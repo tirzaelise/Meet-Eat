@@ -1,3 +1,4 @@
 # Meet-Eat
-UvA Programmeerproject application January 2016<br>
+UvA Programmeerproject application<br>
+January 2016<br>
 Tirza Soute
