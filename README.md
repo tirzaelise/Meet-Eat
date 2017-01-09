@@ -31,3 +31,4 @@ Firebase to keep track of the food users will be making and to keep track of the
 I want to integrate Firebase's Google login, which might be difficult since I have not done this before. I can use online tutorials to figure out how this works exactly.
 
 ### Review of similar applications or visualisations in terms of features and technical aspects
+EatWith also integrates ratings, prices, a starting time and a save button. The rest is very similar to my idea.
