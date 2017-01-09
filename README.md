@@ -1,2 +1,3 @@
 # Meet-Eat
-Programmeerproject January 2016 at UvA application (Tirza Soute)
+UvA Programmeerproject application January 2016
+Tirza Soute
