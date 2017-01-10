@@ -26,13 +26,7 @@ After clicking the search button, the user is sent to <i>ResultsActivity.java</i
 ### Activity ResultsActivity.java
 In this activity, the <i>DatabaseHandler.java</i> is used to get the user's search results using the bundle that has the
 dinner-joining user's specified information. The search results are then displayed. This activity shows the food that
-someone will be making and the time dinner will start. The user can click on a dinner to get more information and is then
-sent to <i>DinnerActivity.java</i>.
-
-### Activity DinnerActivity.java
-This activity shows all the information about a dinner that the cook has specified. There is also a join button that the user
-can click if he wants to join dinner. If it's clicked, <i>DatabaseHandler.java</i> is used to update the amount of people 
-that can join dinner.
+someone will be making and the time dinner will start. The user can click on a dinner to get more information, which is given in a dropdown menu and where a join button also is shown. If the join button is clicked, <i>DatabaseHandler.java</i> is used to update the amount of people that can join dinner.
 
 ### Object Dinner.java
 This object holds all the specified information about a dinner: food (string), start time (string), amountOfPeople (int), 
