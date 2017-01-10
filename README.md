@@ -17,7 +17,6 @@ Users will be able to indicate whether they will be cooking or whether they woul
 <img src="/doc/cookingSketch.png" height="400"><br>
 <img src="/doc/joiningSketch.png" height="400">
 <img src="/doc/resultsSketch.png" height="400">
-<img src="/doc/dinnerSketch.png" height="400">
 
 ### Separate parts of the application and how these should work together
 The home screen will be a login screen. After that, there will be a screen where the user can indicate whether they will be cooking or joining. 
