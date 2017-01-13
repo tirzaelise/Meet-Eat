@@ -28,10 +28,9 @@
     <string name="host">Host</string>
     <string name="free">Free spaces</string>
     <string name="startTime">Start time</string>
-    <string name="title_activity_main2">MainActivity2</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="openDrawer">Open navigation drawer</string>
+    <string name="closeDrawer">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
 </resources>
