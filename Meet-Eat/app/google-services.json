@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "377678081222",
+    "firebase_url": "https://meet-eat.firebaseio.com",
+    "project_id": "meet-eat",
+    "storage_bucket": "meet-eat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377678081222:android:fbd1cb99a78dd141",
+        "android_client_info": {
+          "package_name": "nl.mprog.meeteat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "377678081222-adcrfr3msab4j9qu6dkrknn32n97mso2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwAy6UUIQItCIDSxUFpl7srB4QzdPBLuM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

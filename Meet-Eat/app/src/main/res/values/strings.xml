@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Meet &amp; Eat</string>
+    <string name="introText">Welcome to Meet &amp; Eat! \n\n\n This application helps you waste less
+        food by letting other people join your dinner. Alternatively, this application lets you join
+        other people\'s dinners so that you won\'t have to cook tonight! </string>
+    <string name="welcomeText">Hello, username!</string>
+    <string name="cookOrJoin">Will you be cooking or joining a dinner tonight?</string>
+    <string name="cooking">Cooking</string>
+    <string name="whatMaking">What are you making?</string>
+    <string name="food">Food</string>
+    <string name="howManyPeople">How many people can join your dinner?</string>
+    <string name="number">Number</string>
+    <string name="whatTime">What time will dinner start?</string>
+    <string name="timeHint">hh:mm</string>
+    <string name="typeCuisine">What type of cuisine is your dinner?</string>
+    <string name="cuisine">Cuisine</string>
+    <string name="cuisineOpt">Cuisine (optional)</string>
+    <string name="whatArea">What area are you in?</string>
+    <string name="area">Area</string>
+    <string name="city">City</string>
+    <string name="whatIngredients">What are the ingredients you\'re using?</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="add">Add</string>
+    <string name="joining">Joining</string>
+    <string name="whatPreference">What\'s your dinner preference?</string>
+    <string name="search">Search</string>
+    <string name="results">Results</string>
+    <string name="host">Host</string>
+    <string name="free">Free spaces</string>
+    <string name="startTime">Start time</string>
+    <string name="title_activity_main2">MainActivity2</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+</resources>
