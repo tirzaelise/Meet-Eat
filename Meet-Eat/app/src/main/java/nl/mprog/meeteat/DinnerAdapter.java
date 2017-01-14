@@ -16,8 +16,8 @@ class DinnerAdapter extends BaseExpandableListAdapter {
     private LayoutInflater inflater;
     private ArrayList<Dinner> dinners;
 
-    DinnerAdapter(ResultsActivity activity, ArrayList<Dinner> dinners) {
-        inflater = LayoutInflater.from(activity);
+    DinnerAdapter(ResultFragment activity, ArrayList<Dinner> dinners) {
+        inflater = LayoutInflater.from(activity.getActivity());
         this.dinners = dinners;
     }
 
@@ -28,7 +28,7 @@ class DinnerAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return 5;
+        return 1;
     }
 
     @Override

@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
+        android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
         android:id="@+id/dinnerTitle"/>
 
 </LinearLayout>

@@ -15,9 +15,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CookActivity" />
-        <activity android:name=".JoinActivity" />
-        <activity android:name=".ResultsActivity" />
+        <activity android:name=".CookFragment" />
+        <activity android:name=".JoinFragment" />
+        <activity android:name=".ResultFragment" />
+        <activity android:name=".AccountFragment" />
+        <activity android:name=".MainFragment"></activity>
     </application>
 
 </manifest>
