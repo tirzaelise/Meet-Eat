@@ -1,6 +1,6 @@
 package nl.mprog.meeteat;
 
-import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -25,8 +25,8 @@ class DatabaseHandler {
     }
 
     /** Reads the database based on the user's input of his area and dinner preference (cuisine) */
-    ArrayList<Dinner> readDatabase(String area, String cuisine) {
-        dinners = new ArrayList<>();
+    ArrayList<Dinner> readDatabase(String area, String cuisine, final ArrayList<Dinner> dinners,
+                                   final DinnerAdapter adapter, final ResultFragment fragment) {
         database = FirebaseDatabase.getInstance().getReference();
         Query areaQuery = database.orderByChild("area").equalTo(area);
 
@@ -37,7 +37,7 @@ class DatabaseHandler {
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     Dinner dinner = dataSnapshot.getValue(Dinner.class);
                     dinners.add(dinner);
-                    Log.wtf("dinner", dinner.getFood());
+                    adapter.notifyDataSetChanged();
                 }
 
                 @Override
@@ -57,7 +57,8 @@ class DatabaseHandler {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-//                    Toast.makeText(this, "Failed to read database", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(fragment.getActivity(), "Failed to read database",
+                            Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -69,7 +70,6 @@ class DatabaseHandler {
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     Dinner dinner = dataSnapshot.getValue(Dinner.class);
                     dinners.add(dinner);
-                    Log.wtf("dinner", dinner.getFood());
                 }
 
                 @Override

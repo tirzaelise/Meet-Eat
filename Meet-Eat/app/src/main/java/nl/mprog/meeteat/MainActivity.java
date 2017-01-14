@@ -15,8 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
-    private String[] menuArray;
-    private DrawerLayout drawerLayout;
     private ListView drawerList;
     private ActionBarDrawerToggle drawerToggle;
 
@@ -29,11 +27,19 @@ public class MainActivity extends AppCompatActivity {
         createDrawerItems();
         setDrawerListener();
         setUpDrawer();
+
+        if (savedInstanceState == null) {
+            FragmentManager manager = getFragmentManager();
+            MainFragment mainFragment = new MainFragment();
+            manager.beginTransaction()
+                    .replace(R.id.contentFrame, mainFragment)
+                    .commit();
+        }
     }
 
     /** Creates menu items for the navigation drawer */
     private void createDrawerItems() {
-        menuArray = new String[]{"Home", "Account"};
+        String[] menuArray = {"Home", "Account"};
         ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
                 menuArray);
         drawerList.setAdapter(adapter);
@@ -55,9 +61,6 @@ public class MainActivity extends AppCompatActivity {
                     case 1:
                         startActivity(new Intent(MainActivity.this, AccountFragment.class));
                         break;
-                    default:
-                        startActivity(new Intent(MainActivity.this, MainFragment.class));
-                        break;
                 }
             }
         });
@@ -66,7 +69,9 @@ public class MainActivity extends AppCompatActivity {
     /** Sets up the navigation drawer */
     private void setUpDrawer() {
         final ActionBar actionBar = getSupportActionBar();
-        drawerLayout = (DrawerLayout)findViewById(R.id.drawerLayout);
+        if (actionBar != null) actionBar.setElevation(0);
+
+        DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawerLayout);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.openDrawer,
                 R.string.closeDrawer) {
 

@@ -1,8 +1,6 @@
 package nl.mprog.meeteat;
 
-import android.app.Activity;
 import android.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +10,6 @@ import android.widget.ExpandableListView;
 import java.util.ArrayList;
 
 public class ResultFragment extends Fragment {
-    View rootView;
-    Activity activity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
@@ -25,18 +21,23 @@ public class ResultFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        rootView = getView();
-        activity = getActivity();
+        View rootView = getView();
         Bundle arguments = this.getArguments();
-        if (arguments != null) {
-            String area = arguments.getString("area", "");
-            String cuisine = arguments.getString("cuisine", "");
 
-            DatabaseHandler databaseHandler = new DatabaseHandler();
-            ArrayList<Dinner> dinners = databaseHandler.readDatabase(area, cuisine);
-            DinnerAdapter adapter = new DinnerAdapter(this,  dinners);
-            ExpandableListView listView = (ExpandableListView) rootView.findViewById(R.id.listView);
-            listView.setAdapter(adapter);
-        }
+        if (arguments != null && rootView != null) showResult(arguments, rootView);
+    }
+
+    /** Shows the user's search result by reading from the Firebase database using DatabaseHelper */
+    private void showResult(Bundle arguments, View rootView) {
+        String area = arguments.getString("area", "");
+        String cuisine = arguments.getString("cuisine", "");
+
+        ExpandableListView listView = (ExpandableListView) rootView.findViewById(R.id.listView);
+        ArrayList<Dinner> dinners = new ArrayList<>();
+        DinnerAdapter adapter = new DinnerAdapter(this, dinners);
+        listView.setAdapter(adapter);
+
+        DatabaseHandler databaseHandler = new DatabaseHandler();
+        databaseHandler.readDatabase(area, cuisine, dinners, adapter, this);
     }
 }
