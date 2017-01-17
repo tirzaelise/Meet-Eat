@@ -1,5 +1,8 @@
 package nl.mprog.meeteat;
 
+import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -8,6 +11,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -24,7 +28,7 @@ class DatabaseHandler {
         database.push().setValue(dinner);
     }
 
-    /** Reads the database based on the user's input of his area and dinner preference (cuisine) */
+    /** Reads the database based on the user's input of his area and dinner preference */
     ArrayList<Dinner> readDatabase(String area, final ArrayList<Dinner> dinners,
                                    final DinnerAdapter adapter, final ResultFragment fragment) {
         database = FirebaseDatabase.getInstance().getReference();
@@ -61,5 +65,34 @@ class DatabaseHandler {
             }
         });
         return dinners;
+    }
+
+    void updateFreeSpaces(String dinnerId, final Context context) {
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        Query findId = database.orderByChild("id").equalTo(dinnerId);
+
+        findId.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    String databaseKey = snapshot.getKey();
+                    Dinner dinner = snapshot.getValue(Dinner.class);
+                    int newFreeSpaces = dinner.getFreeSpaces() - 1;
+                    
+                    if (newFreeSpaces < 0) {
+                        Toast.makeText(context, "There are no more free spaces for this dinner",
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        dinner.setFreeSpaces(newFreeSpaces);
+                        database.child(databaseKey).setValue(dinner);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(context, "Failed to join dinner", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

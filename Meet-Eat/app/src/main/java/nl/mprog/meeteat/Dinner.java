@@ -9,20 +9,20 @@ class Dinner {
     private String id;
     private String host;
     private String startTime;
-    private int amountOfPeople;
+    private int freeSpaces;
     private String area;
     private String ingredients;
     private String imageUrl;
     private boolean vegetarian;
     private boolean vegan;
 
-    Dinner(String title, String id, String host, String startTime, int amountOfPeople, String
+    Dinner(String title, String id, String host, String startTime, int freeSpaces, String
             area, String ingredients, String imageUrl, boolean vegetarian, boolean vegan) {
         this.title = title;
         this.id = id;
         this.host = host;
         this.startTime = startTime;
-        this.amountOfPeople = amountOfPeople;
+        this.freeSpaces = freeSpaces;
         this.area = area;
         this.ingredients = ingredients;
         this.imageUrl = imageUrl;
@@ -33,21 +33,20 @@ class Dinner {
     public Dinner() {
     }
 
-    void setVegetarian(boolean vegetarian) {
-        this.vegetarian = vegetarian;
-    }
-
-    void setVegan(boolean vegan) {
-        this.vegan = vegan;
+    void setFreeSpaces(int freeSpaces) {
+        this.freeSpaces = freeSpaces;
     }
 
     void setIngredients(String ingredients) {
         this.ingredients = ingredients;
     }
 
-    Dinner getDinner() {
-        return new Dinner(title, id, host, startTime, amountOfPeople, area, ingredients, imageUrl,
-                vegetarian, vegan);
+    void setVegetarian(boolean vegetarian) {
+        this.vegetarian = vegetarian;
+    }
+
+    void setVegan(boolean vegan) {
+        this.vegan = vegan;
     }
 
     String getTitle() {
@@ -66,8 +65,8 @@ class Dinner {
         return startTime;
     }
 
-    int getAmountOfPeople() {
-        return amountOfPeople;
+    int getFreeSpaces() {
+        return freeSpaces;
     }
 
     String getArea() {

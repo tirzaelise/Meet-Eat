@@ -17,6 +17,7 @@ public class HttpRequestHandler {
 
     static synchronized String downloadFromApi(String... params) {
         String key = "uI9T1GTt8nmshcUUWJOjq8TQNGBgp1P9Zffjsn7dAbkmTSDt1k";
+//        String key = "EV3I1nY4m3msh9pEO51dECigTna1p1CP3TmjsnOpBnaLR4wcfD";
         String urlToApi = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/";
         String query = params[0];
         String urlRequest = urlToApi + query;

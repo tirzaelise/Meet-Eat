@@ -9,7 +9,6 @@ package nl.mprog.meeteat;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -25,18 +24,17 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
     private String id;
     private String host;
     private String startTime;
-    private int amountOfPeople;
+    private int freeSpaces;
     private String area;
     private String imageUrl;
-    private ArrayList<Dinner> dinners;
 
     DinnerAsyncTask(CookFragment activity, OnTaskCompleted listener, String host, String startTime,
-                    int amountOfPeople, String area) {
+                    int freeSpaces, String area) {
         this.context = activity.getActivity();
         this.listener = listener;
         this.host = host;
         this.startTime = startTime;
-        this.amountOfPeople = amountOfPeople;
+        this.freeSpaces = freeSpaces;
         this.area = area;
     }
 
@@ -57,7 +55,7 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
             JSONObject readObject = new JSONObject(result);
             if (!readObject.getString("totalResults").equals("0")) {
                 JSONArray dinnersObject = readObject.getJSONArray("results");
-                dinners = new ArrayList<>();
+                ArrayList<Dinner> dinners = new ArrayList<>();
 
                 for (int i = 0; i < dinnersObject.length(); i++) {
                     JSONObject dinnerObject = dinnersObject.getJSONObject(i);
@@ -65,16 +63,10 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
                     id = dinnerObject.getString("id");
                     imageUrl = dinnerObject.getString("image");
 
-                    Dinner dinner = new Dinner(title, id, host, startTime, amountOfPeople, area, "",
+                    Dinner dinner = new Dinner(title, id, host, startTime, freeSpaces, area, "",
                             imageUrl, false, false);
                     dinners.add(dinner);
-
-//                    InfoAsyncTask infoAsyncTask = new InfoAsyncTask(this);
-//                    String query =  id + "/information";
-//                    infoAsyncTask.execute(query);
-//                    Log.wtf("size dinner meanwhile", Integer.toString(dinners.size()));
                 }
-//                Log.wtf("size", Integer.toString(dinners.size()));
                 listener.onTaskCompleted(dinners);
             } else {
                 Toast.makeText(context, "No data was found", Toast.LENGTH_SHORT).show();
@@ -84,12 +76,4 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         }
     }
-
-//    @Override
-//    public void onTaskCompleted(Dinner dinner) {
-//        Dinner dinner = new Dinner(title, id, host, startTime, amountOfPeople, area, ingredients,
-//                imageUrl, vegetarian, vegan);
-//        DinnerAsyncTask.this.dinners.add(dinner);
-//        Log.wtf("size", Integer.toString(dinners.size()));
-//    }
 }

@@ -42,13 +42,13 @@ public class CookFragment extends Fragment implements View.OnClickListener,
         String host = activity.getSharedPreferences("userInfo", Context.MODE_PRIVATE).
                 getString("userName", "");
         String startTime = ((EditText) rootView.findViewById(R.id.giveTime)).getText().toString();
-        String amountPeopleString = ((EditText) rootView.findViewById(R.id.giveAmount)).getText()
+        String freeSpacesString = ((EditText) rootView.findViewById(R.id.giveAmount)).getText()
                 .toString();
         String area = ((EditText) rootView.findViewById(R.id.giveArea)).getText().toString();
 
         if (correctTimeFormat(startTime)) {
             food = food.replace(" ", "&nbsp;");
-            createDinner(food, host, startTime, amountPeopleString, area);
+            createDinner(food, host, startTime, freeSpacesString, area);
         } else {
             Toast.makeText(activity, "Please enter a start time according to the format hh:mm",
                     Toast.LENGTH_SHORT).show();
@@ -77,17 +77,15 @@ public class CookFragment extends Fragment implements View.OnClickListener,
     }
 
     /** Creates a dinner object */
-    private void createDinner(String food, String host, String startTime, String amountPeopleString,
+    private void createDinner(String food, String host, String startTime, String freeSpacesString,
                               String area) {
 
         // TODO: HOST CHANGE
         host = "Tirza";
         if (!food.equals("") && !host.equals("") && !startTime.equals("") &&
-                !amountPeopleString.equals("") && !area.equals("")) {
-            int amountOfPeople = Integer.valueOf(amountPeopleString);
-            getDinnerInfo(food, host, startTime, amountOfPeople, area);
-//            Dinner newDinner = new Dinner(food, host, startTime, amountOfPeople, cuisine, area,
-//                    ingredients);
+                !freeSpacesString.equals("") && !area.equals("")) {
+            int freeSpaces = Integer.valueOf(freeSpacesString);
+            getDinnerInfo(food, host, startTime, freeSpaces, area);
 //            DatabaseHandler databaseHandler = new DatabaseHandler();
 //            databaseHandler.writeToDatabase(newDinner);
 //            Toast.makeText(activity, "Added dinner successfully", Toast.LENGTH_SHORT).show();
@@ -96,11 +94,11 @@ public class CookFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-    private void getDinnerInfo(String food, String host, String startTime, int amountOfPeople,
+    private void getDinnerInfo(String food, String host, String startTime, int freeSpaces,
                                String area) {
         String query = "search?&query=" + food;
         DinnerAsyncTask dinnerAsyncTask = new DinnerAsyncTask(this, this, host, startTime,
-                amountOfPeople, area);
+                freeSpaces, area);
         dinnerAsyncTask.execute(query);
     }
 
@@ -122,10 +120,12 @@ public class CookFragment extends Fragment implements View.OnClickListener,
             String query =  dinner.getId() + "/information";
             infoAsyncTask.execute(query);
         }
+
     }
 
     @Override
     public void onInfoRetrieved(Dinner dinner) {
         dinners.add(dinner);
+        // Serializable?
     }
 }

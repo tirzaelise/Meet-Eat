@@ -1,9 +1,12 @@
 package nl.mprog.meeteat;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -70,17 +73,31 @@ class DinnerAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
                              View convertView, ViewGroup parentView) {
         final Dinner dinner = dinners.get(groupPosition);
+        String dinnerId = dinner.getId();
         String host = "Host: " + dinner.getHost();
-        String amountOfPeople = "Free spaces: " + Integer.toString(dinner.getAmountOfPeople());
+        String freeSpaces = "Free spaces: " + Integer.toString(dinner.getFreeSpaces());
         String startTime = "Start time: " + dinner.getStartTime();
         String ingredients = "Ingredients: " + dinner.getIngredients();
         convertView = inflater.inflate(R.layout.list_child, parentView, false);
 
         ((TextView) convertView.findViewById(R.id.host)).setText(host);
-        ((TextView) convertView.findViewById(R.id.space)).setText(amountOfPeople);
+        ((TextView) convertView.findViewById(R.id.space)).setText(freeSpaces);
         ((TextView) convertView.findViewById(R.id.startTime)).setText(startTime);
         ((TextView) convertView.findViewById(R.id.ingredients)).setText(ingredients);
+        ImageButton joinButton = (ImageButton) convertView.findViewById(R.id.joinButton);
+        setClickListener(joinButton, dinnerId);
+
         return convertView;
+    }
+
+    private void setClickListener(ImageButton button, final String dinnerId) {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseHandler databaseHandler = new DatabaseHandler();
+                databaseHandler.updateFreeSpaces(dinnerId, v.getContext());
+            }
+        });
     }
 
     @Override
