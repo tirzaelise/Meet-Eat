@@ -59,7 +59,7 @@ class DinnerAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView,
                              ViewGroup parentView) {
-        String dinner = dinners.get(groupPosition).getFood();
+        String dinner = dinners.get(groupPosition).getTitle();
         convertView = inflater.inflate(R.layout.list_group, parentView, false);
 
         ((TextView) convertView.findViewById(R.id.dinnerTitle)).setText(dinner);
@@ -73,14 +73,12 @@ class DinnerAdapter extends BaseExpandableListAdapter {
         String host = "Host: " + dinner.getHost();
         String amountOfPeople = "Free spaces: " + Integer.toString(dinner.getAmountOfPeople());
         String startTime = "Start time: " + dinner.getStartTime();
-        String cuisine = "Cuisine: " + dinner.getCuisine();
         String ingredients = "Ingredients: " + dinner.getIngredients();
         convertView = inflater.inflate(R.layout.list_child, parentView, false);
 
         ((TextView) convertView.findViewById(R.id.host)).setText(host);
         ((TextView) convertView.findViewById(R.id.space)).setText(amountOfPeople);
         ((TextView) convertView.findViewById(R.id.startTime)).setText(startTime);
-        ((TextView) convertView.findViewById(R.id.cuisine)).setText(cuisine);
         ((TextView) convertView.findViewById(R.id.ingredients)).setText(ingredients);
         return convertView;
     }

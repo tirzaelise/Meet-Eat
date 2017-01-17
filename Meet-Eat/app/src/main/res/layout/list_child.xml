@@ -49,21 +49,11 @@
         android:id="@+id/startTime" />
 
     <TextView
-        android:text="@string/cuisine"
-        android:layout_alignParentStart="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/startTime"
-        android:layout_marginBottom="5dp"
-        android:layout_toStartOf="@id/joinButton"
-        android:id="@+id/cuisine" />
-
-    <TextView
         android:text="@string/ingredients"
         android:layout_alignParentStart="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/cuisine"
+        android:layout_below="@id/startTime"
         android:layout_marginBottom="5dp"
         android:layout_toStartOf="@id/joinButton"
         android:id="@+id/ingredients" />

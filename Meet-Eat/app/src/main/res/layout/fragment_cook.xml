@@ -66,29 +66,10 @@
         android:id="@+id/giveAmount" />
 
     <TextView
-        android:text="@string/typeCuisine"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/giveAmount"
-        android:layout_marginTop="20dp"
-        android:id="@+id/typeCuisine"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/typeCuisine"
-        android:inputType="textPersonName"
-        android:textSize="14sp"
-        android:hint="@string/cuisine"
-        android:ems="10"
-        android:id="@+id/giveCuisine" />
-
-
-    <TextView
         android:text="@string/whatArea"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/giveCuisine"
+        android:layout_below="@id/giveAmount"
         android:layout_marginTop="20dp"
         android:id="@+id/whatArea"/>
 
@@ -102,32 +83,13 @@
         android:ems="10"
         android:id="@+id/giveArea" />
 
-    <TextView
-        android:text="@string/whatIngredients"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/giveArea"
-        android:layout_marginTop="20dp"
-        android:id="@+id/whatIngredients"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/whatIngredients"
-        android:inputType="textPersonName"
-        android:textSize="14sp"
-        android:hint="@string/ingredients"
-        android:ems="10"
-        android:id="@+id/giveIngredients" />
-
     <Button
-        android:text="@string/add"
+        android:text="@string/getRecipe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
-        android:onClick="addDinner"
         android:id="@+id/addButton" />
 </RelativeLayout>

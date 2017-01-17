@@ -30,7 +30,6 @@ public class ResultFragment extends Fragment {
     /** Shows the user's search result by reading from the Firebase database using DatabaseHelper */
     private void showResult(Bundle arguments, View rootView) {
         String area = arguments.getString("area", "");
-        String cuisine = arguments.getString("cuisine", "");
 
         ExpandableListView listView = (ExpandableListView) rootView.findViewById(R.id.listView);
         ArrayList<Dinner> dinners = new ArrayList<>();
@@ -38,6 +37,6 @@ public class ResultFragment extends Fragment {
         listView.setAdapter(adapter);
 
         DatabaseHandler databaseHandler = new DatabaseHandler();
-        databaseHandler.readDatabase(area, cuisine, dinners, adapter, this);
+        databaseHandler.readDatabase(area, dinners, adapter, this);
     }
 }

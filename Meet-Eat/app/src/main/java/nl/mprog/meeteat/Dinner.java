@@ -5,58 +5,57 @@ package nl.mprog.meeteat;
  */
 
 class Dinner {
-    private String food;
+    private String title;
+    private String id;
     private String host;
     private String startTime;
     private int amountOfPeople;
-    private String cuisine;
     private String area;
     private String ingredients;
+    private String imageUrl;
+    private boolean vegetarian;
+    private boolean vegan;
 
-    Dinner(String food, String host, String startTime, int amountOfPeople, String cuisine, String
-            area, String ingredients) {
-        this.food = food;
+    Dinner(String title, String id, String host, String startTime, int amountOfPeople, String
+            area, String ingredients, String imageUrl, boolean vegetarian, boolean vegan) {
+        this.title = title;
+        this.id = id;
         this.host = host;
         this.startTime = startTime;
         this.amountOfPeople = amountOfPeople;
-        this.cuisine = cuisine;
         this.area = area;
         this.ingredients = ingredients;
+        this.imageUrl = imageUrl;
+        this.vegetarian = vegetarian;
+        this.vegan = vegan;
     }
 
     public Dinner() {
     }
-//
-//    public void setFood(String food) {
-//        this.food = food;
-//    }
-//
-//    public void setHost(String host) {
-//        this.host = host;
-//    }
-//
-//    public void setStartTime(String startTime) {
-//        this.startTime = startTime;
-//    }
-//
-//    public void setAmountOfPeople(int amountOfPeople) {
-//        this.amountOfPeople = amountOfPeople;
-//    }
-//
-//    public void setCuisine(String cuisine) {
-//        this.cuisine = cuisine;
-//    }
-//
-//    public void setArea(String area) {
-//        this.area = area;
-//    }
-//
-//    public void setIngredients(String ingredients) {
-//        this.ingredients = ingredients;
-//    }
 
-    String getFood() {
-        return food;
+    void setVegetarian(boolean vegetarian) {
+        this.vegetarian = vegetarian;
+    }
+
+    void setVegan(boolean vegan) {
+        this.vegan = vegan;
+    }
+
+    void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    Dinner getDinner() {
+        return new Dinner(title, id, host, startTime, amountOfPeople, area, ingredients, imageUrl,
+                vegetarian, vegan);
+    }
+
+    String getTitle() {
+        return title;
+    }
+
+    String getId() {
+        return id;
     }
 
     String getHost() {
@@ -71,15 +70,23 @@ class Dinner {
         return amountOfPeople;
     }
 
-    String getCuisine() {
-        return cuisine;
-    }
-
     String getArea() {
         return area;
     }
 
     String getIngredients() {
         return ingredients;
+    }
+
+    String getImageUrl() {
+        return imageUrl;
+    }
+
+    boolean isVegetarian() {
+        return vegetarian;
+    }
+
+    boolean isVegan() {
+        return vegan;
     }
 }

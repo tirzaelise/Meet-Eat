@@ -71,6 +71,7 @@ public class JoinFragment extends Fragment implements View.OnClickListener {
         editor.putString("lastCuisine", cuisine).apply();
     }
 
+    /** Sends the user to ResultFragment to show his search results */
     private void toResultFragment(String area, String cuisine) {
         ResultFragment resultFragment = new ResultFragment();
         Bundle arguments = new Bundle();
