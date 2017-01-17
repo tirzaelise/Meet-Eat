@@ -28,8 +28,8 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
     private String area;
     private String imageUrl;
 
-    DinnerAsyncTask(CookFragment activity, OnTaskCompleted listener, String host, String startTime,
-                    int freeSpaces, String area) {
+    DinnerAsyncTask(RecipeResultFragment activity, OnTaskCompleted listener, String host, String
+            startTime, int freeSpaces, String area) {
         this.context = activity.getActivity();
         this.listener = listener;
         this.host = host;

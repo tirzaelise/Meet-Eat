@@ -4,20 +4,20 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
-public class CookFragment extends Fragment implements View.OnClickListener,
-        DinnerAsyncTask.OnTaskCompleted, InfoAsyncTask.OnInfoRetrieved {
+public class CookFragment extends Fragment implements View.OnClickListener {
     View rootView;
     Activity activity;
-    private ArrayList<Dinner> dinners;
+    private String food;
+    private String host;
+    private String startTime;
+    private String freeSpacesString;
+    private String area;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
@@ -37,31 +37,36 @@ public class CookFragment extends Fragment implements View.OnClickListener,
         }
     }
     /** Adds a dinner to the database */
-    public void addDinner() {
-        String food = ((EditText) rootView.findViewById(R.id.giveFood)).getText().toString();
-        String host = activity.getSharedPreferences("userInfo", Context.MODE_PRIVATE).
+    public void searchRecipes() {
+        food = ((EditText) rootView.findViewById(R.id.giveFood)).getText().toString();
+        host = activity.getSharedPreferences("userInfo", Context.MODE_PRIVATE).
                 getString("userName", "");
-        String startTime = ((EditText) rootView.findViewById(R.id.giveTime)).getText().toString();
-        String freeSpacesString = ((EditText) rootView.findViewById(R.id.giveAmount)).getText()
+        startTime = ((EditText) rootView.findViewById(R.id.giveTime)).getText().toString();
+        freeSpacesString = ((EditText) rootView.findViewById(R.id.giveAmount)).getText()
                 .toString();
-        String area = ((EditText) rootView.findViewById(R.id.giveArea)).getText().toString();
+        area = ((EditText) rootView.findViewById(R.id.giveArea)).getText().toString();
 
-        if (correctTimeFormat(startTime)) {
-            food = food.replace(" ", "&nbsp;");
-            createDinner(food, host, startTime, freeSpacesString, area);
-        } else {
+
+        // TODO: FIX HOST
+        host = "Tirza";
+        if (!correctTimeFormat()) {
             Toast.makeText(activity, "Please enter a start time according to the format hh:mm",
                     Toast.LENGTH_SHORT).show();
+        } else if (!filledInAllFields()) {
+            Toast.makeText(activity, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+        } else {
+            food = food.replace(" ", "&nbsp;");
+            toRecipeResultFragment();
         }
     }
 
     /** Checks if a start time corresponds to the format hh:mm */
-    boolean correctTimeFormat(String time) {
-        String[] splitTime = time.split(":");
+    private boolean correctTimeFormat() {
+        String[] splitTime = startTime.split(":");
 
         // If there is no ":" in the string, split returns an array containing the input at the
         // first place
-        if (splitTime[0].equals(time)) {
+        if (splitTime[0].equals(startTime)) {
             return false;
         } else {
             String[] splitHour = splitTime[0].split("");
@@ -76,56 +81,35 @@ public class CookFragment extends Fragment implements View.OnClickListener,
         return false;
     }
 
-    /** Creates a dinner object */
-    private void createDinner(String food, String host, String startTime, String freeSpacesString,
-                              String area) {
-
-        // TODO: HOST CHANGE
-        host = "Tirza";
-        if (!food.equals("") && !host.equals("") && !startTime.equals("") &&
-                !freeSpacesString.equals("") && !area.equals("")) {
-            int freeSpaces = Integer.valueOf(freeSpacesString);
-            getDinnerInfo(food, host, startTime, freeSpaces, area);
-//            DatabaseHandler databaseHandler = new DatabaseHandler();
-//            databaseHandler.writeToDatabase(newDinner);
-//            Toast.makeText(activity, "Added dinner successfully", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(activity, "Please fill in all fields", Toast.LENGTH_SHORT).show();
-        }
+    /** Checks if all fields were filled in */
+    private boolean filledInAllFields() {
+        return (!food.equals("") && !host.equals("") && !startTime.equals("") &&
+                !freeSpacesString.equals("") && !area.equals(""));
     }
 
-    private void getDinnerInfo(String food, String host, String startTime, int freeSpaces,
-                               String area) {
-        String query = "search?&query=" + food;
-        DinnerAsyncTask dinnerAsyncTask = new DinnerAsyncTask(this, this, host, startTime,
-                freeSpaces, area);
-        dinnerAsyncTask.execute(query);
+    /** Sends the user to the fragment where they can see the results of their recipe search */
+    private void toRecipeResultFragment() {
+        int freeSpaces = Integer.valueOf(freeSpacesString);
+        RecipeResultFragment recipeResultFragment = new RecipeResultFragment();
+        Bundle arguments = new Bundle();
+        arguments.putString("food", food);
+        arguments.putString("host", host);
+        arguments.putString("startTime", startTime);
+        arguments.putInt("freeSpaces", freeSpaces);
+        arguments.putString("area", area);
+        recipeResultFragment.setArguments(arguments);
+
+        this.getFragmentManager().beginTransaction()
+                .replace(R.id.contentFrame, recipeResultFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addButton:
-            addDinner();
+            searchRecipes();
         }
-    }
-
-    @Override
-    public void onTaskCompleted(ArrayList<Dinner> retrievedDinners) {
-        dinners = new ArrayList<>();
-
-        for (int i = 0; i < retrievedDinners.size(); i++) {
-            Dinner dinner = retrievedDinners.get(i);
-            InfoAsyncTask infoAsyncTask = new InfoAsyncTask(this, dinner);
-            String query =  dinner.getId() + "/information";
-            infoAsyncTask.execute(query);
-        }
-
-    }
-
-    @Override
-    public void onInfoRetrieved(Dinner dinner) {
-        dinners.add(dinner);
-        // Serializable?
     }
 }

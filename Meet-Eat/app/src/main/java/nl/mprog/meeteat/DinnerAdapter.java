@@ -1,11 +1,10 @@
 package nl.mprog.meeteat;
 
-import android.util.Log;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -19,8 +18,8 @@ class DinnerAdapter extends BaseExpandableListAdapter {
     private LayoutInflater inflater;
     private ArrayList<Dinner> dinners;
 
-    DinnerAdapter(ResultFragment activity, ArrayList<Dinner> dinners) {
-        inflater = LayoutInflater.from(activity.getActivity());
+    DinnerAdapter(Fragment fragment, ArrayList<Dinner> dinners) {
+        inflater = LayoutInflater.from(fragment.getActivity());
         this.dinners = dinners;
     }
 

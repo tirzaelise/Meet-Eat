@@ -25,7 +25,9 @@ public class ResultFragment extends Fragment {
         View rootView = getView();
         Bundle arguments = this.getArguments();
 
-        if (arguments != null && rootView != null) showResult(arguments, rootView);
+        if (arguments != null && rootView != null) {
+            showResult(arguments, rootView);
+        }
     }
 
     /** Shows the user's search result by reading from the Firebase database using DatabaseHelper */

@@ -37,4 +37,5 @@
     <string name="signOut">Sign out</string>
     <string name="joinButtonDesc">This button can be clicked to join a dinner</string>
     <string name="getRecipe">Get recipe</string>
+    <string name="recipes">Recipes</string>
 </resources>

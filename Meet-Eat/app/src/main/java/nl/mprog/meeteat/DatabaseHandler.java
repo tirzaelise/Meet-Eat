@@ -1,8 +1,6 @@
 package nl.mprog.meeteat;
 
-import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -78,7 +76,7 @@ class DatabaseHandler {
                     String databaseKey = snapshot.getKey();
                     Dinner dinner = snapshot.getValue(Dinner.class);
                     int newFreeSpaces = dinner.getFreeSpaces() - 1;
-                    
+
                     if (newFreeSpaces < 0) {
                         Toast.makeText(context, "There are no more free spaces for this dinner",
                                 Toast.LENGTH_SHORT).show();
