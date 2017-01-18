@@ -50,16 +50,20 @@ public class MainActivity extends AppCompatActivity {
         drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                FragmentManager manager = getFragmentManager();
+
                 switch (position) {
                     case 0:
-                        FragmentManager manager = getFragmentManager();
                         MainFragment mainFragment = new MainFragment();
                         manager.beginTransaction()
                                 .replace(R.id.contentFrame, mainFragment)
                                 .commit();
                         break;
                     case 1:
-                        startActivity(new Intent(MainActivity.this, AccountFragment.class));
+                        AccountFragment accountFragment = new AccountFragment();
+                        manager.beginTransaction()
+                                .replace(R.id.contentFrame, accountFragment)
+                                .commit();
                         break;
                 }
             }

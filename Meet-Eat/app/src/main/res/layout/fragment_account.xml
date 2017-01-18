@@ -10,6 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="nl.mprog.meeteat.AccountFragment">
 
+    <!---
     <com.google.android.gms.common.SignInButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,6 +28,55 @@
         android:textColor="@android:color/white"
         android:visibility="invisible"
         android:id="@+id/signOutButton" />
+    </-->
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:hint="@string/email"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/giveEmail" />
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:hint="@string/password"
+        android:ems="10"
+        android:layout_below="@id/giveEmail"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/givePassword" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/givePassword"
+        android:layout_centerHorizontal="true">
+
+        <Button
+            android:text="@string/signUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:layout_marginEnd="10dp"
+            android:id="@+id/signUpButton" />
+
+        <Button
+            android:text="@string/signIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/signUpButton"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:layout_toEndOf="@id/signUpButton"
+            android:id="@+id/signInButton" />
+
+    </RelativeLayout>
 </RelativeLayout>

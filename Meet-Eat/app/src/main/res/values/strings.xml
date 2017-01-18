@@ -40,4 +40,8 @@
     <string name="vegetarian">Vegetarian</string>
     <string name="vegan">Vegan</string>
     <string name="makeDinner">Make for\n dinner</string>
+    <string name="email">E-mail address</string>
+    <string name="password">Password</string>
+    <string name="signIn">Sign in</string>
+    <string name="signUp">Sign up</string>
 </resources>

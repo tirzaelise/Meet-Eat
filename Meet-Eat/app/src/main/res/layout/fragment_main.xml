@@ -45,7 +45,7 @@
         android:layout_below="@+id/cookOrJoin"
         android:layout_marginTop="75dp"
         android:layout_alignStart="@id/cookOrJoin"
-        android:background="@android:color/darker_gray"
+        android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
         android:id="@+id/cookingButton" />
 
@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/cookingButton"
         android:layout_alignEnd="@id/cookOrJoin"
-        android:background="@android:color/darker_gray"
+        android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
         android:id="@+id/joiningButton" />
 </RelativeLayout>
