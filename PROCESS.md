@@ -20,3 +20,6 @@ Worked on integrating the Spoonacular API. I need two AsyncTasks: one to retriev
 
 #### Day 7
 Called both AsyncTasks in the same Fragment, which works. However, the information now needs to be sent to a new Fragment to show the retrieved information about the recipes. New idea: call AsyncTasks in fragment where the results should be displayed instead of sending the results to the fragment where the results should be displayed. Users can now update the amount of free spaces by clicking the plus button when they want to join a dinner. Worked out the new AsyncTasks idea, which works. However, the adapter should be changed so that different (relevant) info is displayed.
+
+#### Day 8
+Created a custom adapter to show recipe search results, which displays relevant information. The new recipes can be saved to the database. Also worked on logging in, but it was not possible to use Google login because of certain necessary methods that require AppCompatActivity instead of Fragment. Therefore, I chose e-mail verification instead, which works now.
