@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
@@ -17,7 +18,7 @@ public class RecipeResultFragment extends Fragment implements DinnerAsyncTask.On
     private String startTime;
     private int freeSpaces;
     private String area;
-    private DinnerAdapter adapter;
+    private RecipeAdapter adapter;
     private ArrayList<Dinner> dinners;
 
     @Override
@@ -57,8 +58,8 @@ public class RecipeResultFragment extends Fragment implements DinnerAsyncTask.On
     }
 
     private void showResult(View rootView) {
-        ExpandableListView listView = (ExpandableListView) rootView.findViewById(R.id.listView);
-        adapter = new DinnerAdapter(this, dinners);
+        ListView listView = (ListView) rootView.findViewById(R.id.listView);
+        adapter = new RecipeAdapter(getActivity(), dinners);
         listView.setAdapter(adapter);
     }
 
@@ -70,7 +71,6 @@ public class RecipeResultFragment extends Fragment implements DinnerAsyncTask.On
             String query =  dinner.getId() + "/information";
             infoAsyncTask.execute(query);
         }
-
     }
 
     @Override

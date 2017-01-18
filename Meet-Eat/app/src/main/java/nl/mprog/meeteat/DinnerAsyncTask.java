@@ -20,13 +20,10 @@ import java.util.ArrayList;
 class DinnerAsyncTask extends AsyncTask<String, Void, String> {
     private Context context;
     private OnTaskCompleted listener;
-    private String title;
-    private String id;
     private String host;
     private String startTime;
     private int freeSpaces;
     private String area;
-    private String imageUrl;
 
     DinnerAsyncTask(RecipeResultFragment activity, OnTaskCompleted listener, String host, String
             startTime, int freeSpaces, String area) {
@@ -59,12 +56,11 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
 
                 for (int i = 0; i < dinnersObject.length(); i++) {
                     JSONObject dinnerObject = dinnersObject.getJSONObject(i);
-                    title = dinnerObject.getString("title");
-                    id = dinnerObject.getString("id");
-                    imageUrl = dinnerObject.getString("image");
+                    String title = dinnerObject.getString("title");
+                    String id = dinnerObject.getString("id");
 
                     Dinner dinner = new Dinner(title, id, host, startTime, freeSpaces, area, "",
-                            imageUrl, false, false);
+                            false, false);
                     dinners.add(dinner);
                 }
                 listener.onTaskCompleted(dinners);

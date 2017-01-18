@@ -28,14 +28,16 @@
     <string name="host">Host</string>
     <string name="free">Free spaces</string>
     <string name="startTime">Start time</string>
-
     <string name="openDrawer">Open navigation drawer</string>
     <string name="closeDrawer">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
     <string name="home">Home</string>
     <string name="signOut">Sign out</string>
     <string name="joinButtonDesc">This button can be clicked to join a dinner</string>
     <string name="getRecipe">Get recipe</string>
     <string name="recipes">Recipes</string>
+    <string name="recipeImageDesc">This is where the image of a recipe is placed</string>
+    <string name="vegetarian">Vegetarian</string>
+    <string name="vegan">Vegan</string>
+    <string name="makeDinner">Make for\n dinner</string>
 </resources>

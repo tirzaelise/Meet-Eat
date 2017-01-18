@@ -12,12 +12,11 @@ class Dinner {
     private int freeSpaces;
     private String area;
     private String ingredients;
-    private String imageUrl;
     private boolean vegetarian;
     private boolean vegan;
 
     Dinner(String title, String id, String host, String startTime, int freeSpaces, String
-            area, String ingredients, String imageUrl, boolean vegetarian, boolean vegan) {
+            area, String ingredients, boolean vegetarian, boolean vegan) {
         this.title = title;
         this.id = id;
         this.host = host;
@@ -25,7 +24,6 @@ class Dinner {
         this.freeSpaces = freeSpaces;
         this.area = area;
         this.ingredients = ingredients;
-        this.imageUrl = imageUrl;
         this.vegetarian = vegetarian;
         this.vegan = vegan;
     }
@@ -75,10 +73,6 @@ class Dinner {
 
     String getIngredients() {
         return ingredients;
-    }
-
-    String getImageUrl() {
-        return imageUrl;
     }
 
     boolean isVegetarian() {

@@ -72,6 +72,7 @@ class DinnerAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
                              View convertView, ViewGroup parentView) {
         final Dinner dinner = dinners.get(groupPosition);
+
         String dinnerId = dinner.getId();
         String host = "Host: " + dinner.getHost();
         String freeSpaces = "Free spaces: " + Integer.toString(dinner.getFreeSpaces());
