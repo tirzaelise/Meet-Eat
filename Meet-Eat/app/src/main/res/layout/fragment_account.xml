@@ -10,25 +10,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="nl.mprog.meeteat.AccountFragment">
 
-    <!---
-    <com.google.android.gms.common.SignInButton
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:hint="@string/name"
+        android:layout_marginTop="30dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
-        android:id="@+id/signInButton" />
-
-    <Button
-        android:text="@string/signOut"
-        android:layout_marginTop="100dp"
-        android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:textColor="@android:color/white"
-        android:visibility="invisible"
-        android:id="@+id/signOutButton" />
-    </-->
+        android:id="@+id/giveName"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -36,8 +26,8 @@
         android:inputType="textEmailAddress"
         android:ems="10"
         android:hint="@string/email"
-        android:layout_marginTop="30dp"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/giveName"
+        android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
         android:id="@+id/giveEmail" />
 
@@ -52,31 +42,46 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/givePassword" />
 
-    <RelativeLayout
+    <Button
+        android:text="@string/signUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true"
         android:layout_below="@id/givePassword"
-        android:layout_centerHorizontal="true">
+        android:id="@+id/signUpButton" />
 
-        <Button
-            android:text="@string/signUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:background="@color/colorPrimary"
-            android:textColor="@android:color/white"
-            android:layout_marginEnd="10dp"
-            android:id="@+id/signUpButton" />
+    <Button
+        android:text="@string/signIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/signUpButton"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        android:id="@+id/signInButton" />
 
-        <Button
-            android:text="@string/signIn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/signUpButton"
-            android:background="@color/colorPrimary"
-            android:textColor="@android:color/white"
-            android:layout_toEndOf="@id/signUpButton"
-            android:id="@+id/signInButton" />
 
-    </RelativeLayout>
+    <Button
+        android:text="@string/signOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/signUpButton"
+        android:background="@color/colorPrimary"
+        android:visibility="invisible"
+        android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/signOutButton" />
+
+    <TextView
+        android:text="@string/accountAlready"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/accountAlready"/>
 </RelativeLayout>

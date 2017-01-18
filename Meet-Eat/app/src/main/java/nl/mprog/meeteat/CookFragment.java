@@ -40,15 +40,12 @@ public class CookFragment extends Fragment implements View.OnClickListener {
     public void searchRecipes() {
         food = ((EditText) rootView.findViewById(R.id.giveFood)).getText().toString();
         host = activity.getSharedPreferences("userInfo", Context.MODE_PRIVATE).
-                getString("userName", "");
+                getString("username", "");
         startTime = ((EditText) rootView.findViewById(R.id.giveTime)).getText().toString();
         freeSpacesString = ((EditText) rootView.findViewById(R.id.giveAmount)).getText()
                 .toString();
         area = ((EditText) rootView.findViewById(R.id.giveArea)).getText().toString();
 
-
-        // TODO: FIX HOST
-        host = "Tirza";
         if (!filledInAllFields()) {
             Toast.makeText(activity, "Please fill in all fields", Toast.LENGTH_SHORT).show();
         } else if (!correctTimeFormat()) {

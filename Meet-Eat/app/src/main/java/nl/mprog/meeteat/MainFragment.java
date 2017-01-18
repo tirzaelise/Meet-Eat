@@ -1,10 +1,17 @@
 package nl.mprog.meeteat;
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
     View rootView;
@@ -24,6 +31,19 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         if (rootView != null) {
             rootView.findViewById(R.id.joiningButton).setOnClickListener(this);
             rootView.findViewById(R.id.cookingButton).setOnClickListener(this);
+            putUsername();
+        }
+    }
+
+    /** Shows the user's name in the fragment */
+    private void putUsername() {
+        TextView helloTextView = (TextView) rootView.findViewById(R.id.helloText);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null && user.getDisplayName() != null) {
+            helloTextView.setText("Hello, " + user.getDisplayName() + "!");
+        } else {
+            helloTextView.setText(R.string.hello);
         }
     }
 

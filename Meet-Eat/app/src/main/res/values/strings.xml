@@ -3,7 +3,6 @@
     <string name="introText">Welcome to Meet &amp; Eat! \n\n\n This application helps you waste less
         food by letting other people join your dinner. Alternatively, this application lets you join
         other people\'s dinners so that you won\'t have to cook tonight! </string>
-    <string name="welcomeText">Hello, username!</string>
     <string name="cookOrJoin">Will you be cooking or joining a dinner tonight?</string>
     <string name="cooking">Cooking</string>
     <string name="whatMaking">What are you making?</string>
@@ -44,4 +43,7 @@
     <string name="password">Password</string>
     <string name="signIn">Sign in</string>
     <string name="signUp">Sign up</string>
+    <string name="name">Name</string>
+    <string name="hello">Hello!</string>
+    <string name="accountAlready">Already have an account?</string>
 </resources>
