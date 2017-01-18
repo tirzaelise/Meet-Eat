@@ -60,6 +60,7 @@
         android:textColor="@android:color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/recipeVegetarian"
         android:layout_alignBottom="@+id/recipeVegan"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/recipeIngredients"

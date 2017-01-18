@@ -49,11 +49,11 @@ public class CookFragment extends Fragment implements View.OnClickListener {
 
         // TODO: FIX HOST
         host = "Tirza";
-        if (!correctTimeFormat()) {
+        if (!filledInAllFields()) {
+            Toast.makeText(activity, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+        } else if (!correctTimeFormat()) {
             Toast.makeText(activity, "Please enter a start time according to the format hh:mm",
                     Toast.LENGTH_SHORT).show();
-        } else if (!filledInAllFields()) {
-            Toast.makeText(activity, "Please fill in all fields", Toast.LENGTH_SHORT).show();
         } else {
             food = food.replace(" ", "&nbsp;");
             toRecipeResultFragment();

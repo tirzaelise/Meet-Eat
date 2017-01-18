@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/ic_menu_add"
         android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
         android:background="@null"
         android:contentDescription="@string/joinButtonDesc"
         android:id="@+id/joinButton" />

@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -84,6 +86,9 @@ public class RecipeAdapter extends BaseAdapter {
             Picasso.with(context).load(url).into(recipeImage);
 
         }
+        Button makeDinner = ((Button) rowView.findViewById(R.id.makeButton));
+        setClickListener(makeDinner);
+
         return rowView;
     }
 
@@ -105,5 +110,17 @@ public class RecipeAdapter extends BaseAdapter {
             text = text + ": no";
         }
         return text;
+    }
+
+    /** Sets a listener on the make dinner button */
+    private void setClickListener(Button button) {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseHandler databaseHandler = new DatabaseHandler();
+                databaseHandler.writeToDatabase(recipe);
+                Toast.makeText(context, "Added dinner", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
