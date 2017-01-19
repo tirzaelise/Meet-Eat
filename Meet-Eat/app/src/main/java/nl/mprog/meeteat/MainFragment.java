@@ -38,10 +38,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     /** Shows the user's name in the fragment */
     private void putUsername() {
         TextView helloTextView = (TextView) rootView.findViewById(R.id.helloText);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        SharedPreferences sharedPrefs = getActivity().getSharedPreferences("userInfo",
+                Context.MODE_PRIVATE);
 
-        if (user != null && user.getDisplayName() != null) {
-            helloTextView.setText("Hello, " + user.getDisplayName() + "!");
+        if (sharedPrefs.contains("username")) {
+            String name = sharedPrefs.getString("username", "");
+            helloTextView.setText("Hello, " + name + "!");
         } else {
             helloTextView.setText(R.string.hello);
         }

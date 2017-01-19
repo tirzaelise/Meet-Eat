@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import static org.apache.commons.lang3.text.WordUtils.capitalizeFully;
+
 public class JoinFragment extends Fragment implements View.OnClickListener {
     View rootView;
     Activity activity;
@@ -40,43 +42,40 @@ public class JoinFragment extends Fragment implements View.OnClickListener {
 
     /** Changes the text in the area and cuisine EditText to the most recent search */
     private void resetLastSearch() {
-        SharedPreferences sharedPrefs = activity.getSharedPreferences("lastSearch", Context.MODE_PRIVATE);
+        SharedPreferences sharedPrefs = activity.getSharedPreferences("lastSearch",
+                Context.MODE_PRIVATE);
 
         if (sharedPrefs.contains("lastArea")) {
             String lastArea = sharedPrefs.getString("lastArea", "area");
-            String lastCuisine = sharedPrefs.getString("lastCuisine", "cuisine");
             ((EditText) rootView.findViewById(R.id.giveArea)).setText(lastArea);
-            ((EditText) rootView.findViewById(R.id.givePreference)).setText(lastCuisine);
         }
     }
 
     /** Searches for a dinner given the user's input */
     public void search() {
         String area = ((EditText) rootView.findViewById(R.id.giveArea)).getText().toString();
-        String cuisine = ((EditText) rootView.findViewById(R.id.givePreference)).getText().toString();
 
         if (!area.equals("")) {
-            saveLastSearch(area, cuisine);
-            toResultFragment(area, cuisine);
+            area = capitalizeFully(area);
+            saveLastSearch(area);
+            toResultFragment(area);
         } else {
-            Toast.makeText(activity, "Please enter the area you're in", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "Please enter an area", Toast.LENGTH_SHORT).show();
         }
     }
 
     /** Saves the most recent search in Shared Preferences */
-    private void saveLastSearch(String area, String cuisine) {
-        SharedPreferences.Editor editor = activity.getSharedPreferences("lastSearch", Context.MODE_PRIVATE)
-                .edit();
-        editor.putString("lastArea", area);
-        editor.putString("lastCuisine", cuisine).apply();
+    private void saveLastSearch(String area) {
+        SharedPreferences.Editor editor = activity.getSharedPreferences("lastSearch",
+                Context.MODE_PRIVATE).edit();
+        editor.putString("lastArea", area).apply();
     }
 
     /** Sends the user to ResultFragment to show his search results */
-    private void toResultFragment(String area, String cuisine) {
+    private void toResultFragment(String area) {
         ResultFragment resultFragment = new ResultFragment();
         Bundle arguments = new Bundle();
         arguments.putString("area", area);
-        arguments.putString("cuisine", cuisine);
         resultFragment.setArguments(arguments);
 
         this.getFragmentManager().beginTransaction()

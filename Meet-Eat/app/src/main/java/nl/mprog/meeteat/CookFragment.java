@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import static org.apache.commons.lang3.text.WordUtils.capitalizeFully;
+
 public class CookFragment extends Fragment implements View.OnClickListener {
     View rootView;
     Activity activity;
@@ -44,7 +46,8 @@ public class CookFragment extends Fragment implements View.OnClickListener {
         startTime = ((EditText) rootView.findViewById(R.id.giveTime)).getText().toString();
         freeSpacesString = ((EditText) rootView.findViewById(R.id.giveAmount)).getText()
                 .toString();
-        area = ((EditText) rootView.findViewById(R.id.giveArea)).getText().toString();
+        area = capitalizeFully(((EditText) rootView.findViewById(R.id.giveArea)).getText()
+                .toString());
 
         if (!filledInAllFields()) {
             Toast.makeText(activity, "Please fill in all fields", Toast.LENGTH_SHORT).show();

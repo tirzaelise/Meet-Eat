@@ -2,9 +2,10 @@ package nl.mprog.meeteat;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,6 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class AccountFragment extends Fragment implements View.OnClickListener {
     private View rootView;
@@ -74,6 +74,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 boolean loggedIn = user != null;
+
                 if (loggedIn) {
                     signOutVisibility();
                 } else {
@@ -157,15 +158,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
     /** Saves the user's name in the database */
     private void saveUsername() {
-        FirebaseUser user = mAuth.getCurrentUser();
         String name = ((EditText) rootView.findViewById(R.id.giveName)).getText().toString();
-
-        UserProfileChangeRequest updateName = new UserProfileChangeRequest.Builder()
-                .setDisplayName(name).build();
-
-        if (user != null) {
-            user.updateProfile(updateName);
-        }
+        SharedPreferences.Editor editor = activity.getSharedPreferences("userInfo",
+                Context.MODE_PRIVATE).edit();
+        editor.putString("username", name).apply();
     }
 
     /** Hides keyboard */

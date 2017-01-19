@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:text="@string/whatArea"
+        android:text="@string/areaPref"
         android:id="@+id/whatArea" />
 
     <EditText
@@ -27,24 +27,6 @@
         android:ems="10"
         android:textSize="14sp"
         android:id="@+id/giveArea"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/giveArea"
-        android:layout_marginTop="20dp"
-        android:text="@string/whatPreference"
-        android:id="@+id/whatPreference" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/whatPreference"
-        android:hint="@string/cuisineOpt"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:textSize="14sp"
-        android:id="@+id/givePreference"/>
 
     <Button
         android:text="@string/search"
