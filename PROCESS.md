@@ -25,4 +25,4 @@ Called both AsyncTasks in the same Fragment, which works. However, the informati
 Created a custom adapter to show recipe search results, which displays relevant information. The new recipes can be saved to the database. Also worked on logging in, but it was not possible to use Google login because of certain necessary methods that require AppCompatActivity instead of Fragment. Therefore, I chose e-mail verification instead, which works now.
 
 #### Day 9
-Wanted to save the user's name using Firebase's setDisplayName, but apparently this does not work if you use e-mail authentication. Now the user's name is saved in SharedPreferences instead.
+Wanted to save the user's name using Firebase's setDisplayName, but apparently this does not work if you use e-mail authentication. Now the user's name is saved in SharedPreferences instead. Found a bug where it turned out that the recipe that was saved to the database was random instead of the recipe that was clicked. Fixed this using the adapter.
