@@ -2,7 +2,6 @@ package nl.mprog.meeteat;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,6 @@ public class CookFragment extends Fragment implements View.OnClickListener {
     View rootView;
     Activity activity;
     private String food;
-    private String host;
     private String startTime;
     private String freeSpacesString;
     private String area;
@@ -41,8 +39,6 @@ public class CookFragment extends Fragment implements View.OnClickListener {
     /** Adds a dinner to the database */
     public void searchRecipes() {
         food = ((EditText) rootView.findViewById(R.id.giveFood)).getText().toString();
-        host = activity.getSharedPreferences("userInfo", Context.MODE_PRIVATE).
-                getString("username", "");
         startTime = ((EditText) rootView.findViewById(R.id.giveTime)).getText().toString();
         freeSpacesString = ((EditText) rootView.findViewById(R.id.giveAmount)).getText()
                 .toString();
@@ -83,7 +79,7 @@ public class CookFragment extends Fragment implements View.OnClickListener {
 
     /** Checks if all fields were filled in */
     private boolean filledInAllFields() {
-        return (!food.equals("") && !host.equals("") && !startTime.equals("") &&
+        return (!food.equals("") && !startTime.equals("") &&
                 !freeSpacesString.equals("") && !area.equals(""));
     }
 
@@ -93,7 +89,6 @@ public class CookFragment extends Fragment implements View.OnClickListener {
         RecipeResultFragment recipeResultFragment = new RecipeResultFragment();
         Bundle arguments = new Bundle();
         arguments.putString("food", food);
-        arguments.putString("host", host);
         arguments.putString("startTime", startTime);
         arguments.putInt("freeSpaces", freeSpaces);
         arguments.putString("area", area);

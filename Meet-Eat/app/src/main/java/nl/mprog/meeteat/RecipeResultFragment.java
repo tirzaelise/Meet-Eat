@@ -1,18 +1,19 @@
 package nl.mprog.meeteat;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
 public class RecipeResultFragment extends Fragment implements DinnerAsyncTask.OnTaskCompleted,
         InfoAsyncTask.OnInfoRetrieved {
+    private Activity activity;
     private String food;
     private String host;
     private String startTime;
@@ -32,6 +33,7 @@ public class RecipeResultFragment extends Fragment implements DinnerAsyncTask.On
         super.onViewCreated(view, savedInstanceState);
 
         View rootView = getView();
+        activity = getActivity();
         Bundle arguments = this.getArguments();
 
         if (arguments != null && rootView != null) {
@@ -44,7 +46,8 @@ public class RecipeResultFragment extends Fragment implements DinnerAsyncTask.On
 
     private void getArguments(Bundle arguments) {
         food = arguments.getString("food");
-        host = arguments.getString("host");
+        host = activity.getSharedPreferences("userInfo", Context.MODE_PRIVATE)
+                .getString("username", "");
         startTime = arguments.getString("startTime");
         freeSpaces = arguments.getInt("freeSpaces");
         area = arguments.getString("area");
@@ -59,7 +62,7 @@ public class RecipeResultFragment extends Fragment implements DinnerAsyncTask.On
 
     private void showResult(View rootView) {
         ListView listView = (ListView) rootView.findViewById(R.id.listView);
-        adapter = new RecipeAdapter(getActivity(), dinners);
+        adapter = new RecipeAdapter(activity, dinners);
         listView.setAdapter(adapter);
     }
 

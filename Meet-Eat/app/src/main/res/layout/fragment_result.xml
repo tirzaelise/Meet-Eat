@@ -12,12 +12,12 @@
     tools:context="nl.mprog.meeteat.ResultFragment">
 
     <TextView
-        android:text="@string/results"
+        android:text="@string/dinnersIn"
         android:textSize="18sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:id="@+id/resultsText"/>
+        android:id="@+id/dinnersInText"/>
 
     <ExpandableListView
         android:layout_width="match_parent"

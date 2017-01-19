@@ -1,12 +1,14 @@
 package nl.mprog.meeteat;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,7 +89,7 @@ public class RecipeAdapter extends BaseAdapter {
 
         }
         Button makeDinner = ((Button) rowView.findViewById(R.id.makeButton));
-        setClickListener(makeDinner);
+        setClickListener(makeDinner, position);
 
         return rowView;
     }
@@ -113,12 +115,13 @@ public class RecipeAdapter extends BaseAdapter {
     }
 
     /** Sets a listener on the make dinner button */
-    private void setClickListener(Button button) {
+    private void setClickListener(Button button, final int position) {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Dinner clickedRecipe = recipes.get(position);
                 DatabaseHandler databaseHandler = new DatabaseHandler();
-                databaseHandler.writeToDatabase(recipe);
+                databaseHandler.writeToDatabase(clickedRecipe);
                 Toast.makeText(context, "Added dinner", Toast.LENGTH_SHORT).show();
             }
         });

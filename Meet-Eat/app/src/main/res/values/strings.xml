@@ -47,4 +47,5 @@
     <string name="hello">Hello!</string>
     <string name="accountAlready">Already have an account?</string>
     <string name="areaPref">In what area do you want to have dinner tonight?</string>
+    <string name="dinnersIn">Dinners in </string>
 </resources>

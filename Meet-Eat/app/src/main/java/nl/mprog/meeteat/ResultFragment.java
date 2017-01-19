@@ -33,6 +33,9 @@ public class ResultFragment extends Fragment {
     /** Shows the user's search result by reading from the Firebase database using DatabaseHelper */
     private void showResult(Bundle arguments, View rootView) {
         String area = arguments.getString("area", "");
+        TextView dinnersInTV = (TextView) rootView.findViewById(R.id.dinnersInText);
+        String dinnersIn = dinnersInTV.getText() + " " + area;
+        dinnersInTV.setText(dinnersIn);
 
         ExpandableListView listView = (ExpandableListView) rootView.findViewById(R.id.listView);
         ArrayList<Dinner> dinners = new ArrayList<>();
