@@ -83,6 +83,7 @@ class DatabaseHandler {
                     } else {
                         dinner.setFreeSpaces(newFreeSpaces);
                         database.child(databaseKey).setValue(dinner);
+                        Toast.makeText(context, "Joined dinner", Toast.LENGTH_SHORT).show();
                     }
                 }
             }

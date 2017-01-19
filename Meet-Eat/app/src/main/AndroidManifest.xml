@@ -20,7 +20,8 @@
         <activity android:name=".ResultFragment" />
         <activity android:name=".AccountFragment" />
         <activity android:name=".MainFragment" />
-        <activity android:name=".RecipeResultFragment"></activity>
+        <activity android:name=".RecipeResultFragment" />
+        <activity android:name=".SavedFragment"></activity>
     </application>
 
 </manifest>

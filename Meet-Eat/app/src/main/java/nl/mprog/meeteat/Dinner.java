@@ -1,8 +1,14 @@
-package nl.mprog.meeteat;
-
-/**
- * Created by tirza on 10-1-17.
+/* Meet & Eat
+ * Tirza Soute (10761977)
+ * Programmeerproject
+ *
+ * This class implements the Dinner object, which consists of a title, an ID (retrieved from the
+ * Spoonacular API), a host, a start time, an amount of free spaces, an an area where it'll be held,
+ * a string of ingredients, a boolean that says whether it's vegan and another boolean that says
+ * whether it's vegetarian.
  */
+
+package nl.mprog.meeteat;
 
 class Dinner {
     private String title;
@@ -65,10 +71,6 @@ class Dinner {
 
     int getFreeSpaces() {
         return freeSpaces;
-    }
-
-    String getArea() {
-        return area;
     }
 
     String getIngredients() {

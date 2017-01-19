@@ -2,6 +2,7 @@ package nl.mprog.meeteat;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -104,7 +105,8 @@ public class CookFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addButton:
-            searchRecipes();
+                searchRecipes();
+                break;
         }
     }
 }

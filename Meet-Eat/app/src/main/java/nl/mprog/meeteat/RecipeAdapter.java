@@ -8,19 +8,20 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-/**
+/*
  * Created by tirza on 17-1-17.
  */
 
-public class RecipeAdapter extends BaseAdapter {
+class RecipeAdapter extends BaseAdapter {
     private ArrayList<Dinner> recipes;
     private Context context;
     private LayoutInflater inflater;
@@ -60,13 +61,11 @@ public class RecipeAdapter extends BaseAdapter {
             rowView = inflater.inflate(R.layout.layout_recipe_row, parent, false);
             initialiseViewsAndRecipe(rowView, position);
             String ingredients = "Ingredients: " + recipe.getIngredients();
-            String vegetarian = booleanToString(recipe.isVegetarian(), "Vegetarian");
-            String vegan = booleanToString(recipe.isVegan(), "Vegan");
 
             recipeTitle.setText(recipe.getTitle());
             recipeIngredients.setText(ingredients);
-            recipeVegetarian.setText(vegetarian);
-            recipeVegan.setText(vegan);
+            booleanToVisibility(recipe.isVegetarian(), recipeVegetarian);
+            booleanToVisibility(recipe.isVegan(), recipeVegan);
             String url = "https://spoonacular.com/recipeImages/" + recipe.getId() + "-312x231.jpg";
 
             Picasso.with(context).load(url).into(recipeImage);
@@ -76,13 +75,10 @@ public class RecipeAdapter extends BaseAdapter {
             String ingredients = "Ingredients: " + this.recipes.get(position).getIngredients();
             boolean isVegetarian = this.recipes.get(position).isVegetarian();
             boolean isVegan = this.recipes.get(position).isVegan();
-            String vegetarian = booleanToString(isVegetarian, "Vegetarian");
-            String vegan = booleanToString(isVegan, "Vegan");
 
-            recipeTitle.setText(this.recipes.get(position).getTitle());
             recipeIngredients.setText(ingredients);
-            recipeVegetarian.setText(vegetarian);
-            recipeVegan.setText(vegan);
+            booleanToVisibility(isVegetarian, recipeVegetarian);
+            booleanToVisibility(isVegan, recipeVegan);
             String url = "https://spoonacular.com/recipeImages/" +
                     this.recipes.get(position).getId() + "-312x231.jpg";
             Picasso.with(context).load(url).into(recipeImage);
@@ -104,25 +100,31 @@ public class RecipeAdapter extends BaseAdapter {
         recipeImage = (ImageView) view.findViewById(R.id.recipeImage);
     }
 
-    /** Converts a boolean to a string that can be used in a TextView */
-    private String booleanToString(boolean isTrue, String text){
+    /** Determines the visibility of a TextView according to a boolean */
+    private void booleanToVisibility(boolean isTrue, TextView textView){
         if (isTrue) {
-            text = text + ": yes";
+            Log.wtf("is true", "in true");
+            textView.setVisibility(View.VISIBLE);
         } else {
-            text = text + ": no";
+            textView.setVisibility(View.INVISIBLE);
         }
-        return text;
     }
 
-    /** Sets a listener on the make dinner button */
+    /** Adds a dinner to the Firebase database if the user is logged in */
     private void setClickListener(Button button, final int position) {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dinner clickedRecipe = recipes.get(position);
-                DatabaseHandler databaseHandler = new DatabaseHandler();
-                databaseHandler.writeToDatabase(clickedRecipe);
-                Toast.makeText(context, "Added dinner", Toast.LENGTH_SHORT).show();
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                if (user != null) {
+                    Dinner clickedRecipe = recipes.get(position);
+                    DatabaseHandler databaseHandler = new DatabaseHandler();
+                    databaseHandler.writeToDatabase(clickedRecipe);
+                    Toast.makeText(context, "Added dinner", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Please log in to add a dinner", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

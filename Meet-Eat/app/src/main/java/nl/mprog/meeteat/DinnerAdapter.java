@@ -1,12 +1,19 @@
 package nl.mprog.meeteat;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -16,10 +23,12 @@ import java.util.ArrayList;
 
 class DinnerAdapter extends BaseExpandableListAdapter {
     private LayoutInflater inflater;
+    private Context context;
     private ArrayList<Dinner> dinners;
 
     DinnerAdapter(Fragment fragment, ArrayList<Dinner> dinners) {
         inflater = LayoutInflater.from(fragment.getActivity());
+        this.context = fragment.getActivity();
         this.dinners = dinners;
     }
 
@@ -84,6 +93,10 @@ class DinnerAdapter extends BaseExpandableListAdapter {
         ((TextView) convertView.findViewById(R.id.space)).setText(freeSpaces);
         ((TextView) convertView.findViewById(R.id.startTime)).setText(startTime);
         ((TextView) convertView.findViewById(R.id.ingredients)).setText(ingredients);
+        ImageView dinnerImage = (ImageView) convertView.findViewById(R.id.dinnerImage);
+        String url = "https://spoonacular.com/recipeImages/" +
+                dinner.getId() + "-312x231.jpg";
+        Picasso.with(context).load(url).into(dinnerImage);
         ImageButton joinButton = (ImageButton) convertView.findViewById(R.id.joinButton);
         setClickListener(joinButton, dinnerId);
 
@@ -94,8 +107,14 @@ class DinnerAdapter extends BaseExpandableListAdapter {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseHandler databaseHandler = new DatabaseHandler();
-                databaseHandler.updateFreeSpaces(dinnerId, v.getContext());
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null) {
+                    DatabaseHandler databaseHandler = new DatabaseHandler();
+                    databaseHandler.updateFreeSpaces(dinnerId, v.getContext());
+                } else {
+                    Toast.makeText(context, "Please sign in to join a dinner", Toast.LENGTH_SHORT)
+                            .show();
+                }
             }
         });
     }
