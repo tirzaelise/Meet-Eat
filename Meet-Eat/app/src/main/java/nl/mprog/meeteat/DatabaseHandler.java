@@ -25,7 +25,7 @@ class DatabaseHandler {
         database.child("dinners").push().setValue(dinner);
     }
 
-    /** Reads the database based on the user's input of his area and dinner preference */
+    /** Reads the database based on the user's input area. */
     void readDatabase(String area, final ArrayList<Dinner> dinners, final DinnerAdapter adapter,
                       final ResultFragment fragment) {
         database = FirebaseDatabase.getInstance().getReference();
@@ -62,6 +62,7 @@ class DatabaseHandler {
         });
     }
 
+    /** The amount of free spaces is updated if there are more than 0 free spaces. */
     void updateFreeSpaces(String dinnerId, final Context context) {
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         Query findId = database.child("dinners").orderByChild("id").equalTo(dinnerId);
@@ -93,9 +94,11 @@ class DatabaseHandler {
         });
     }
 
-    /** Find the user's name using his user ID */
-    private void updateGuests(final ArrayList<String> guests, final Dinner dinner, final String
-            databaseKey) {
+    /**
+     * Finds the user's name to update the Dinner entry in the database when the join button is
+     * clicked. */
+    private void updateGuests(final ArrayList<String> guests, final Dinner dinner,
+                              final String databaseKey) {
         final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         Query findName = database.child("users").orderByChild("userId").equalTo(userId);
@@ -117,8 +120,10 @@ class DatabaseHandler {
         });
     }
 
-    /** Searches for the first "null" occurrence in the guests array and replaces this with the
-     * guest's name */
+    /**
+     * Searches for the first "null" occurrence in the guests array and replaces this with the
+     * guest's name. After that, the Dinner entry in the database is updated.
+     */
     private void updateFirebaseGuests(ArrayList<String> guests, String name, Dinner dinner,
                                       String databaseKey) {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
@@ -133,7 +138,7 @@ class DatabaseHandler {
         }
     }
 
-    /** Returns an ArrayList of the dinners the user is hosting */
+    /** Returns an ArrayList of the dinners the user is hosting. */
     ArrayList<Dinner> getHostingDinners() {
         ArrayList<Dinner> hostingDinners = new ArrayList<>();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -155,7 +160,7 @@ class DatabaseHandler {
         return hostingDinners;
     }
 
-    /** Saves a user in Firebase under his user ID */
+    /** Saves a user in Firebase under his user ID. */
     void saveUser(User user) {
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         database.child("users").child(user.getUserId()).setValue(user);
