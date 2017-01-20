@@ -15,7 +15,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Created by tirza on 11-1-17.
@@ -84,7 +88,9 @@ class DinnerAdapter extends BaseExpandableListAdapter {
 
         String dinnerId = dinner.getId();
         String host = "Host: " + dinner.getHost();
-        String freeSpaces = "Free spaces: " + Integer.toString(dinner.getFreeSpaces());
+        String guestsString = Arrays.toString(dinner.getGuests().toArray());
+        String freeSpaces = "Free spaces: "  +
+                Integer.toString(StringUtils.countMatches(guestsString, "null"));
         String date = "Date: " + dinner.getDate();
         String ingredients = "Ingredients: " + dinner.getIngredients();
         convertView = inflater.inflate(R.layout.list_child, parentView, false);

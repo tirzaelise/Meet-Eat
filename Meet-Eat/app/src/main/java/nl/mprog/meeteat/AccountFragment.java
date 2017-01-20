@@ -118,7 +118,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
     /** Creates an account in the database */
     private void createAccount() {
-        String name = ((EditText) rootView.findViewById(R.id.giveName)).getText().toString();
+        final String name = ((EditText) rootView.findViewById(R.id.giveName)).getText().toString();
         String email = ((EditText) rootView.findViewById(R.id.giveEmail)).getText().toString();
         String password = ((EditText) rootView.findViewById(R.id.givePassword)).getText().
                 toString();
@@ -144,7 +144,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                                     e.printStackTrace();
                                 }
                             } else {
-                                saveUsername();
+//                                saveUsername();
+                                saveUser(name);
                                 Toast.makeText(activity, "Registered successfully",
                                         Toast.LENGTH_SHORT).show();
                                 hideKeyboard();
@@ -156,12 +157,25 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    /** Saves the user's name in the database */
-    private void saveUsername() {
-        String name = ((EditText) rootView.findViewById(R.id.giveName)).getText().toString();
-        SharedPreferences.Editor editor = activity.getSharedPreferences("userInfo",
-                Context.MODE_PRIVATE).edit();
-        editor.putString("username", name).apply();
+//    /** Saves the user's name in the database */
+//    private void saveUsername() {
+//        String name = ((EditText) rootView.findViewById(R.id.giveName)).getText().toString();
+//        SharedPreferences.Editor editor = activity.getSharedPreferences("userInfo",
+//                Context.MODE_PRIVATE).edit();
+//        editor.putString("username", name).apply();
+//    }
+
+    /** Saves a user to the Firebase database after the user has created an account to keep track
+     * of the user's name */
+    private void saveUser(String username) {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (firebaseUser != null) {
+            String userId = firebaseUser.getUid();
+            User user = new User(userId, username);
+            DatabaseHandler databaseHandler = new DatabaseHandler();
+            databaseHandler.saveUser(user);
+        }
     }
 
     /** Hides keyboard */

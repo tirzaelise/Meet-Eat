@@ -10,24 +10,26 @@
 
 package nl.mprog.meeteat;
 
+import java.util.ArrayList;
+
 class Dinner {
     private String title;
     private String id;
     private String host;
     private String date;
-    private int freeSpaces;
+    private ArrayList<String> guests;
     private String area;
     private String ingredients;
     private boolean vegetarian;
     private boolean vegan;
 
-    Dinner(String title, String id, String host, String date, int freeSpaces, String
+    Dinner(String title, String id, String host, String date, ArrayList<String> guests, String
             area, String ingredients, boolean vegetarian, boolean vegan) {
         this.title = title;
         this.id = id;
         this.host = host;
         this.date = date;
-        this.freeSpaces = freeSpaces;
+        this.guests = guests;
         this.area = area;
         this.ingredients = ingredients;
         this.vegetarian = vegetarian;
@@ -37,8 +39,8 @@ class Dinner {
     public Dinner() {
     }
 
-    void setFreeSpaces(int freeSpaces) {
-        this.freeSpaces = freeSpaces;
+    void setGuests(ArrayList<String> guests) {
+        this.guests = guests;
     }
 
     void setIngredients(String ingredients) {
@@ -69,8 +71,8 @@ class Dinner {
         return date;
     }
 
-    int getFreeSpaces() {
-        return freeSpaces;
+    ArrayList<String> getGuests() {
+        return guests;
     }
 
     String getArea() {

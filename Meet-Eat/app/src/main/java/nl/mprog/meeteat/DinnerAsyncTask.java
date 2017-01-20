@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 class DinnerAsyncTask extends AsyncTask<String, Void, String> {
     private Context context;
@@ -58,9 +59,10 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
                     JSONObject dinnerObject = dinnersObject.getJSONObject(i);
                     String title = dinnerObject.getString("title");
                     String id = dinnerObject.getString("id");
+                    ArrayList<String> guests = createEmptyGuests(freeSpaces);
 
-                    Dinner dinner = new Dinner(title, id, host, date, freeSpaces, area, "",
-                            false, false);
+                    Dinner dinner = new Dinner(title, id, host, date, guests, area, "", false,
+                            false);
                     dinners.add(dinner);
                 }
                 listener.onTaskCompleted(dinners);
@@ -71,5 +73,12 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
             Toast.makeText(context, "No data was found", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
+    }
+
+    /** Creates an ArrayList<String> of the size of the amount of spaces that was given */
+    private ArrayList<String> createEmptyGuests(int spaces) {
+        String[] guests = new String[freeSpaces];
+        Arrays.fill(guests, "null");
+        return new ArrayList<>(Arrays.asList(guests));
     }
 }
