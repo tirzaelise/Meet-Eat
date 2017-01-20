@@ -21,16 +21,16 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
     private Context context;
     private OnTaskCompleted listener;
     private String host;
-    private String startTime;
+    private String date;
     private int freeSpaces;
     private String area;
 
     DinnerAsyncTask(RecipeResultFragment activity, OnTaskCompleted listener, String host, String
-            startTime, int freeSpaces, String area) {
+            date, int freeSpaces, String area) {
         this.context = activity.getActivity();
         this.listener = listener;
         this.host = host;
-        this.startTime = startTime;
+        this.date = date;
         this.freeSpaces = freeSpaces;
         this.area = area;
     }
@@ -59,7 +59,7 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
                     String title = dinnerObject.getString("title");
                     String id = dinnerObject.getString("id");
 
-                    Dinner dinner = new Dinner(title, id, host, startTime, freeSpaces, area, "",
+                    Dinner dinner = new Dinner(title, id, host, date, freeSpaces, area, "",
                             false, false);
                     dinners.add(dinner);
                 }

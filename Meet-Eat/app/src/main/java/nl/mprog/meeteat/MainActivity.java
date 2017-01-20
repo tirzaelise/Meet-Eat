@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     /** Creates menu items for the navigation drawer */
     private void createDrawerItems() {
-        String[] menuArray = {"Home", "Account"};
+        String[] menuArray = {"Home", "Account", "Hosting dinners", "Joined dinners"};
         ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
                 menuArray);
         drawerList.setAdapter(adapter);
@@ -63,6 +63,18 @@ public class MainActivity extends AppCompatActivity {
                         manager.beginTransaction()
                                 .replace(R.id.contentFrame, accountFragment)
                                 .commit();
+                        break;
+                    case 2:
+                        OwnHostFragment ownHostFragment = new OwnHostFragment();
+                        manager.beginTransaction()
+                                .replace(R.id.contentFrame, ownHostFragment)
+                                .commit();
+                        break;
+                    case 3:
+//                        OwnJoinFragment ownJoinFragment = new OwnJoinFragment();
+//                        manager.beginTransaction()
+//                                .replace(R.id.contentFrame, ownJoinFragment)
+//                                .commit();
                         break;
                 }
             }

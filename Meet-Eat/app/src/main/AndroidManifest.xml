@@ -21,7 +21,7 @@
         <activity android:name=".AccountFragment" />
         <activity android:name=".MainFragment" />
         <activity android:name=".RecipeResultFragment" />
-        <activity android:name=".SavedFragment"></activity>
+        <activity android:name=".OwnHostFragment"></activity>
     </application>
 
 </manifest>

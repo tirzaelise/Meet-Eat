@@ -85,13 +85,13 @@ class DinnerAdapter extends BaseExpandableListAdapter {
         String dinnerId = dinner.getId();
         String host = "Host: " + dinner.getHost();
         String freeSpaces = "Free spaces: " + Integer.toString(dinner.getFreeSpaces());
-        String startTime = "Start time: " + dinner.getStartTime();
+        String date = "Date: " + dinner.getDate();
         String ingredients = "Ingredients: " + dinner.getIngredients();
         convertView = inflater.inflate(R.layout.list_child, parentView, false);
 
         ((TextView) convertView.findViewById(R.id.host)).setText(host);
         ((TextView) convertView.findViewById(R.id.space)).setText(freeSpaces);
-        ((TextView) convertView.findViewById(R.id.startTime)).setText(startTime);
+        ((TextView) convertView.findViewById(R.id.date)).setText(date);
         ((TextView) convertView.findViewById(R.id.ingredients)).setText(ingredients);
         ImageView dinnerImage = (ImageView) convertView.findViewById(R.id.dinnerImage);
         String url = "https://spoonacular.com/recipeImages/" +

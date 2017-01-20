@@ -76,14 +76,15 @@ class RecipeAdapter extends BaseAdapter {
             boolean isVegetarian = this.recipes.get(position).isVegetarian();
             boolean isVegan = this.recipes.get(position).isVegan();
 
+            recipeTitle.setText(recipes.get(position).getTitle());
             recipeIngredients.setText(ingredients);
             booleanToVisibility(isVegetarian, recipeVegetarian);
             booleanToVisibility(isVegan, recipeVegan);
             String url = "https://spoonacular.com/recipeImages/" +
                     this.recipes.get(position).getId() + "-312x231.jpg";
             Picasso.with(context).load(url).into(recipeImage);
-
         }
+
         Button makeDinner = ((Button) rowView.findViewById(R.id.makeButton));
         setClickListener(makeDinner, position);
 

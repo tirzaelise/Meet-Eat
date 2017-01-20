@@ -1,8 +1,11 @@
 package nl.mprog.meeteat;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -13,13 +16,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-/**
- * Created by tirza on 11-1-17.
- */
-
 class DatabaseHandler {
     private DatabaseReference database;
-    private ArrayList<Dinner> dinners;
 
     void writeToDatabase(Dinner dinner) {
         database = FirebaseDatabase.getInstance().getReference();
@@ -27,8 +25,8 @@ class DatabaseHandler {
     }
 
     /** Reads the database based on the user's input of his area and dinner preference */
-    ArrayList<Dinner> readDatabase(String area, final ArrayList<Dinner> dinners,
-                                   final DinnerAdapter adapter, final ResultFragment fragment) {
+    void readDatabase(String area, final ArrayList<Dinner> dinners, final DinnerAdapter adapter,
+                      final ResultFragment fragment) {
         database = FirebaseDatabase.getInstance().getReference();
         Query areaQuery = database.orderByChild("area").equalTo(area);
 
@@ -62,7 +60,6 @@ class DatabaseHandler {
                         Toast.LENGTH_SHORT).show();
             }
         });
-        return dinners;
     }
 
     void updateFreeSpaces(String dinnerId, final Context context) {
@@ -93,5 +90,27 @@ class DatabaseHandler {
                 Toast.makeText(context, "Failed to join dinner", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /** Returns an ArrayList of the dinners the user is hosting */
+    ArrayList<Dinner> getHostingDinners() {
+        ArrayList<Dinner> hostingDinners = new ArrayList<>();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        Query findHosting = database.orderByChild("host").equalTo(user.getUid());
+
+        findHosting.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+//                Log.wtf()
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        return hostingDinners;
     }
 }

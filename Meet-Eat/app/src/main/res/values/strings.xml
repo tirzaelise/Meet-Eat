@@ -48,4 +48,6 @@
     <string name="accountAlready">Already have an account?</string>
     <string name="areaPref">In what area do you want to have dinner tonight?</string>
     <string name="dinnersIn">Dinners in </string>
+    <string name="hostDinners">Host Dinners</string>
+    <string name="date">Date</string>
 </resources>

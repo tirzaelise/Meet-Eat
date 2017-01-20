@@ -16,7 +16,7 @@ public class RecipeResultFragment extends Fragment implements DinnerAsyncTask.On
     private Activity activity;
     private String food;
     private String host;
-    private String startTime;
+    private String date;
     private int freeSpaces;
     private String area;
     private RecipeAdapter adapter;
@@ -48,14 +48,14 @@ public class RecipeResultFragment extends Fragment implements DinnerAsyncTask.On
         food = arguments.getString("food");
         host = activity.getSharedPreferences("userInfo", Context.MODE_PRIVATE)
                 .getString("username", "");
-        startTime = arguments.getString("startTime");
+        date = arguments.getString("date");
         freeSpaces = arguments.getInt("freeSpaces");
         area = arguments.getString("area");
     }
 
     private void getDinnerInfo() {
         String query = "search?&query=" + food;
-        DinnerAsyncTask dinnerAsyncTask = new DinnerAsyncTask(this, this, host, startTime,
+        DinnerAsyncTask dinnerAsyncTask = new DinnerAsyncTask(this, this, host, date,
                 freeSpaces, area);
         dinnerAsyncTask.execute(query);
     }

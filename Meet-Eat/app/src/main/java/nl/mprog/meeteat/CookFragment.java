@@ -2,7 +2,6 @@ package nl.mprog.meeteat;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,7 @@ public class CookFragment extends Fragment implements View.OnClickListener {
     View rootView;
     Activity activity;
     private String food;
-    private String startTime;
+    private String date;
     private String freeSpacesString;
     private String area;
 
@@ -37,10 +36,11 @@ public class CookFragment extends Fragment implements View.OnClickListener {
             rootView.findViewById(R.id.addButton).setOnClickListener(this);
         }
     }
+
     /** Adds a dinner to the database */
     public void searchRecipes() {
         food = ((EditText) rootView.findViewById(R.id.giveFood)).getText().toString();
-        startTime = ((EditText) rootView.findViewById(R.id.giveTime)).getText().toString();
+        date = ((EditText) rootView.findViewById(R.id.giveTime)).getText().toString();
         freeSpacesString = ((EditText) rootView.findViewById(R.id.giveAmount)).getText()
                 .toString();
         area = capitalizeFully(((EditText) rootView.findViewById(R.id.giveArea)).getText()
@@ -59,11 +59,11 @@ public class CookFragment extends Fragment implements View.OnClickListener {
 
     /** Checks if a start time corresponds to the format hh:mm */
     private boolean correctTimeFormat() {
-        String[] splitTime = startTime.split(":");
+        String[] splitTime = date.split(":");
 
         // If there is no ":" in the string, split returns an array containing the input at the
         // first place
-        if (splitTime[0].equals(startTime)) {
+        if (splitTime[0].equals(date)) {
             return false;
         } else {
             String[] splitHour = splitTime[0].split("");
@@ -80,7 +80,7 @@ public class CookFragment extends Fragment implements View.OnClickListener {
 
     /** Checks if all fields were filled in */
     private boolean filledInAllFields() {
-        return (!food.equals("") && !startTime.equals("") &&
+        return (!food.equals("") && !date.equals("") &&
                 !freeSpacesString.equals("") && !area.equals(""));
     }
 
@@ -90,7 +90,7 @@ public class CookFragment extends Fragment implements View.OnClickListener {
         RecipeResultFragment recipeResultFragment = new RecipeResultFragment();
         Bundle arguments = new Bundle();
         arguments.putString("food", food);
-        arguments.putString("startTime", startTime);
+        arguments.putString("date", date);
         arguments.putInt("freeSpaces", freeSpaces);
         arguments.putString("area", area);
         recipeResultFragment.setArguments(arguments);

@@ -32,9 +32,9 @@
         android:text="@string/host"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_toEndOf="@id/dinnerImage"
         android:layout_marginStart="10dp"
-        android:layout_marginBottom="5dp"
         android:layout_toStartOf="@id/joinButton"
         android:id="@+id/host"/>
 
@@ -45,20 +45,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/host"
-        android:layout_marginBottom="5dp"
         android:layout_toStartOf="@id/joinButton"
         android:id="@+id/space" />
 
     <TextView
-        android:text="@string/startTime"
+        android:text="@string/date"
         android:layout_alignStart="@+id/host"
         android:layout_toEndOf="@id/dinnerImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/space"
-        android:layout_marginBottom="5dp"
         android:layout_toStartOf="@id/joinButton"
-        android:id="@+id/startTime" />
+        android:id="@+id/date" />
+
+    <TextView
+        android:text="@string/vegetarian"
+        android:layout_alignStart="@+id/host"
+        android:layout_toEndOf="@id/dinnerImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/date"
+        android:layout_toStartOf="@id/joinButton"
+        android:id="@+id/vegetarian" />
+
+    <TextView
+        android:text="@string/vegan"
+        android:layout_alignStart="@+id/host"
+        android:layout_toEndOf="@id/dinnerImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/vegetarian"
+        android:layout_toStartOf="@id/joinButton"
+        android:id="@+id/vegan" />
 
     <TextView
         android:text="@string/ingredients"

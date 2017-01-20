@@ -3,8 +3,8 @@
  * Programmeerproject
  *
  * This class implements the Dinner object, which consists of a title, an ID (retrieved from the
- * Spoonacular API), a host, a start time, an amount of free spaces, an an area where it'll be held,
- * a string of ingredients, a boolean that says whether it's vegan and another boolean that says
+ * Spoonacular API), a host, a date, an amount of free spaces, an an area where it'll be held, a
+ * string of ingredients, a boolean that says whether it's vegan and another boolean that says
  * whether it's vegetarian.
  */
 
@@ -14,19 +14,19 @@ class Dinner {
     private String title;
     private String id;
     private String host;
-    private String startTime;
+    private String date;
     private int freeSpaces;
     private String area;
     private String ingredients;
     private boolean vegetarian;
     private boolean vegan;
 
-    Dinner(String title, String id, String host, String startTime, int freeSpaces, String
+    Dinner(String title, String id, String host, String date, int freeSpaces, String
             area, String ingredients, boolean vegetarian, boolean vegan) {
         this.title = title;
         this.id = id;
         this.host = host;
-        this.startTime = startTime;
+        this.date = date;
         this.freeSpaces = freeSpaces;
         this.area = area;
         this.ingredients = ingredients;
@@ -65,12 +65,16 @@ class Dinner {
         return host;
     }
 
-    String getStartTime() {
-        return startTime;
+    String getDate() {
+        return date;
     }
 
     int getFreeSpaces() {
         return freeSpaces;
+    }
+
+    String getArea() {
+        return area;
     }
 
     String getIngredients() {

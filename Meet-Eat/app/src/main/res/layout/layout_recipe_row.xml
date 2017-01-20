@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/recipeTitle"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_alignStart="@id/recipeTitle"
         android:id="@+id/recipeVegetarian" />
 
@@ -42,7 +42,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/recipeVegetarian"
-        android:layout_marginTop="2.5dp"
         android:layout_alignStart="@id/recipeVegetarian"
         android:id="@+id/recipeVegan" />
 
