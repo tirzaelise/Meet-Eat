@@ -1,6 +1,8 @@
 package nl.mprog.meeteat;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -96,7 +98,8 @@ class DatabaseHandler {
 
     /**
      * Finds the user's name to update the Dinner entry in the database when the join button is
-     * clicked. */
+     * clicked.
+     */
     private void updateGuests(final ArrayList<String> guests, final Dinner dinner,
                               final String databaseKey) {
         final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -109,6 +112,7 @@ class DatabaseHandler {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
                     String username = user.getUsername();
+                    Log.wtf("username", username);
                     updateFirebaseGuests(guests, username, dinner, databaseKey);
                 }
             }
@@ -133,9 +137,10 @@ class DatabaseHandler {
                 guests.set(i, name);
                 break;
             }
-            dinner.setGuests(guests);
-            database.child("dinners").child(databaseKey).setValue(dinner);
         }
+        dinner.setGuests(guests);
+        database.child("dinners").child(databaseKey).setValue(dinner);
+
     }
 
     /** Returns an ArrayList of the dinners the user is hosting. */
@@ -143,7 +148,7 @@ class DatabaseHandler {
         ArrayList<Dinner> hostingDinners = new ArrayList<>();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        Query findHosting = database.child("dinners").orderByChild("host").equalTo(user.getUid());
+        Query findHosting = database.child("dinners").orderByChild("hostId").equalTo(user.getUid());
 
         findHosting.addValueEventListener(new ValueEventListener() {
             @Override
@@ -161,8 +166,37 @@ class DatabaseHandler {
     }
 
     /** Saves a user in Firebase under his user ID. */
-    void saveUser(User user) {
+    void saveUser(User user, Context context) {
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         database.child("users").child(user.getUserId()).setValue(user);
+
+        SharedPreferences.Editor editor = context.getSharedPreferences("userInfo",
+                Context.MODE_PRIVATE).edit();
+        editor.putString("userId", user.getUserId());
+        editor.putString("username", user.getUsername()).apply();
+    }
+
+    /** Saves the user's name in SharedPreferences. */
+    void getUsername(final String userId, final Context context) {
+        Query findName = database.child("users").orderByChild("userId").equalTo(userId);
+
+        findName.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    User user = snapshot.getValue(User.class);
+                    String username = user.getUsername();
+                    SharedPreferences.Editor editor = context.getSharedPreferences("userInfo",
+                            Context.MODE_PRIVATE).edit();
+                    editor.putString("username", username);
+                    editor.putString("userId", userId).apply();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

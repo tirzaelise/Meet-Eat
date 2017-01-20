@@ -8,6 +8,7 @@
 package nl.mprog.meeteat;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
@@ -21,16 +22,14 @@ import java.util.Arrays;
 class DinnerAsyncTask extends AsyncTask<String, Void, String> {
     private Context context;
     private OnTaskCompleted listener;
-    private String host;
     private String date;
     private int freeSpaces;
     private String area;
 
-    DinnerAsyncTask(RecipeResultFragment activity, OnTaskCompleted listener, String host, String
-            date, int freeSpaces, String area) {
+    DinnerAsyncTask(RecipeResultFragment activity, OnTaskCompleted listener, String date,
+                    int freeSpaces, String area) {
         this.context = activity.getActivity();
         this.listener = listener;
-        this.host = host;
         this.date = date;
         this.freeSpaces = freeSpaces;
         this.area = area;
@@ -54,6 +53,10 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
             if (!readObject.getString("totalResults").equals("0")) {
                 JSONArray dinnersObject = readObject.getJSONArray("results");
                 ArrayList<Dinner> dinners = new ArrayList<>();
+                SharedPreferences sharedPrefs = context.getSharedPreferences("userInfo",
+                        Context.MODE_PRIVATE);
+                String hostId = sharedPrefs.getString("userId", "");
+                String hostName = sharedPrefs.getString("username", "");
 
                 for (int i = 0; i < dinnersObject.length(); i++) {
                     JSONObject dinnerObject = dinnersObject.getJSONObject(i);
@@ -61,8 +64,8 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
                     String id = dinnerObject.getString("id");
                     ArrayList<String> guests = createEmptyGuests(freeSpaces);
 
-                    Dinner dinner = new Dinner(title, id, host, date, guests, area, "", false,
-                            false);
+                    Dinner dinner = new Dinner(title, id, hostId, hostName, date, guests, area, "",
+                            false, false);
                     dinners.add(dinner);
                 }
                 listener.onTaskCompleted(dinners);

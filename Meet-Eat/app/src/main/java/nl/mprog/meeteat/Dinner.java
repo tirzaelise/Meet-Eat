@@ -15,7 +15,8 @@ import java.util.ArrayList;
 class Dinner {
     private String title;
     private String id;
-    private String host;
+    private String hostId;
+    private String hostName;
     private String date;
     private ArrayList<String> guests;
     private String area;
@@ -23,11 +24,13 @@ class Dinner {
     private boolean vegetarian;
     private boolean vegan;
 
-    Dinner(String title, String id, String host, String date, ArrayList<String> guests, String
-            area, String ingredients, boolean vegetarian, boolean vegan) {
+    Dinner(String title, String id, String hostId, String hostName, String date,
+           ArrayList<String> guests, String area, String ingredients, boolean vegetarian,
+           boolean vegan) {
         this.title = title;
         this.id = id;
-        this.host = host;
+        this.hostId = hostId;
+        this.hostName = hostName;
         this.date = date;
         this.guests = guests;
         this.area = area;
@@ -63,8 +66,12 @@ class Dinner {
         return id;
     }
 
-    String getHost() {
-        return host;
+    String getHostId() {
+        return hostId;
+    }
+
+    String getHostName() {
+        return hostName;
     }
 
     String getDate() {

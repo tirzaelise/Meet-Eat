@@ -2,7 +2,6 @@ package nl.mprog.meeteat;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,6 @@ public class RecipeResultFragment extends Fragment implements DinnerAsyncTask.On
         InfoAsyncTask.OnInfoRetrieved {
     private Activity activity;
     private String food;
-    private String host;
     private String date;
     private int freeSpaces;
     private String area;
@@ -46,8 +44,6 @@ public class RecipeResultFragment extends Fragment implements DinnerAsyncTask.On
 
     private void getArguments(Bundle arguments) {
         food = arguments.getString("food");
-        host = activity.getSharedPreferences("userInfo", Context.MODE_PRIVATE)
-                .getString("username", "");
         date = arguments.getString("date");
         freeSpaces = arguments.getInt("freeSpaces");
         area = arguments.getString("area");
@@ -55,8 +51,7 @@ public class RecipeResultFragment extends Fragment implements DinnerAsyncTask.On
 
     private void getDinnerInfo() {
         String query = "search?&query=" + food;
-        DinnerAsyncTask dinnerAsyncTask = new DinnerAsyncTask(this, this, host, date,
-                freeSpaces, area);
+        DinnerAsyncTask dinnerAsyncTask = new DinnerAsyncTask(this, this, date, freeSpaces, area);
         dinnerAsyncTask.execute(query);
     }
 

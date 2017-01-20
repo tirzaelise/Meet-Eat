@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +30,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     private Activity activity;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
-            savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_account, container, false);
     }
 
@@ -51,14 +52,14 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    /** Attaches listener to FirebaseAuth instance */
+    /** Attaches listener to FirebaseAuth instance. */
     @Override
     public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
     }
 
-    /** Removes listener from FirebaseAuth instance */
+    /** Removes listener from FirebaseAuth instance. */
     @Override
     public void onStop() {
         super.onStop();
@@ -67,23 +68,30 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    /** Checks if the user has been signed in or signed out */
+    /** Keeps track of the user signing in and out. */
     private void stateChanged() {
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                boolean loggedIn = user != null;
 
-                if (loggedIn) {
+                if (user != null) {
                     signOutVisibility();
                 } else {
                     signUpVisibility();
+                    SharedPreferences.Editor editor = activity.getSharedPreferences("userInfo",
+                            Context.MODE_PRIVATE).edit();
+                    editor.remove("userId");
+                    editor.remove("username").apply();
                 }
             }
         };
     }
 
+    /**
+     * Changes the visibility of views so that the right views are shown when the user has to sign
+     * in.
+     */
     private void signInVisibility() {
         rootView.findViewById(R.id.giveName).setVisibility(View.INVISIBLE);
         rootView.findViewById(R.id.giveEmail).setVisibility(View.VISIBLE);
@@ -94,6 +102,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         rootView.findViewById(R.id.accountAlready).setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * Changes the visibility of views so that the right views are shown when the user has to sign
+     * up.
+     */
     private void signUpVisibility() {
         rootView.findViewById(R.id.giveName).setVisibility(View.VISIBLE);
         rootView.findViewById(R.id.giveEmail).setVisibility(View.VISIBLE);
@@ -105,6 +117,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    /**
+     * Changes the visibility of views so that the right views are shown when the user has to sign
+     * out.
+     */
     private void signOutVisibility() {
         rootView.findViewById(R.id.giveName).setVisibility(View.INVISIBLE);
         rootView.findViewById(R.id.giveEmail).setVisibility(View.INVISIBLE);
@@ -116,7 +132,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    /** Creates an account in the database */
+    /** Creates an account in the database. */
     private void createAccount() {
         final String name = ((EditText) rootView.findViewById(R.id.giveName)).getText().toString();
         String email = ((EditText) rootView.findViewById(R.id.giveEmail)).getText().toString();
@@ -144,7 +160,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                                     e.printStackTrace();
                                 }
                             } else {
-//                                saveUsername();
                                 saveUser(name);
                                 Toast.makeText(activity, "Registered successfully",
                                         Toast.LENGTH_SHORT).show();
@@ -157,16 +172,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-//    /** Saves the user's name in the database */
-//    private void saveUsername() {
-//        String name = ((EditText) rootView.findViewById(R.id.giveName)).getText().toString();
-//        SharedPreferences.Editor editor = activity.getSharedPreferences("userInfo",
-//                Context.MODE_PRIVATE).edit();
-//        editor.putString("username", name).apply();
-//    }
-
-    /** Saves a user to the Firebase database after the user has created an account to keep track
-     * of the user's name */
+    /**
+     * Saves a user to the Firebase database after the user has created an account to keep track
+     * of the user's name.
+     */
     private void saveUser(String username) {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -174,18 +183,18 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             String userId = firebaseUser.getUid();
             User user = new User(userId, username);
             DatabaseHandler databaseHandler = new DatabaseHandler();
-            databaseHandler.saveUser(user);
+            databaseHandler.saveUser(user, activity);
         }
     }
 
-    /** Hides keyboard */
+    /** Hides keyboard. */
     private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) activity
                 .getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
 
-    /** Logs in the user */
+    /** Logs in the user. */
     private void logIn() {
         String email = ((EditText) rootView.findViewById(R.id.giveEmail)).getText().toString();
         String password = ((EditText) rootView.findViewById(R.id.givePassword)).getText().
@@ -203,6 +212,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                                 Toast.makeText(activity, "Logged in successfully",
                                         Toast.LENGTH_SHORT).show();
                                 hideKeyboard();
+                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                if (user != null) {
+                                    DatabaseHandler databaseHandler = new DatabaseHandler();
+                                    databaseHandler.getUsername(user.getUid(), activity);
+
+                                }
                             }
                         }
                     });
@@ -211,7 +226,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    /** Signs out the user */
+    /** Signs out the user. */
     private void signOut() {
         mAuth.signOut();
     }
