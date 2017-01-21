@@ -104,7 +104,6 @@ class RecipeAdapter extends BaseAdapter {
     /** Determines the visibility of a TextView according to a boolean */
     private void booleanToVisibility(boolean isTrue, TextView textView){
         if (isTrue) {
-            Log.wtf("is true", "in true");
             textView.setVisibility(View.VISIBLE);
         } else {
             textView.setVisibility(View.INVISIBLE);

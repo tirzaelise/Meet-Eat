@@ -7,11 +7,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private ListView drawerList;
@@ -38,10 +41,25 @@ public class MainActivity extends AppCompatActivity {
 
     /** Creates menu items for the navigation drawer */
     private void createDrawerItems() {
-        String[] menuArray = {"Home", "Account", "Hosting dinners", "Joined dinners"};
-        ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
-                menuArray);
+//        String[] menuArray = {"Home", "Account", "Hosting dinners", "Joined dinners"};
+        ArrayList<DrawerItem> data = createDrawerData();
+
+        DrawerAdapter adapter = new DrawerAdapter(this, R.layout.layout_drawer, data);
+//        ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
+//                menuArray);
+        Log.wtf("count", Integer.toString(adapter.getCount()));
         drawerList.setAdapter(adapter);
+    }
+
+    private ArrayList<DrawerItem> createDrawerData() {
+        ArrayList<DrawerItem> data = new ArrayList<>();
+
+        data.add(new DrawerItem(R.drawable.home_icon, "Home"));
+        data.add(new DrawerItem(R.drawable.account_icon, "Account"));
+        data.add(new DrawerItem(R.drawable.hosting_icon, "Hosting dinners"));
+        data.add(new DrawerItem(R.drawable.joining_icon, "Joining dinners"));
+
+        return data;
     }
 
     /** Sets a listener on the navigation drawer */
