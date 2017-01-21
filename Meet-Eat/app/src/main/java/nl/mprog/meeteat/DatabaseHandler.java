@@ -17,20 +17,20 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 class DatabaseHandler {
-    private DatabaseReference database;
 
     void writeToDatabase(Dinner dinner) {
-        database = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         database.child("dinners").push().setValue(dinner);
     }
 
     /** Reads the database based on the user's input area. */
     void readDatabase(String area, final ArrayList<Dinner> dinners, final DinnerAdapter adapter,
                       final ResultFragment fragment) {
-        database = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         Query areaQuery = database.child("dinners").orderByChild("area").equalTo(area);
 
         areaQuery.addChildEventListener(new ChildEventListener() {
@@ -75,12 +75,13 @@ class DatabaseHandler {
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     String databaseKey = snapshot.getKey();
                     Dinner dinner = snapshot.getValue(Dinner.class);
-                    String guestString = dinner.getGuests().toString();
-                    ArrayList<String> guests = dinner.getGuests();
+                    String guestString = dinner.getGuestNames().toString();
+                    ArrayList<String> guestIds = dinner.getGuestIds();
+                    ArrayList<String> guestNames = dinner.getGuestNames();
                     int freeSpaces = StringUtils.countMatches(guestString, "null");
 
                     if (freeSpaces > 0) {
-                        updateGuests(guests, dinner, databaseKey);
+                        updateGuests(guestIds, guestNames, dinner, databaseKey);
                         Toast.makeText(context, "Joined dinner", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(context, "There are no more free spaces for this dinner",
@@ -100,8 +101,8 @@ class DatabaseHandler {
      * Finds the user's name to update the Dinner entry in the database when the join button is
      * clicked.
      */
-    private void updateGuests(final ArrayList<String> guests, final Dinner dinner,
-                              final String databaseKey) {
+    private void updateGuests(final ArrayList<String> guestIds, final ArrayList<String> guestNames,
+                              final Dinner dinner, final String databaseKey) {
         final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         Query findName = database.child("users").orderByChild("userId").equalTo(userId);
@@ -112,8 +113,8 @@ class DatabaseHandler {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
                     String username = user.getUsername();
-                    Log.wtf("username", username);
-                    updateFirebaseGuests(guests, username, dinner, databaseKey);
+                    updateFirebaseGuests(guestIds, guestNames, username, userId, dinner,
+                            databaseKey);
                 }
             }
 
@@ -128,17 +129,19 @@ class DatabaseHandler {
      * Searches for the first "null" occurrence in the guests array and replaces this with the
      * guest's name. After that, the Dinner entry in the database is updated.
      */
-    private void updateFirebaseGuests(ArrayList<String> guests, String name, Dinner dinner,
-                                      String databaseKey) {
+    private void updateFirebaseGuests(ArrayList<String> guestIds, ArrayList<String> guestNames,
+                                      String id, String name, Dinner dinner, String databaseKey) {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
-        for (int i = 0; i < guests.size(); i++) {
-            if (guests.get(i).equals("null")) {
-                guests.set(i, name);
+        for (int i = 0; i < guestNames.size(); i++) {
+            if (guestIds.get(i).equals("null")) {
+                guestIds.set(i, id);
+                guestNames.set(i, name);
                 break;
             }
         }
-        dinner.setGuests(guests);
+        dinner.setGuestIds(guestIds);
+        dinner.setGuestNames(guestNames);
         database.child("dinners").child(databaseKey).setValue(dinner);
 
     }
@@ -178,6 +181,7 @@ class DatabaseHandler {
 
     /** Saves the user's name in SharedPreferences. */
     void getUsername(final String userId, final Context context) {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         Query findName = database.child("users").orderByChild("userId").equalTo(userId);
 
         findName.addListenerForSingleValueEvent(new ValueEventListener() {

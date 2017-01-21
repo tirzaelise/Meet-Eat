@@ -18,21 +18,23 @@ class Dinner {
     private String hostId;
     private String hostName;
     private String date;
-    private ArrayList<String> guests;
+    private ArrayList<String> guestIds;
+    private ArrayList<String> guestNames;
     private String area;
     private String ingredients;
     private boolean vegetarian;
     private boolean vegan;
 
     Dinner(String title, String id, String hostId, String hostName, String date,
-           ArrayList<String> guests, String area, String ingredients, boolean vegetarian,
-           boolean vegan) {
+           ArrayList<String> guestIds, ArrayList<String> guestNames, String area,
+           String ingredients, boolean vegetarian, boolean vegan) {
         this.title = title;
         this.id = id;
         this.hostId = hostId;
         this.hostName = hostName;
         this.date = date;
-        this.guests = guests;
+        this.guestIds = guestIds;
+        this.guestNames = guestNames;
         this.area = area;
         this.ingredients = ingredients;
         this.vegetarian = vegetarian;
@@ -42,8 +44,12 @@ class Dinner {
     public Dinner() {
     }
 
-    void setGuests(ArrayList<String> guests) {
-        this.guests = guests;
+    void setGuestIds(ArrayList<String> guestIds) {
+        this.guestIds = guestIds;
+    }
+
+    void setGuestNames(ArrayList<String> guestNames) {
+        this.guestNames = guestNames;
     }
 
     void setIngredients(String ingredients) {
@@ -78,8 +84,12 @@ class Dinner {
         return date;
     }
 
-    ArrayList<String> getGuests() {
-        return guests;
+    ArrayList<String> getGuestIds() {
+        return guestIds;
+    }
+
+    ArrayList<String> getGuestNames() {
+        return guestNames;
     }
 
     String getArea() {

@@ -88,7 +88,7 @@ class DinnerAdapter extends BaseExpandableListAdapter {
 
         String dinnerId = dinner.getId();
         String host = "Host: " + dinner.getHostName();
-        String guestsString = Arrays.toString(dinner.getGuests().toArray());
+        String guestsString = Arrays.toString(dinner.getGuestNames().toArray());
         String freeSpaces = "Free spaces: "  +
                 Integer.toString(StringUtils.countMatches(guestsString, "null"));
         String date = "Date: " + dinner.getDate();

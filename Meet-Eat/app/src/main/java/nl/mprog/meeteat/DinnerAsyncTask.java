@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -62,10 +63,12 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
                     JSONObject dinnerObject = dinnersObject.getJSONObject(i);
                     String title = dinnerObject.getString("title");
                     String id = dinnerObject.getString("id");
-                    ArrayList<String> guests = createEmptyGuests(freeSpaces);
+                    ArrayList<String> guestNames = createEmptyGuests(freeSpaces);
+                    ArrayList<String> guestIds = createEmptyGuests(freeSpaces);
 
-                    Dinner dinner = new Dinner(title, id, hostId, hostName, date, guests, area, "",
-                            false, false);
+
+                    Dinner dinner = new Dinner(title, id, hostId, hostName, date, guestIds,
+                            guestNames, area, "", false, false);
                     dinners.add(dinner);
                 }
                 listener.onTaskCompleted(dinners);
@@ -80,7 +83,7 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
 
     /** Creates an ArrayList<String> of the size of the amount of spaces that was given */
     private ArrayList<String> createEmptyGuests(int spaces) {
-        String[] guests = new String[freeSpaces];
+        String[] guests = new String[spaces];
         Arrays.fill(guests, "null");
         return new ArrayList<>(Arrays.asList(guests));
     }
