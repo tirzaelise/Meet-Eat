@@ -88,10 +88,10 @@ public class MainActivity extends AppCompatActivity {
                                 .commit();
                         break;
                     case 3:
-//                        OwnJoinFragment ownJoinFragment = new OwnJoinFragment();
-//                        manager.beginTransaction()
-//                                .replace(R.id.contentFrame, ownJoinFragment)
-//                                .commit();
+                        JoinListFragment joinListFragment = new JoinListFragment();
+                        manager.beginTransaction()
+                                .replace(R.id.contentFrame, joinListFragment)
+                                .commit();
                         break;
                 }
             }

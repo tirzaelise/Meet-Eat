@@ -21,7 +21,8 @@
         <activity android:name=".AccountFragment" />
         <activity android:name=".MainFragment" />
         <activity android:name=".RecipeResultFragment" />
-        <activity android:name=".HostListFragment"></activity>
+        <activity android:name=".HostListFragment" />
+        <activity android:name=".JoinListFragment"></activity>
     </application>
 
 </manifest>

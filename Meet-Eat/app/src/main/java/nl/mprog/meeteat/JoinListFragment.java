@@ -6,18 +6,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class HostListFragment extends Fragment {
+public class JoinListFragment extends Fragment {
+
     private Activity activity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_host_list, container, false);
+        return inflater.inflate(R.layout.fragment_join_list, container, false);
     }
 
     @Override
@@ -29,16 +29,15 @@ public class HostListFragment extends Fragment {
 
         if (rootView != null) {
             ListView listView = (ListView) rootView.findViewById(R.id.listView);
-            ArrayList<Dinner> hostingDinners = new ArrayList<>();
-            HostAdapter adapter = new HostAdapter(activity, hostingDinners);
+            ArrayList<Dinner> joinedDinners = new ArrayList<>();
+            HostAdapter adapter = new HostAdapter(activity, joinedDinners);
             listView.setAdapter(adapter);
-            getHostingDinners(adapter, hostingDinners);
+            getJoinedDinners(adapter, joinedDinners);
         }
     }
 
-    /** Uses DatabaseHandler class to retrieve hosting dinners. */
-    private void getHostingDinners(HostAdapter adapter, ArrayList<Dinner> dinners) {
+    private void getJoinedDinners(HostAdapter adapter, ArrayList<Dinner> dinners) {
         DatabaseHandler databaseHandler = new DatabaseHandler();
-        databaseHandler.getHostingDinners(adapter, dinners, activity);
+        databaseHandler.getJoinedDinners(adapter, dinners, activity);
     }
 }

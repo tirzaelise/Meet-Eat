@@ -148,12 +148,12 @@ class DatabaseHandler {
     }
 
     /** Retrieves the dinners that the user is hosting from Firebase. */
-    void getHostingDinners(final HostAdapter adapter, final ArrayList<Dinner> hostingDinners,
+    void getHostingDinners(final HostAdapter adapter, final ArrayList<Dinner> dinners,
                            final Activity activity) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user != null) {
-            String userId = user.getUid();
+            final String userId = user.getUid();
             DatabaseReference database = FirebaseDatabase.getInstance().getReference();
             Query findHosting = database.child("dinners").orderByChild("hostId").equalTo(userId);
 
@@ -161,22 +161,65 @@ class DatabaseHandler {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
-                        Dinner hostingDinner = snapshot.getValue(Dinner.class);
-                        hostingDinners.add(hostingDinner);
+                        Dinner dinner = snapshot.getValue(Dinner.class);
+                        dinners.add(dinner);
                         adapter.notifyDataSetChanged();
                     }
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(activity, "Could not  retrieve hosting dinners",
+                    Toast.makeText(activity, "Could not retrieve dinners",
                             Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
-            Toast.makeText(activity, "Please log in to view the dinners you're hosting",
+            Toast.makeText(activity, "Please log in to view this page",
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /** Retrieves the dinners that the user has joined from Firebase. */
+    void getJoinedDinners(final HostAdapter adapter, final ArrayList<Dinner> dinners,
+                          final Activity activity) {
+        FirebaseUser user  = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            final String userId = user.getUid();
+            DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+            Query findJoined = database.child("dinners").orderByChild("guestIds");
+
+            findJoined.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                        Dinner dinner = snapshot.getValue(Dinner.class);
+                        ArrayList<String> guestIds = dinner.getGuestIds();
+
+                        if (isInArray(userId, guestIds)) {
+                            dinners.add(dinner);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(activity, "Could not retrieve joined dinners",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    /** Checks if a certain value is in an array. */
+    private boolean isInArray(String value, ArrayList<String> array) {
+        for (int i = 0; i < array.size(); i++) {
+            if (array.get(i).equals(value)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** Saves a user in Firebase under his user ID. */

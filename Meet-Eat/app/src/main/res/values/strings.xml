@@ -52,4 +52,5 @@
     <string name="date">Date</string>
     <string name="guests">Guests</string>
     <string name="dinnerImageDesc">This is an image of the dinner</string>
+    <string name="joinedDinners">Joined dinners</string>
 </resources>
