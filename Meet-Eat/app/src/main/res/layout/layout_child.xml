@@ -65,16 +65,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/date"
-        android:layout_toStartOf="@id/joinButton"
         android:id="@+id/vegetarian" />
 
     <TextView
-        android:text="@string/vegan"
-        android:layout_alignStart="@+id/host"
-        android:layout_toEndOf="@id/dinnerImage"
+        android:text="@string/veganLower"
+        android:layout_toEndOf="@id/vegetarian"
+        android:layout_alignTop="@id/vegetarian"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/vegetarian"
         android:layout_toStartOf="@id/joinButton"
         android:id="@+id/vegan" />
 

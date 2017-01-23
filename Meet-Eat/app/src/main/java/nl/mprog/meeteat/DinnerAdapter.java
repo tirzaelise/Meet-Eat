@@ -19,7 +19,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * Created by tirza on 11-1-17.
@@ -75,7 +74,7 @@ class DinnerAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView,
                              ViewGroup parentView) {
         String dinner = dinners.get(groupPosition).getTitle();
-        convertView = inflater.inflate(R.layout.list_group, parentView, false);
+        convertView = inflater.inflate(R.layout.layout_parent, parentView, false);
 
         ((TextView) convertView.findViewById(R.id.dinnerTitle)).setText(dinner);
         return convertView;
@@ -93,20 +92,42 @@ class DinnerAdapter extends BaseExpandableListAdapter {
                 Integer.toString(StringUtils.countMatches(guestsString, "null"));
         String date = "Date: " + dinner.getDate();
         String ingredients = "Ingredients: " + dinner.getIngredients();
-        convertView = inflater.inflate(R.layout.list_child, parentView, false);
+        convertView = inflater.inflate(R.layout.layout_child, parentView, false);
 
         ((TextView) convertView.findViewById(R.id.host)).setText(host);
         ((TextView) convertView.findViewById(R.id.space)).setText(freeSpaces);
         ((TextView) convertView.findViewById(R.id.date)).setText(date);
+        TextView vegetarian = (TextView) convertView.findViewById(R.id.vegetarian);
+        TextView vegan = (TextView) convertView.findViewById(R.id.vegan);
+        booleanToVisibility(dinner.isVegetarian(), dinner.isVegan(), vegetarian, vegan);
         ((TextView) convertView.findViewById(R.id.ingredients)).setText(ingredients);
         ImageView dinnerImage = (ImageView) convertView.findViewById(R.id.dinnerImage);
+
         String url = "https://spoonacular.com/recipeImages/" +
                 dinner.getId() + "-312x231.jpg";
         Picasso.with(context).load(url).into(dinnerImage);
+
         ImageButton joinButton = (ImageButton) convertView.findViewById(R.id.joinButton);
         setClickListener(joinButton, dinnerId);
 
         return convertView;
+    }
+
+    /** Uses the boolean values to set visibility and text. */
+    private void booleanToVisibility(boolean isVegetarian, boolean isVegan, TextView vegetarian,
+                                     TextView vegan) {
+        if (isVegan) {
+            vegetarian.setVisibility(View.VISIBLE);
+            String isVeganAndVegetarian = vegetarian.getText().toString() + ", ";
+            vegetarian.setText(isVeganAndVegetarian);
+            vegetarian.setVisibility(View.VISIBLE);
+        } else if (isVegetarian) {
+            vegetarian.setVisibility(View.VISIBLE);
+            vegan.setVisibility(View.INVISIBLE);
+        } else {
+            vegetarian.setVisibility(View.INVISIBLE);
+            vegan.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void setClickListener(ImageButton button, final String dinnerId) {

@@ -3,6 +3,7 @@ package nl.mprog.meeteat;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +69,8 @@ public class CookFragment extends Fragment implements View.OnClickListener {
         } else {
             String[] splitHour = splitTime[0].split("");
             String[] splitMins = splitTime[1].split("");
+
+            Log.wtf(splitHour[0], splitHour[1]);
 
             if ((splitHour[1].equals("0") || splitHour[1].equals("1") || splitHour[1].equals("2"))
                     && splitHour[2].matches("[0-9]+") && splitMins[1].matches("[0-5]+") &&
