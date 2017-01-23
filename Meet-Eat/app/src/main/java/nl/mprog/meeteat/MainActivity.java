@@ -40,12 +40,9 @@ public class MainActivity extends AppCompatActivity {
 
     /** Creates menu items for the navigation drawer */
     private void createDrawerItems() {
-        String[] menuArray = {"Home", "Account", "Hosting dinners", "Joined dinners"};
-//        ArrayList<DrawerItem> data = createDrawerData();
+        ArrayList<DrawerItem> data = createDrawerData();
+        DrawerAdapter adapter = new DrawerAdapter(this, data);
 
-//        DrawerAdapter adapter = new DrawerAdapter(this, R.layout.layout_drawer, data);
-        ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
-                menuArray);
         drawerList.setAdapter(adapter);
     }
 
@@ -55,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         data.add(new DrawerItem(R.drawable.home_icon, "Home"));
         data.add(new DrawerItem(R.drawable.account_icon, "Account"));
         data.add(new DrawerItem(R.drawable.hosting_icon, "Hosting dinners"));
-        data.add(new DrawerItem(R.drawable.joining_icon, "Joining dinners"));
+        data.add(new DrawerItem(R.drawable.joining_icon, "Joined dinners"));
 
         return data;
     }
