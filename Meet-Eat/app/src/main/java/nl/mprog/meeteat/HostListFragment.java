@@ -6,18 +6,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class OwnHostFragment extends Fragment {
+public class HostListFragment extends Fragment {
     private View rootView;
     private Activity activity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_own_host, container, false);
+        return inflater.inflate(R.layout.fragment_host_list, container, false);
     }
 
     @Override
@@ -29,13 +30,15 @@ public class OwnHostFragment extends Fragment {
 
         if (rootView != null) {
             ListView listView = (ListView) rootView.findViewById(R.id.listView);
-            getHostingDinners();
-//            rootView.findViewById(R.id.addButton).setOnClickListener(this);
+            ArrayList<Dinner> hostingDinners = new ArrayList<>();
+            HostAdapter adapter = new HostAdapter(activity, hostingDinners);
+            listView.setAdapter(adapter);
+            getHostingDinners(adapter, hostingDinners);
         }
     }
 
-    private void getHostingDinners() {
+    private void getHostingDinners(HostAdapter adapter, ArrayList<Dinner> dinners) {
         DatabaseHandler databaseHandler = new DatabaseHandler();
-        ArrayList<Dinner> dinners = databaseHandler.getHostingDinners();
+        databaseHandler.getHostingDinners(adapter, dinners, activity);
     }
 }

@@ -82,9 +82,9 @@ public class MainActivity extends AppCompatActivity {
                                 .commit();
                         break;
                     case 2:
-                        OwnHostFragment ownHostFragment = new OwnHostFragment();
+                        HostListFragment hostListFragment = new HostListFragment();
                         manager.beginTransaction()
-                                .replace(R.id.contentFrame, ownHostFragment)
+                                .replace(R.id.contentFrame, hostListFragment)
                                 .commit();
                         break;
                     case 3:
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setElevation(0);
 
-        DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawerLayout);
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.openDrawer,
                 R.string.closeDrawer) {
 

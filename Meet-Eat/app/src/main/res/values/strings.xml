@@ -50,4 +50,6 @@
     <string name="dinnersIn">Dinners in </string>
     <string name="hostDinners">Host Dinners</string>
     <string name="date">Date</string>
+    <string name="guests">Guests</string>
+    <string name="dinnerImageDesc">This is an image of the dinner</string>
 </resources>

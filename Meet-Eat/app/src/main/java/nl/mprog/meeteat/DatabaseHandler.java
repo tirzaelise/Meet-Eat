@@ -1,8 +1,10 @@
 package nl.mprog.meeteat;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -113,7 +115,7 @@ class DatabaseHandler {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
                     String username = user.getUsername();
-                    updateFirebaseGuests(guestIds, guestNames, username, userId, dinner,
+                    updateFirebaseGuests(guestIds, guestNames, userId, username, dinner,
                             databaseKey);
                 }
             }
@@ -143,29 +145,38 @@ class DatabaseHandler {
         dinner.setGuestIds(guestIds);
         dinner.setGuestNames(guestNames);
         database.child("dinners").child(databaseKey).setValue(dinner);
-
     }
 
-    /** Returns an ArrayList of the dinners the user is hosting. */
-    ArrayList<Dinner> getHostingDinners() {
-        ArrayList<Dinner> hostingDinners = new ArrayList<>();
+    /** Retrieves the dinners that the user is hosting from Firebase. */
+    void getHostingDinners(final HostAdapter adapter, final ArrayList<Dinner> hostingDinners,
+                           final Activity activity) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        Query findHosting = database.child("dinners").orderByChild("hostId").equalTo(user.getUid());
 
-        findHosting.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-//                Log.wtf()
-            }
+        if (user != null) {
+            String userId = user.getUid();
+            DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+            Query findHosting = database.child("dinners").orderByChild("hostId").equalTo(userId);
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+            findHosting.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                        Dinner hostingDinner = snapshot.getValue(Dinner.class);
+                        hostingDinners.add(hostingDinner);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
 
-            }
-        });
-
-        return hostingDinners;
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(activity, "Could not  retrieve hosting dinners",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(activity, "Please log in to view the dinners you're hosting",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     /** Saves a user in Firebase under his user ID. */
