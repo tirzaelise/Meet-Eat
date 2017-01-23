@@ -30,13 +30,13 @@ public class JoinListFragment extends Fragment {
         if (rootView != null) {
             ListView listView = (ListView) rootView.findViewById(R.id.listView);
             ArrayList<Dinner> joinedDinners = new ArrayList<>();
-            HostAdapter adapter = new HostAdapter(activity, joinedDinners);
+            SavedAdapter adapter = new SavedAdapter(activity, joinedDinners, true);
             listView.setAdapter(adapter);
             getJoinedDinners(adapter, joinedDinners);
         }
     }
 
-    private void getJoinedDinners(HostAdapter adapter, ArrayList<Dinner> dinners) {
+    private void getJoinedDinners(SavedAdapter adapter, ArrayList<Dinner> dinners) {
         DatabaseHandler databaseHandler = new DatabaseHandler();
         databaseHandler.getJoinedDinners(adapter, dinners, activity);
     }

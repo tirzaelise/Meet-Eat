@@ -44,6 +44,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@id/dinnerDate"
+        android:layout_below="@+id/dinnerGuests"
+        android:layout_toEndOf="@id/dinnerImage"
+        android:id="@+id/dinnerHost" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/dinnerImage"
         android:layout_marginTop="10dp"
         android:layout_alignParentStart="true"

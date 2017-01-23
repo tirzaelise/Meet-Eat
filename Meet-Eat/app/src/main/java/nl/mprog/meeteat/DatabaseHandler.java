@@ -3,8 +3,6 @@ package nl.mprog.meeteat;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,7 +17,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 class DatabaseHandler {
@@ -148,7 +145,7 @@ class DatabaseHandler {
     }
 
     /** Retrieves the dinners that the user is hosting from Firebase. */
-    void getHostingDinners(final HostAdapter adapter, final ArrayList<Dinner> dinners,
+    void getHostingDinners(final SavedAdapter adapter, final ArrayList<Dinner> dinners,
                            final Activity activity) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -180,7 +177,7 @@ class DatabaseHandler {
     }
 
     /** Retrieves the dinners that the user has joined from Firebase. */
-    void getJoinedDinners(final HostAdapter adapter, final ArrayList<Dinner> dinners,
+    void getJoinedDinners(final SavedAdapter adapter, final ArrayList<Dinner> dinners,
                           final Activity activity) {
         FirebaseUser user  = FirebaseAuth.getInstance().getCurrentUser();
 

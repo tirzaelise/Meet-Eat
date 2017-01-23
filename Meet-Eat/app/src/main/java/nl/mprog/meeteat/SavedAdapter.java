@@ -1,7 +1,6 @@
 package nl.mprog.meeteat;
 
 import android.content.Context;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +16,11 @@ import java.util.ArrayList;
  * Created by tirza on 23-1-17.
  */
 
-class HostAdapter extends BaseAdapter {
+class SavedAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<Dinner> dinners;
     private LayoutInflater inflater;
+    private boolean joining;
     private Dinner dinner;
     private TextView dinnerTitle;
     private TextView dinnerDate;
@@ -28,9 +28,10 @@ class HostAdapter extends BaseAdapter {
     private TextView dinnerIngredients;
     private ImageView dinnerImage;
 
-    HostAdapter(Context context, ArrayList<Dinner> dinners) {
+    SavedAdapter(Context context, ArrayList<Dinner> dinners, boolean joining) {
         this.context = context;
         this.dinners = dinners;
+        this.joining = joining;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -54,7 +55,7 @@ class HostAdapter extends BaseAdapter {
         View view = convertView;
 
         if (view == null) {
-            view = inflater.inflate(R.layout.layout_host_row, parent, false);
+            view = inflater.inflate(R.layout.layout_saved_row, parent, false);
             initialiseViewsAndRecipe(view, position);
             String date = "Date: " + dinner.getDate();
             String guests = "Guests: " + arrayToString(dinner.getGuestNames());
@@ -64,6 +65,11 @@ class HostAdapter extends BaseAdapter {
             dinnerDate.setText(date);
             dinnerGuests.setText(guests);
             dinnerIngredients.setText(ingredients);
+
+            if (joining) {
+                String host = "Host: " + dinner.getHostName();
+                ((TextView) view.findViewById(R.id.dinnerHost)).setText(host);
+            }
 
             String url = "https://spoonacular.com/recipeImages/" + dinner.getId() + "-312x231.jpg";
             Picasso.with(context).load(url).into(dinnerImage);
@@ -77,6 +83,11 @@ class HostAdapter extends BaseAdapter {
             dinnerDate.setText(date);
             dinnerGuests.setText(guests);
             dinnerIngredients.setText(ingredients);
+
+            if (joining) {
+                String host = "Host: " + dinners.get(position).getHostName();
+                ((TextView) view.findViewById(R.id.dinnerHost)).setText(host);
+            }
 
             String url = "https://spoonacular.com/recipeImages/" +
                     this.dinners.get(position).getId() + "-312x231.jpg";

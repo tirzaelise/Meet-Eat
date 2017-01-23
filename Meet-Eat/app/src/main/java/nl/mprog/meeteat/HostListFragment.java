@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -30,14 +29,14 @@ public class HostListFragment extends Fragment {
         if (rootView != null) {
             ListView listView = (ListView) rootView.findViewById(R.id.listView);
             ArrayList<Dinner> hostingDinners = new ArrayList<>();
-            HostAdapter adapter = new HostAdapter(activity, hostingDinners);
+            SavedAdapter adapter = new SavedAdapter(activity, hostingDinners, false);
             listView.setAdapter(adapter);
             getHostingDinners(adapter, hostingDinners);
         }
     }
 
     /** Uses DatabaseHandler class to retrieve hosting dinners. */
-    private void getHostingDinners(HostAdapter adapter, ArrayList<Dinner> dinners) {
+    private void getHostingDinners(SavedAdapter adapter, ArrayList<Dinner> dinners) {
         DatabaseHandler databaseHandler = new DatabaseHandler();
         databaseHandler.getHostingDinners(adapter, dinners, activity);
     }
