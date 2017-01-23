@@ -7,7 +7,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,13 +40,12 @@ public class MainActivity extends AppCompatActivity {
 
     /** Creates menu items for the navigation drawer */
     private void createDrawerItems() {
-//        String[] menuArray = {"Home", "Account", "Hosting dinners", "Joined dinners"};
-        ArrayList<DrawerItem> data = createDrawerData();
+        String[] menuArray = {"Home", "Account", "Hosting dinners", "Joined dinners"};
+//        ArrayList<DrawerItem> data = createDrawerData();
 
-        DrawerAdapter adapter = new DrawerAdapter(this, R.layout.layout_drawer, data);
-//        ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
-//                menuArray);
-        Log.wtf("count", Integer.toString(adapter.getCount()));
+//        DrawerAdapter adapter = new DrawerAdapter(this, R.layout.layout_drawer, data);
+        ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
+                menuArray);
         drawerList.setAdapter(adapter);
     }
 
@@ -75,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                         manager.beginTransaction()
                                 .replace(R.id.contentFrame, mainFragment)
                                 .commit();
+
                         break;
                     case 1:
                         AccountFragment accountFragment = new AccountFragment();

@@ -1,6 +1,5 @@
 package nl.mprog.meeteat;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
