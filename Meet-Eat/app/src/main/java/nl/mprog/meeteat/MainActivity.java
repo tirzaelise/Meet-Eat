@@ -1,7 +1,9 @@
 package nl.mprog.meeteat;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -10,7 +12,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -30,11 +32,8 @@ public class MainActivity extends AppCompatActivity {
         setUpDrawer();
 
         if (savedInstanceState == null) {
-            FragmentManager manager = getFragmentManager();
             MainFragment mainFragment = new MainFragment();
-            manager.beginTransaction()
-                    .replace(R.id.contentFrame, mainFragment)
-                    .commit();
+            changeFragment(mainFragment);
         }
     }
 
@@ -62,37 +61,37 @@ public class MainActivity extends AppCompatActivity {
         drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                FragmentManager manager = getFragmentManager();
 
                 switch (position) {
                     case 0:
                         MainFragment mainFragment = new MainFragment();
-                        manager.beginTransaction()
-                                .replace(R.id.contentFrame, mainFragment)
-                                .commit();
-
+                        changeFragment(mainFragment);
                         break;
                     case 1:
                         AccountFragment accountFragment = new AccountFragment();
-                        manager.beginTransaction()
-                                .replace(R.id.contentFrame, accountFragment)
-                                .commit();
+                        changeFragment(accountFragment);
                         break;
                     case 2:
                         HostListFragment hostListFragment = new HostListFragment();
-                        manager.beginTransaction()
-                                .replace(R.id.contentFrame, hostListFragment)
-                                .commit();
+                        changeFragment(hostListFragment);
                         break;
                     case 3:
                         JoinListFragment joinListFragment = new JoinListFragment();
-                        manager.beginTransaction()
-                                .replace(R.id.contentFrame, joinListFragment)
-                                .commit();
+                        changeFragment(joinListFragment);
                         break;
                 }
             }
         });
+    }
+
+    /** Changes the Fragment in the content frame to the new fragment. */
+    private void changeFragment(Fragment newFragment) {
+        FragmentManager manager = getFragmentManager();
+
+        manager.beginTransaction()
+                .replace(R.id.contentFrame, newFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     /** Sets up the navigation drawer */
@@ -140,5 +139,15 @@ public class MainActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    /** Defines what to do to the fragments when the back button on the phone is pressed. */
+    @Override
+    public void onBackPressed() {
+        if(getFragmentManager().getBackStackEntryCount() <= 1){
+            super.onBackPressed();
+        } else {
+            getFragmentManager().popBackStack();
+        }
     }
 }
