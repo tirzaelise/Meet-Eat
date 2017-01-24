@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ((DrawerLayout) findViewById(R.id.drawerLayout)).closeDrawers();
 
                 switch (position) {
                     case 0:
