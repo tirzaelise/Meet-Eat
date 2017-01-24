@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -118,7 +117,7 @@ class SavedAdapter extends BaseAdapter {
     }
 
     /** Sets a click listener on the buttons. */
-    private void setClickListener(ImageButton button, int position) {
+    private void setClickListener(ImageButton button, final int position) {
         final Dinner dinner = dinners.get(position);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -127,19 +126,26 @@ class SavedAdapter extends BaseAdapter {
                 switch (v.getId()) {
                     case R.id.editButton:
                         alertDialog("Are you sure you want to edit this dinner?", v.getId(),
-                                dinner);
+                                dinner, joining, position);
                         break;
                     case R.id.deleteButton:
-                        alertDialog("Are you sure you want to delete this dinner?", v.getId(),
-                                dinner);
-                        break;
+                        if (joining) {
+                            alertDialog("Are you sure you no longer want to join this dinner?",
+                                    v.getId(), dinner, joining, position);
+                            break;
+                        } else {
+                            alertDialog("Are you sure you want to delete this dinner?", v.getId(),
+                                    dinner, joining, position);
+                            break;
+                        }
                 }
             }
         });
     }
 
     /** Creates an alert dialog when a button is clicked. */
-    private void alertDialog(String alert, final int id, final Dinner dinner) {
+    private void alertDialog(String alert, final int id, final Dinner dinner,
+                             final boolean joining, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setMessage(alert);
         builder.setCancelable(true);
@@ -166,7 +172,13 @@ class SavedAdapter extends BaseAdapter {
                         break;
 
                     case R.id.deleteButton:
-                        break;
+                        if (joining) {
+                            unjoinDinner(dinner, position);
+                            break;
+                        } else {
+                            deleteDinner(dinner);
+                            break;
+                        }
                 }
             }
         });
@@ -179,6 +191,18 @@ class SavedAdapter extends BaseAdapter {
         });
         builder.show();
     }
+
+    /** Removes a user from a dinner. */
+    private void unjoinDinner(Dinner dinner, int position) {
+        DatabaseHandler databaseHandler = new DatabaseHandler();
+        databaseHandler.findDinner(dinner, activity, dinners, this, position);
+    }
+
+    /** Deletes a dinner from the database. */
+    private void deleteDinner(Dinner dinner) {
+        DatabaseHandler databaseHandler = new DatabaseHandler();
+    }
+
 
     /** Initialises the views in the row layout and a value for the recipe. */
     private void initialiseViewsAndRecipe(View view, int position) {

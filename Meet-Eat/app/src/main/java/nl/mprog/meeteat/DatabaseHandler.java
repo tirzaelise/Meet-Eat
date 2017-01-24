@@ -3,7 +3,7 @@ package nl.mprog.meeteat;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.view.inputmethod.InputMethodManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -84,7 +84,7 @@ class DatabaseHandler {
                         ArrayList<String> guestNames = dinner.getGuestNames();
 
                         updateGuests(guestIds, guestNames, dinner, databaseKey, position, adapter,
-                                dinners);
+                                dinners, context);
                         Toast.makeText(context, "Joined dinner", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(context, "There are no more free spaces for this dinner",
@@ -106,27 +106,33 @@ class DatabaseHandler {
      */
     private void updateGuests(final ArrayList<String> guestIds, final ArrayList<String> guestNames,
                               final Dinner dinner, final String databaseKey, final int position,
-                              final DinnerAdapter adapter, final ArrayList<Dinner> dinners) {
-        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        Query findName = database.child("users").orderByChild("userId").equalTo(userId);
+                              final DinnerAdapter adapter, final ArrayList<Dinner> dinners,
+                              final Context context) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        findName.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    User user = snapshot.getValue(User.class);
-                    String username = user.getUsername();
-                    updateFirebaseGuests(guestIds, guestNames, userId, username, dinner,
-                            databaseKey, position, adapter, dinners);
+        if (user != null) {
+            final String userId = user.getUid();
+            final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+            Query findName = database.child("users").orderByChild("userId").equalTo(userId);
+
+            findName.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        User user = snapshot.getValue(User.class);
+                        String username = user.getUsername();
+                        updateFirebaseGuests(guestIds, guestNames, userId, username, dinner,
+                                databaseKey, position, adapter, dinners);
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(context, "Failed to retrieve username",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     /**
@@ -284,5 +290,51 @@ class DatabaseHandler {
                 Toast.makeText(activity, "Failed to update dinner", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /** Finds an ID in the database according to its ID. */
+    void findDinner(final Dinner dinner, final Activity activity, final ArrayList<Dinner> dinners,
+                    final SavedAdapter adapter, final int position) {
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        Query findDinner = database.child("dinners").orderByChild("id").equalTo(dinner.getId());
+
+        findDinner.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    String databaseKey = snapshot.getKey();
+                    Dinner foundDinner = snapshot.getValue(Dinner.class);
+                    removeGuest(foundDinner, databaseKey, database, dinners, adapter, position);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(activity, "Could not find dinner", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /** Removes a guest from a dinner in the database. */
+    private void removeGuest(Dinner dinner, String key, DatabaseReference database,
+                             ArrayList<Dinner> dinners, SavedAdapter adapter, int dinnerPosition) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            ArrayList<String> guestIds = dinner.getGuestIds();
+            ArrayList<String> guestNames = dinner.getGuestNames();
+            String userId = user.getUid();
+            int lastOccurrence = guestIds.lastIndexOf(userId);
+
+            guestIds.set(lastOccurrence, "null");
+            guestNames.set(lastOccurrence, "null");
+            dinner.setGuestIds(guestIds);
+            dinner.setGuestNames(guestNames);
+
+            dinners.set(dinnerPosition, dinner);
+            adapter.notifyDataSetChanged();
+
+            database.child("dinners").child(key).setValue(dinner);
+        }
     }
 }
