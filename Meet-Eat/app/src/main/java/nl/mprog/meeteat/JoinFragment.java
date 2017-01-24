@@ -37,7 +37,7 @@ public class JoinFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    /** Changes the text in the area and cuisine EditText to the most recent search */
+    /** Changes the text in the area EditText to the most recent search. */
     private void resetLastSearch() {
         SharedPreferences sharedPrefs = activity.getSharedPreferences("lastSearch",
                 Context.MODE_PRIVATE);
@@ -48,7 +48,7 @@ public class JoinFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    /** Searches for a dinner given the user's input */
+    /** Searches for a dinner given the user's input. */
     public void search() {
         String area = ((EditText) rootView.findViewById(R.id.giveArea)).getText().toString();
 
@@ -61,14 +61,14 @@ public class JoinFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    /** Saves the most recent search in Shared Preferences */
+    /** Saves the most recent search in Shared Preferences. */
     private void saveLastSearch(String area) {
         SharedPreferences.Editor editor = activity.getSharedPreferences("lastSearch",
                 Context.MODE_PRIVATE).edit();
         editor.putString("lastArea", area).apply();
     }
 
-    /** Sends the user to ResultFragment to show his search results */
+    /** Sends the user to ResultFragment to show his search results. */
     private void toResultFragment(String area) {
         ResultFragment resultFragment = new ResultFragment();
         Bundle arguments = new Bundle();

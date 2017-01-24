@@ -64,7 +64,8 @@ class DatabaseHandler {
     }
 
     /** The amount of free spaces is updated if there are more than 0 free spaces. */
-    void updateFreeSpaces(String dinnerId, final Context context) {
+    void updateFreeSpaces(String dinnerId, final Context context, final int position,
+                          final DinnerAdapter adapter, final ArrayList<Dinner> dinners) {
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         Query findId = database.child("dinners").orderByChild("id").equalTo(dinnerId);
 
@@ -75,12 +76,13 @@ class DatabaseHandler {
                     String databaseKey = snapshot.getKey();
                     Dinner dinner = snapshot.getValue(Dinner.class);
                     String guestString = dinner.getGuestNames().toString();
-                    ArrayList<String> guestIds = dinner.getGuestIds();
-                    ArrayList<String> guestNames = dinner.getGuestNames();
                     int freeSpaces = StringUtils.countMatches(guestString, "null");
 
                     if (freeSpaces > 0) {
-                        updateGuests(guestIds, guestNames, dinner, databaseKey);
+                        ArrayList<String> guestIds = dinner.getGuestIds();
+                        ArrayList<String> guestNames = dinner.getGuestNames();
+
+                        updateGuests(guestIds, guestNames, dinner, databaseKey, position, adapter, dinners);
                         Toast.makeText(context, "Joined dinner", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(context, "There are no more free spaces for this dinner",
@@ -101,7 +103,8 @@ class DatabaseHandler {
      * clicked.
      */
     private void updateGuests(final ArrayList<String> guestIds, final ArrayList<String> guestNames,
-                              final Dinner dinner, final String databaseKey) {
+                              final Dinner dinner, final String databaseKey, final int position,
+                              final DinnerAdapter adapter, final ArrayList<Dinner> dinners) {
         final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         Query findName = database.child("users").orderByChild("userId").equalTo(userId);
@@ -113,7 +116,7 @@ class DatabaseHandler {
                     User user = snapshot.getValue(User.class);
                     String username = user.getUsername();
                     updateFirebaseGuests(guestIds, guestNames, userId, username, dinner,
-                            databaseKey);
+                            databaseKey, position, adapter, dinners);
                 }
             }
 
@@ -129,7 +132,9 @@ class DatabaseHandler {
      * guest's name. After that, the Dinner entry in the database is updated.
      */
     private void updateFirebaseGuests(ArrayList<String> guestIds, ArrayList<String> guestNames,
-                                      String id, String name, Dinner dinner, String databaseKey) {
+                                      String id, String name, Dinner dinner, String databaseKey,
+                                      int position, DinnerAdapter adapter,
+                                      ArrayList<Dinner> dinners) {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
         for (int i = 0; i < guestNames.size(); i++) {
@@ -141,6 +146,8 @@ class DatabaseHandler {
         }
         dinner.setGuestIds(guestIds);
         dinner.setGuestNames(guestNames);
+        dinners.set(position, dinner);
+        adapter.notifyDataSetChanged();
         database.child("dinners").child(databaseKey).setValue(dinner);
     }
 

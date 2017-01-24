@@ -108,7 +108,7 @@ class DinnerAdapter extends BaseExpandableListAdapter {
         Picasso.with(context).load(url).into(dinnerImage);
 
         ImageButton joinButton = (ImageButton) convertView.findViewById(R.id.joinButton);
-        setClickListener(joinButton, dinnerId);
+        setClickListener(joinButton, dinnerId, groupPosition);
 
         return convertView;
     }
@@ -130,20 +130,25 @@ class DinnerAdapter extends BaseExpandableListAdapter {
         }
     }
 
-    private void setClickListener(ImageButton button, final String dinnerId) {
+    private void setClickListener(ImageButton button, final String dinnerId, final int position) {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
                 if (user != null) {
                     DatabaseHandler databaseHandler = new DatabaseHandler();
-                    databaseHandler.updateFreeSpaces(dinnerId, v.getContext());
+                    databaseHandler.updateFreeSpaces(dinnerId, v.getContext(), position, DinnerAdapter.this, dinners);
                 } else {
                     Toast.makeText(context, "Please sign in to join a dinner", Toast.LENGTH_SHORT)
                             .show();
                 }
             }
         });
+    }
+
+    private void updateAdapter() {
+
     }
 
     @Override
