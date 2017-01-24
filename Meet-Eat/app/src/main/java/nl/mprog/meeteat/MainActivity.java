@@ -3,7 +3,6 @@ package nl.mprog.meeteat;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,7 +11,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -37,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /** Creates menu items for the navigation drawer */
+    /** Creates menu items for the navigation drawer. */
     private void createDrawerItems() {
         ArrayList<DrawerItem> data = createDrawerData();
         DrawerAdapter adapter = new DrawerAdapter(this, data);
@@ -45,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         drawerList.setAdapter(adapter);
     }
 
+    /** Creates the data for the drawer adapter. */
     private ArrayList<DrawerItem> createDrawerData() {
         ArrayList<DrawerItem> data = new ArrayList<>();
 
@@ -56,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         return data;
     }
 
-    /** Sets a listener on the navigation drawer */
+    /** Sets a listener on the navigation drawer. */
     private void setDrawerListener() {
         drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /** Changes the Fragment in the content frame to the new fragment. */
+    /** Changes the fragment in the content frame to the new fragment. */
     private void changeFragment(Fragment newFragment) {
         FragmentManager manager = getFragmentManager();
 
@@ -95,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    /** Sets up the navigation drawer */
+    /** Sets up the navigation drawer. */
     private void setUpDrawer() {
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setElevation(0);
@@ -125,17 +124,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /** Returns true if the touch event was handled. */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
+    /** Synchronise the state of the drawer with the drawer layout. */
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         drawerToggle.syncState();
     }
 
+    /** Change the configuration to the new configuration if it changes. */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
