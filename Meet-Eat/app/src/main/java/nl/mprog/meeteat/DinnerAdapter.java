@@ -138,17 +138,14 @@ class DinnerAdapter extends BaseExpandableListAdapter {
 
                 if (user != null) {
                     DatabaseHandler databaseHandler = new DatabaseHandler();
-                    databaseHandler.updateFreeSpaces(dinnerId, v.getContext(), position, DinnerAdapter.this, dinners);
+                    databaseHandler.updateFreeSpaces(dinnerId, v.getContext(), position,
+                            DinnerAdapter.this, dinners);
                 } else {
                     Toast.makeText(context, "Please sign in to join a dinner", Toast.LENGTH_SHORT)
                             .show();
                 }
             }
         });
-    }
-
-    private void updateAdapter() {
-
     }
 
     @Override

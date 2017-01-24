@@ -12,6 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
@@ -60,25 +64,44 @@ public class MainActivity extends AppCompatActivity {
         drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ((DrawerLayout) findViewById(R.id.drawerLayout)).closeDrawers();
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 
                 switch (position) {
                     case 0:
+                        drawerLayout.closeDrawers();
+
                         MainFragment mainFragment = new MainFragment();
                         changeFragment(mainFragment);
                         break;
                     case 1:
+                        drawerLayout.closeDrawers();
+
                         AccountFragment accountFragment = new AccountFragment();
                         changeFragment(accountFragment);
                         break;
                     case 2:
-                        HostListFragment hostListFragment = new HostListFragment();
-                        changeFragment(hostListFragment);
-                        break;
+                        if (user != null) {
+                            drawerLayout.closeDrawers();
+
+                            HostListFragment hostListFragment = new HostListFragment();
+                            changeFragment(hostListFragment);
+                            break;
+                        } else {
+                            Toast.makeText(MainActivity.this, "Please log in to view this page",
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     case 3:
-                        JoinListFragment joinListFragment = new JoinListFragment();
-                        changeFragment(joinListFragment);
-                        break;
+                        if (user != null) {
+                            drawerLayout.closeDrawers();
+
+                            JoinListFragment joinListFragment = new JoinListFragment();
+                            changeFragment(joinListFragment);
+                            break;
+                        } else {
+                            Toast.makeText(MainActivity.this, "Please log in to view this page",
+                                    Toast.LENGTH_SHORT).show();
+                        }
                 }
             }
         });

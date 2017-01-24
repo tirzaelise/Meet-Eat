@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_edit_dinner"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="nl.mprog.meeteat.EditDinnerFragment">
+
+    <TextView
+        android:text="@string/newTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/titleText" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:labelFor="@id/titleText"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_below="@+id/titleText"
+        android:layout_alignParentStart="true"
+        android:id="@+id/newTitle" />
+
+    <TextView
+        android:text="@string/newIngredients"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/newTitle"
+        android:layout_alignParentStart="true"
+        android:id="@+id/ingredientsText" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:labelFor="@id/ingredientsText"
+        android:ems="10"
+        android:layout_below="@+id/ingredientsText"
+        android:layout_alignParentStart="true"
+        android:id="@+id/newIngredients" />
+
+    <TextView
+        android:text="@string/newDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/newIngredients"
+        android:layout_alignParentStart="true"
+        android:id="@+id/dateText" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:labelFor="@id/dateText"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_below="@+id/dateText"
+        android:layout_alignParentStart="true"
+        android:id="@+id/newDate" />
+
+    <Button
+        android:text="@string/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        android:id="@+id/saveButton" />
+
+</RelativeLayout>

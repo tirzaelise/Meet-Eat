@@ -54,4 +54,8 @@
     <string name="dinnerImageDesc">This is an image of the dinner</string>
     <string name="joinedDinners">Joined dinners</string>
     <string name="veganLower">vegan</string>
+    <string name="newIngredients">What are the new ingredients you\'re going to use?</string>
+    <string name="newDate">What\'s the new date for your dinner?</string>
+    <string name="newTitle">What\'s the new title for your dinner?</string>
+    <string name="save">Save</string>
 </resources>

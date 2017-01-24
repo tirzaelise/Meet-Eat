@@ -3,6 +3,7 @@ package nl.mprog.meeteat;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -82,7 +83,8 @@ class DatabaseHandler {
                         ArrayList<String> guestIds = dinner.getGuestIds();
                         ArrayList<String> guestNames = dinner.getGuestNames();
 
-                        updateGuests(guestIds, guestNames, dinner, databaseKey, position, adapter, dinners);
+                        updateGuests(guestIds, guestNames, dinner, databaseKey, position, adapter,
+                                dinners);
                         Toast.makeText(context, "Joined dinner", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(context, "There are no more free spaces for this dinner",
@@ -258,6 +260,28 @@ class DatabaseHandler {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+    }
+
+    /** Updates a dinner in the database. */
+    void updateDinner(final Dinner dinner, final Activity activity) {
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        Query updateDinner = database.child("dinners").orderByChild("id").equalTo(dinner.getId());
+
+        updateDinner.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    String databaseKey = snapshot.getKey();
+                    database.child("dinners").child(databaseKey).setValue(dinner);
+                    Toast.makeText(activity, "Updated dinner", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(activity, "Failed to update dinner", Toast.LENGTH_SHORT).show();
             }
         });
     }

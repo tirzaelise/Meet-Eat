@@ -1,10 +1,18 @@
 package nl.mprog.meeteat;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,7 +25,7 @@ import java.util.ArrayList;
  */
 
 class SavedAdapter extends BaseAdapter {
-    private Context context;
+    private Activity activity;
     private ArrayList<Dinner> dinners;
     private LayoutInflater inflater;
     private boolean joining;
@@ -28,11 +36,11 @@ class SavedAdapter extends BaseAdapter {
     private TextView dinnerIngredients;
     private ImageView dinnerImage;
 
-    SavedAdapter(Context context, ArrayList<Dinner> dinners, boolean joining) {
-        this.context = context;
+    SavedAdapter(Activity activity, ArrayList<Dinner> dinners, boolean joining) {
+        this.activity = activity;
         this.dinners = dinners;
         this.joining = joining;
-        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -69,10 +77,14 @@ class SavedAdapter extends BaseAdapter {
             if (joining) {
                 String host = "Host: " + dinner.getHostName();
                 ((TextView) view.findViewById(R.id.dinnerHost)).setText(host);
+                view.findViewById(R.id.editButton).setVisibility(View.GONE);
+            } else {
+                view.findViewById(R.id.dinnerHost).setVisibility(View.GONE);
             }
 
             String url = "https://spoonacular.com/recipeImages/" + dinner.getId() + "-312x231.jpg";
-            Picasso.with(context).load(url).into(dinnerImage);
+            Picasso.with(activity).load(url).into(dinnerImage);
+
         } else {
             initialiseViewsAndRecipe(view, position);
             String date = "Date: " + dinners.get(position).getDate();
@@ -87,13 +99,85 @@ class SavedAdapter extends BaseAdapter {
             if (joining) {
                 String host = "Host: " + dinners.get(position).getHostName();
                 ((TextView) view.findViewById(R.id.dinnerHost)).setText(host);
+                view.findViewById(R.id.editButton).setVisibility(View.GONE);
+            } else {
+                view.findViewById(R.id.dinnerHost).setVisibility(View.GONE);
             }
 
             String url = "https://spoonacular.com/recipeImages/" +
                     this.dinners.get(position).getId() + "-312x231.jpg";
-            Picasso.with(context).load(url).into(dinnerImage);
+            Picasso.with(activity).load(url).into(dinnerImage);
         }
+
+        ImageButton editButton = (ImageButton) view.findViewById(R.id.editButton);
+        ImageButton deleteButton = (ImageButton) view.findViewById(R.id.deleteButton);
+        setClickListener(editButton, position);
+        setClickListener(deleteButton, position);
+
         return view;
+    }
+
+    /** Sets a click listener on the buttons. */
+    private void setClickListener(ImageButton button, int position) {
+        final Dinner dinner = dinners.get(position);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.editButton:
+                        alertDialog("Are you sure you want to edit this dinner?", v.getId(),
+                                dinner);
+                        break;
+                    case R.id.deleteButton:
+                        alertDialog("Are you sure you want to delete this dinner?", v.getId(),
+                                dinner);
+                        break;
+                }
+            }
+        });
+    }
+
+    /** Creates an alert dialog when a button is clicked. */
+    private void alertDialog(String alert, final int id, final Dinner dinner) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setMessage(alert);
+        builder.setCancelable(true);
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+
+                switch (id) {
+                    case R.id.editButton:
+                        EditDinnerFragment editDinnerFragment = new EditDinnerFragment();
+                        Bundle arguments = new Bundle();
+                        arguments.putSerializable("dinner", dinner);
+                        editDinnerFragment.setArguments(arguments);
+
+                        FragmentManager manager = activity.getFragmentManager();
+
+                        manager.beginTransaction()
+                                .replace(R.id.contentFrame, editDinnerFragment)
+                                .addToBackStack(null)
+                                .commit();
+                        break;
+
+                    case R.id.deleteButton:
+                        break;
+                }
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
     }
 
     /** Initialises the views in the row layout and a value for the recipe. */
@@ -108,7 +192,13 @@ class SavedAdapter extends BaseAdapter {
 
     /** Converts an array to a string. */
     private String arrayToString(ArrayList<String> array) {
-        String string = array.get(0);
+        String string;
+
+        if (array.get(0).equals("null")) {
+            string = "none";
+        } else {
+            string = array.get(0);
+        }
 
         for (int i = 1; i < array.size(); i++) {
             if (!array.get(i).equals("null")) {

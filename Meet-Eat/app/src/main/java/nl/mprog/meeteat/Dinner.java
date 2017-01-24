@@ -10,9 +10,10 @@
 
 package nl.mprog.meeteat;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-class Dinner {
+class Dinner implements Serializable {
     private String title;
     private String id;
     private String hostId;
@@ -42,6 +43,14 @@ class Dinner {
     }
 
     public Dinner() {
+    }
+
+    void setTitle(String title) {
+        this.title = title;
+    }
+
+    void setDate(String date) {
+        this.date = date;
     }
 
     void setGuestIds(ArrayList<String> guestIds) {
