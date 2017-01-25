@@ -153,14 +153,14 @@ public class MainActivity extends AppCompatActivity {
         return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
-    /** Synchronise the state of the drawer with the drawer layout. */
+    /** Synchronises the state of the drawer with the drawer layout. */
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         drawerToggle.syncState();
     }
 
-    /** Change the configuration to the new configuration if it changes. */
+    /** Changes the configuration to the new configuration if it changes. */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);

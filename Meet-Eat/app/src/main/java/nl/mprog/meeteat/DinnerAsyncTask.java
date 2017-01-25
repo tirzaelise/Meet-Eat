@@ -2,7 +2,8 @@
  * Tirza Soute (10761977)
  * Programmeerproject
  *
- * This class implements the AsyncTask for the Spoonacular API.
+ * This class implements the AsyncTask for the Spoonacular API. It gets everything from the web page
+ * and uses this to create an ArrayList<Dinner> of all the recipes that were found.
  */
 
 package nl.mprog.meeteat;
@@ -61,14 +62,7 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
 
                 for (int i = 0; i < dinnersObject.length(); i++) {
                     JSONObject dinnerObject = dinnersObject.getJSONObject(i);
-                    String title = dinnerObject.getString("title");
-                    String id = dinnerObject.getString("id");
-                    ArrayList<String> guestNames = createEmptyGuests(freeSpaces);
-                    ArrayList<String> guestIds = createEmptyGuests(freeSpaces);
-
-
-                    Dinner dinner = new Dinner(title, id, hostId, hostName, date, guestIds,
-                            guestNames, area, "", false, false);
+                    Dinner dinner = createDinnerObject(dinnerObject, hostId, hostName);
                     dinners.add(dinner);
                 }
                 listener.onTaskCompleted(dinners);
@@ -81,7 +75,19 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
         }
     }
 
-    /** Creates an ArrayList<String> of the size of the amount of spaces that was given */
+    /** Creates a new dinner object from the JSONObject. */
+    private Dinner createDinnerObject(JSONObject dinner, String hostId, String hostName)
+            throws JSONException {
+        String title = dinner.getString("title");
+        String id = dinner.getString("id");
+        ArrayList<String> guestNames = createEmptyGuests(freeSpaces);
+        ArrayList<String> guestIds = createEmptyGuests(freeSpaces);
+
+        return new Dinner(title, id, hostId, hostName, date, guestIds, guestNames, area, "", false,
+                false);
+    }
+
+    /** Creates an ArrayList<String> of the size of the amount of spaces that was given. */
     private ArrayList<String> createEmptyGuests(int spaces) {
         String[] guests = new String[spaces];
         Arrays.fill(guests, "null");
