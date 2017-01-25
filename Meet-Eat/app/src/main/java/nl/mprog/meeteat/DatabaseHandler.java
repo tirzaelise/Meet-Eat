@@ -169,7 +169,7 @@ class DatabaseHandler {
             DatabaseReference database = FirebaseDatabase.getInstance().getReference();
             Query findHosting = database.child("dinners").orderByChild("hostId").equalTo(userId);
 
-            findHosting.addValueEventListener(new ValueEventListener() {
+            findHosting.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot: dataSnapshot.getChildren()) {

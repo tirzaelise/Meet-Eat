@@ -99,6 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/whatTime"
         android:layout_toEndOf="@id/giveDate"
+        android:layout_marginStart="5dp"
         android:inputType="time"
         android:textSize="14sp"
         android:hint="@string/time"
