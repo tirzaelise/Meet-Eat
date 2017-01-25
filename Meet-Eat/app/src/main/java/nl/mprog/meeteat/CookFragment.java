@@ -1,14 +1,20 @@
 package nl.mprog.meeteat;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import static org.apache.commons.lang3.text.WordUtils.capitalizeFully;
 
@@ -35,6 +41,7 @@ public class CookFragment extends Fragment implements View.OnClickListener {
 
         if (rootView != null) {
             rootView.findViewById(R.id.addButton).setOnClickListener(this);
+            calendarPopUp();
         }
     }
 
@@ -56,6 +63,41 @@ public class CookFragment extends Fragment implements View.OnClickListener {
             food = food.replace(" ", "&nbsp;");
             toRecipeResultFragment();
         }
+    }
+
+    /** Creates a pop up with a calendar so that the user can easily pick a date. */
+    private void calendarPopUp() {
+        final Calendar calendar = Calendar.getInstance();
+
+        DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateEditText(calendar);
+            }
+        };
+        setDateListener(calendar, date);
+    }
+
+    /** Updates the word 'Date' in the EditText to the date that was picked. */
+    private void updateEditText(Calendar calendar) {
+        String format = "dd/MM/yy";
+        SimpleDateFormat date = new SimpleDateFormat(format, Locale.UK);
+        ((EditText) rootView.findViewById(R.id.giveDate)).setText(date.format(calendar.getTime()));
+    }
+
+    /** Sets a listener on the EditText so tht a date can be picked when the EditText is clicked. */
+    private void setDateListener(final Calendar calendar, 
+                                 final DatePickerDialog.OnDateSetListener date) {
+        rootView.findViewById(R.id.giveDate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(activity, date, calendar.get(Calendar.YEAR), 
+                        calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
     }
 
     /** Checks if a start time corresponds to the format hh:mm */
