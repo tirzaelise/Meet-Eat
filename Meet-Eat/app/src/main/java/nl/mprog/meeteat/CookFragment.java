@@ -3,7 +3,8 @@
  * Programmeerproject
  *
  * This class implements the fragment where the user can give information about the dinner they
- * will be holding.
+ * will be holding. After the user has filled in all fields, he is sent to the next fragment where
+ * his search results will be displayed.
  */
 
 package nl.mprog.meeteat;
