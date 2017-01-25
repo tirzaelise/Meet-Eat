@@ -195,7 +195,12 @@ class SavedAdapter extends BaseAdapter {
     /** Removes a user from a dinner. */
     private void unjoinDinner(Dinner dinner, int position) {
         DatabaseHandler databaseHandler = new DatabaseHandler();
-        databaseHandler.findDinner(dinner, activity, dinners, this, position);
+        databaseHandler.removeGuest(dinner, activity, dinners, this, position);
+    }
+
+    /** Gets the new list of dinners from the DatabaseHandler. */
+    void setData(ArrayList<Dinner> dinners) {
+        this.dinners = dinners;
     }
 
     /** Deletes a dinner from the database. */

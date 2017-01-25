@@ -64,7 +64,7 @@ class DatabaseHandler {
         });
     }
 
-    /** The amount of free spaces is updated if there are more than 0 free spaces. */
+    /** The list of guests is updated if there are more than 0 free spaces. */
     void updateFreeSpaces(String dinnerId, final Context context, final int position,
                           final DinnerAdapter adapter, final ArrayList<Dinner> dinners) {
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
@@ -201,7 +201,7 @@ class DatabaseHandler {
             DatabaseReference database = FirebaseDatabase.getInstance().getReference();
             Query findJoined = database.child("dinners").orderByChild("guestIds");
 
-            findJoined.addValueEventListener(new ValueEventListener() {
+            findJoined.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
@@ -292,8 +292,11 @@ class DatabaseHandler {
         });
     }
 
-    /** Finds an ID in the database according to its ID. */
-    void findDinner(final Dinner dinner, final Activity activity, final ArrayList<Dinner> dinners,
+    /**
+     * Finds a dinner in the database according to its ID and removes the current user from the
+     * list of guests.
+     */
+    void removeGuest(final Dinner dinner, final Activity activity, final ArrayList<Dinner> dinners,
                     final SavedAdapter adapter, final int position) {
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         Query findDinner = database.child("dinners").orderByChild("id").equalTo(dinner.getId());
@@ -304,7 +307,8 @@ class DatabaseHandler {
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     String databaseKey = snapshot.getKey();
                     Dinner foundDinner = snapshot.getValue(Dinner.class);
-                    removeGuest(foundDinner, databaseKey, database, dinners, adapter, position);
+                    removeUser(foundDinner, databaseKey, database, dinners, adapter, position,
+                            activity);
                 }
             }
 
@@ -315,9 +319,10 @@ class DatabaseHandler {
         });
     }
 
-    /** Removes a guest from a dinner in the database. */
-    private void removeGuest(Dinner dinner, String key, DatabaseReference database,
-                             ArrayList<Dinner> dinners, SavedAdapter adapter, int dinnerPosition) {
+    /** Removes the current user from a dinner in the database. */
+    private void removeUser(Dinner dinner, String key, DatabaseReference database,
+                             ArrayList<Dinner> dinners, SavedAdapter adapter, int dinnerPosition,
+                            Activity activity) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user != null) {
@@ -326,15 +331,21 @@ class DatabaseHandler {
             String userId = user.getUid();
             int lastOccurrence = guestIds.lastIndexOf(userId);
 
-            guestIds.set(lastOccurrence, "null");
-            guestNames.set(lastOccurrence, "null");
-            dinner.setGuestIds(guestIds);
-            dinner.setGuestNames(guestNames);
+            if (lastOccurrence != -1) {
+                guestIds.set(lastOccurrence, "null");
+                guestNames.set(lastOccurrence, "null");
+                dinner.setGuestIds(guestIds);
+                dinner.setGuestNames(guestNames);
 
-            dinners.set(dinnerPosition, dinner);
-            adapter.notifyDataSetChanged();
+                dinners.set(dinnerPosition, dinner);
+                adapter.notifyDataSetChanged();
+                adapter.setData(dinners);
 
-            database.child("dinners").child(key).setValue(dinner);
+                database.child("dinners").child(key).setValue(dinner);
+            } else {
+                Toast.makeText(activity, "You have already been removed from this dinner",
+                        Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
