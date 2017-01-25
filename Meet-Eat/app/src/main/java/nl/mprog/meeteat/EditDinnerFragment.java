@@ -145,11 +145,12 @@ public class EditDinnerFragment extends Fragment implements View.OnClickListener
     private void updateInfo() {
         String title = ((EditText) rootView.findViewById(R.id.newTitle)).getText().toString();
         String date = ((EditText) rootView.findViewById(R.id.newDate)).getText().toString();
+        String time = ((EditText) rootView.findViewById(R.id.newTime)).getText().toString();
         String ingredients = ((EditText) rootView.findViewById(R.id.newIngredients)).getText()
                 .toString();
 
         dinner.setTitle(title);
-        dinner.setDate(date);
+        dinner.setDate(date + " " + time);
         dinner.setIngredients(ingredients);
 
         DatabaseHandler databaseHandler = new DatabaseHandler();

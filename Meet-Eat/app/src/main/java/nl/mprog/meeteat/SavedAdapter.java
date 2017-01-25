@@ -1,3 +1,13 @@
+/* Meet & Eat
+ * Tirza Soute (10761977)
+ * Programmeerproject
+ *
+ * This class implements the adapter for dinners that the user is hosting and has joined. It
+ * displays the relevant information, namely the title, the date, the guests that are joining and,
+ * optionally, the host. The user can also edit and delete their hosted dinners using this adapter.
+ * Moreover, the user can remove themselves from a dinner that they joined.
+ */
+
 package nl.mprog.meeteat;
 
 import android.app.Activity;
@@ -6,7 +16,6 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,21 +28,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-/**
- * Created by tirza on 23-1-17.
- */
-
 class SavedAdapter extends BaseAdapter {
     private Activity activity;
     private ArrayList<Dinner> dinners;
     private LayoutInflater inflater;
     private boolean joining;
-    private Dinner dinner;
-    private TextView dinnerTitle;
-    private TextView dinnerDate;
-    private TextView dinnerGuests;
-    private TextView dinnerIngredients;
-    private ImageView dinnerImage;
 
     SavedAdapter(Activity activity, ArrayList<Dinner> dinners, boolean joining) {
         this.activity = activity;
@@ -61,52 +60,13 @@ class SavedAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
 
-        if (view == null) {
+        if (convertView == null) {
             view = inflater.inflate(R.layout.layout_saved_row, parent, false);
-            initialiseViewsAndRecipe(view, position);
-            String date = "Date: " + dinner.getDate();
-            String guests = "Guests: " + arrayToString(dinner.getGuestNames());
-            String ingredients = "Ingredients: " + dinner.getIngredients();
-
-            dinnerTitle.setText(dinner.getTitle());
-            dinnerDate.setText(date);
-            dinnerGuests.setText(guests);
-            dinnerIngredients.setText(ingredients);
-
-            if (joining) {
-                String host = "Host: " + dinner.getHostName();
-                ((TextView) view.findViewById(R.id.dinnerHost)).setText(host);
-                view.findViewById(R.id.editButton).setVisibility(View.GONE);
-            } else {
-                view.findViewById(R.id.dinnerHost).setVisibility(View.GONE);
-            }
-
-            String url = "https://spoonacular.com/recipeImages/" + dinner.getId() + "-312x231.jpg";
-            Picasso.with(activity).load(url).into(dinnerImage);
-
-        } else {
-            initialiseViewsAndRecipe(view, position);
-            String date = "Date: " + dinners.get(position).getDate();
-            String guests = "Guests: " + arrayToString(this.dinners.get(position).getGuestNames());
-            String ingredients = "Ingredients: " + dinners.get(position).getIngredients();
-
-            dinnerTitle.setText(dinners.get(position).getTitle());
-            dinnerDate.setText(date);
-            dinnerGuests.setText(guests);
-            dinnerIngredients.setText(ingredients);
-
-            if (joining) {
-                String host = "Host: " + dinners.get(position).getHostName();
-                ((TextView) view.findViewById(R.id.dinnerHost)).setText(host);
-                view.findViewById(R.id.editButton).setVisibility(View.GONE);
-            } else {
-                view.findViewById(R.id.dinnerHost).setVisibility(View.GONE);
-            }
-
-            String url = "https://spoonacular.com/recipeImages/" +
-                    this.dinners.get(position).getId() + "-312x231.jpg";
-            Picasso.with(activity).load(url).into(dinnerImage);
         }
+
+        setDinnerInfo(position, view);
+        setDinnerImage(position, view);
+        setHostOptionally(position, view, joining);
 
         ImageButton editButton = (ImageButton) view.findViewById(R.id.editButton);
         ImageButton deleteButton = (ImageButton) view.findViewById(R.id.deleteButton);
@@ -116,7 +76,63 @@ class SavedAdapter extends BaseAdapter {
         return view;
     }
 
-    /** Sets a click listener on the buttons. */
+    /** Sets all the information about a dinner in the ListView. */
+    private void setDinnerInfo(int position, View view) {
+        String title = this.dinners.get(position).getTitle();
+        String date = "Date: " + this.dinners.get(position).getDate();
+        String guests = "Guests: " + arrayToString(this.dinners.get(position).getGuestNames());
+        String ingredients = "Ingredients: " + this.dinners.get(position).getIngredients();
+
+        ((TextView) view.findViewById(R.id.dinnerTitle)).setText(title);
+        ((TextView) view.findViewById(R.id.dinnerDate)).setText(date);
+        ((TextView) view.findViewById(R.id.dinnerGuests)).setText(guests);
+        ((TextView) view.findViewById(R.id.dinnerIngredients)).setText(ingredients);
+    }
+
+    /**
+     * If the adapter is being used to show the joined dinners, set the host name in the ListView.
+     * Otherwise, set the visibility of the TextView to gone.
+     */
+    private void setHostOptionally(int position, View view, boolean joining) {
+        if (joining) {
+            String host = "Host: " + dinners.get(position).getHostName();
+            ((TextView) view.findViewById(R.id.dinnerHost)).setText(host);
+            view.findViewById(R.id.editButton).setVisibility(View.GONE);
+        } else {
+            view.findViewById(R.id.dinnerHost).setVisibility(View.GONE);
+        }
+    }
+
+    /** Converts an array to a string. */
+    private String arrayToString(ArrayList<String> array) {
+        String string;
+
+        if (array.get(0).equals("null")) {
+            string = "none";
+        } else {
+            string = array.get(0);
+        }
+
+        for (int i = 1; i < array.size(); i++) {
+            if (!array.get(i).equals("null")) {
+                string = string + ", " + array.get(i);
+            } else {
+                break;
+            }
+        }
+        return string;
+    }
+
+    /** Sets the image of a dinner in the ImageView. */
+    private void setDinnerImage(int position, View view) {
+        ImageView dinnerImage = (ImageView) view.findViewById(R.id.dinnerImage);
+        String id = this.dinners.get(position).getId();
+        String url = "https://spoonacular.com/recipeImages/" + id + "-312x231.jpg";
+
+        Picasso.with(activity).load(url).into(dinnerImage);
+    }
+
+    /** Sets a click listener on the edit and delete buttons. */
     private void setClickListener(ImageButton button, final int position) {
         final Dinner dinner = dinners.get(position);
 
@@ -164,7 +180,6 @@ class SavedAdapter extends BaseAdapter {
                         editDinnerFragment.setArguments(arguments);
 
                         FragmentManager manager = activity.getFragmentManager();
-
                         manager.beginTransaction()
                                 .replace(R.id.contentFrame, editDinnerFragment)
                                 .addToBackStack(null)
@@ -198,45 +213,14 @@ class SavedAdapter extends BaseAdapter {
         databaseHandler.removeGuest(dinner, activity, dinners, this, position);
     }
 
-    /** Gets the new list of dinners from the DatabaseHandler. */
-    void setData(ArrayList<Dinner> dinners) {
-        this.dinners = dinners;
-    }
-
     /** Deletes a dinner from the database. */
     private void deleteDinner(Dinner dinner) {
         DatabaseHandler databaseHandler = new DatabaseHandler();
         databaseHandler.deleteDinner(dinner, activity, this, dinners);
     }
 
-
-    /** Initialises the views in the row layout and a value for the recipe. */
-    private void initialiseViewsAndRecipe(View view, int position) {
-        dinner = dinners.get(position);
-        dinnerTitle = (TextView) view.findViewById(R.id.dinnerTitle);
-        dinnerDate = (TextView) view.findViewById(R.id.dinnerDate);
-        dinnerGuests = (TextView) view.findViewById(R.id.dinnerGuests);
-        dinnerIngredients = (TextView) view.findViewById(R.id.dinnerIngredients);
-        dinnerImage = (ImageView) view.findViewById(R.id.dinnerImage);
-    }
-
-    /** Converts an array to a string. */
-    private String arrayToString(ArrayList<String> array) {
-        String string;
-
-        if (array.get(0).equals("null")) {
-            string = "none";
-        } else {
-            string = array.get(0);
-        }
-
-        for (int i = 1; i < array.size(); i++) {
-            if (!array.get(i).equals("null")) {
-                string = string + ", " + array.get(i);
-            } else {
-                break;
-            }
-        }
-        return string;
+    /** Gets the new list of dinners from the DatabaseHandler. */
+    void setData(ArrayList<Dinner> dinners) {
+        this.dinners = dinners;
     }
 }
