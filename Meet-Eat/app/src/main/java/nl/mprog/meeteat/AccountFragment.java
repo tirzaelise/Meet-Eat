@@ -212,10 +212,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                                         Toast.LENGTH_SHORT).show();
                                 hideKeyboard();
                                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
                                 if (user != null) {
                                     DatabaseHandler databaseHandler = new DatabaseHandler();
                                     databaseHandler.getUsername(user.getUid(), activity);
-
                                 }
                             }
                         }

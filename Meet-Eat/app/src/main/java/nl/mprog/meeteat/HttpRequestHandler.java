@@ -1,6 +1,12 @@
-package nl.mprog.meeteat;
+/* Meet & Eat
+ * Tirza Soute (10761977)
+ * Programmeerproject
+ *
+ * This class handles the requests that are made to the Spoonacular API. The result that is returned
+ * is a string that contains everything on the web page.
+ */
 
-import android.util.Log;
+package nl.mprog.meeteat;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,15 +15,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-/**
- * Created by tirza on 15-1-17.
- */
-
-public class HttpRequestHandler {
+class HttpRequestHandler {
 
     static synchronized String downloadFromApi(String... params) {
-        String key = "uI9T1GTt8nmshcUUWJOjq8TQNGBgp1P9Zffjsn7dAbkmTSDt1k";
-//        String key = "EV3I1nY4m3msh9pEO51dECigTna1p1CP3TmjsnOpBnaLR4wcfD";
         String urlToApi = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/";
         String query = params[0];
         String urlRequest = urlToApi + query;
@@ -30,6 +30,14 @@ public class HttpRequestHandler {
             e.printStackTrace();
             return result;
         }
+        result = readPage(url, result);
+
+        return result;
+    }
+
+    /** Reads the text on a web page. */
+    private static String readPage(URL url, String result) {
+        String key = "uI9T1GTt8nmshcUUWJOjq8TQNGBgp1P9Zffjsn7dAbkmTSDt1k";
 
         try {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
