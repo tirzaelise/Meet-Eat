@@ -33,6 +33,7 @@ class SavedAdapter extends BaseAdapter {
     private ArrayList<Dinner> dinners;
     private LayoutInflater inflater;
     private boolean joining;
+    private int position;
 
     SavedAdapter(Activity activity, ArrayList<Dinner> dinners, boolean joining) {
         this.activity = activity;
@@ -59,25 +60,26 @@ class SavedAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
+        this.position = position;
 
         if (convertView == null) {
             view = inflater.inflate(R.layout.layout_saved_row, parent, false);
         }
 
-        setDinnerInfo(position, view);
-        setDinnerImage(position, view);
-        setHostOptionally(position, view, joining);
+        setDinnerInfo(view);
+        setDinnerImage(view);
+        setHostOptionally(view, joining);
 
         ImageButton editButton = (ImageButton) view.findViewById(R.id.editButton);
         ImageButton deleteButton = (ImageButton) view.findViewById(R.id.deleteButton);
-        setClickListener(editButton, position);
-        setClickListener(deleteButton, position);
+        setClickListener(editButton);
+        setClickListener(deleteButton);
 
         return view;
     }
 
     /** Sets all the information about a dinner in the ListView. */
-    private void setDinnerInfo(int position, View view) {
+    private void setDinnerInfo(View view) {
         String title = this.dinners.get(position).getTitle();
         String date = "Date: " + this.dinners.get(position).getDate();
         String guests = "Guests: " + arrayToString(this.dinners.get(position).getGuestNames());
@@ -93,7 +95,7 @@ class SavedAdapter extends BaseAdapter {
      * If the adapter is being used to show the joined dinners, set the host name in the ListView.
      * Otherwise, set the visibility of the TextView to gone.
      */
-    private void setHostOptionally(int position, View view, boolean joining) {
+    private void setHostOptionally(View view, boolean joining) {
         if (joining) {
             String host = "Host: " + dinners.get(position).getHostName();
             ((TextView) view.findViewById(R.id.dinnerHost)).setText(host);
@@ -124,7 +126,7 @@ class SavedAdapter extends BaseAdapter {
     }
 
     /** Sets the image of a dinner in the ImageView. */
-    private void setDinnerImage(int position, View view) {
+    private void setDinnerImage(View view) {
         ImageView dinnerImage = (ImageView) view.findViewById(R.id.dinnerImage);
         String id = this.dinners.get(position).getId();
         String url = "https://spoonacular.com/recipeImages/" + id + "-312x231.jpg";
@@ -133,7 +135,7 @@ class SavedAdapter extends BaseAdapter {
     }
 
     /** Sets a click listener on the edit and delete buttons. */
-    private void setClickListener(ImageButton button, final int position) {
+    private void setClickListener(ImageButton button) {
         final Dinner dinner = dinners.get(position);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -142,16 +144,16 @@ class SavedAdapter extends BaseAdapter {
                 switch (v.getId()) {
                     case R.id.editButton:
                         alertDialog("Are you sure you want to edit this dinner?", v.getId(),
-                                dinner, joining, position);
+                                dinner, joining);
                         break;
                     case R.id.deleteButton:
                         if (joining) {
                             alertDialog("Are you sure you no longer want to join this dinner?",
-                                    v.getId(), dinner, joining, position);
+                                    v.getId(), dinner, joining);
                             break;
                         } else {
                             alertDialog("Are you sure you want to delete this dinner?", v.getId(),
-                                    dinner, joining, position);
+                                    dinner, joining);
                             break;
                         }
                 }
@@ -160,8 +162,8 @@ class SavedAdapter extends BaseAdapter {
     }
 
     /** Creates an alert dialog when a button is clicked. */
-    private void alertDialog(String alert, final int id, final Dinner dinner,
-                             final boolean joining, final int position) {
+    private void alertDialog(String alert, final int buttonId, final Dinner dinner,
+                             final boolean joining) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setMessage(alert);
         builder.setCancelable(true);
@@ -172,23 +174,14 @@ class SavedAdapter extends BaseAdapter {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
 
-                switch (id) {
+                switch (buttonId) {
                     case R.id.editButton:
-                        EditDinnerFragment editDinnerFragment = new EditDinnerFragment();
-                        Bundle arguments = new Bundle();
-                        arguments.putSerializable("dinner", dinner);
-                        editDinnerFragment.setArguments(arguments);
-
-                        FragmentManager manager = activity.getFragmentManager();
-                        manager.beginTransaction()
-                                .replace(R.id.contentFrame, editDinnerFragment)
-                                .addToBackStack(null)
-                                .commit();
+                        goToEditFragment(dinner);
                         break;
 
                     case R.id.deleteButton:
                         if (joining) {
-                            unjoinDinner(dinner, position);
+                            unjoinDinner(dinner);
                             break;
                         } else {
                             deleteDinner(dinner);
@@ -207,8 +200,22 @@ class SavedAdapter extends BaseAdapter {
         builder.show();
     }
 
+    /** Sends the user to the fragment where they can edit their dinner. */
+    private void goToEditFragment(Dinner dinner) {
+        EditDinnerFragment editDinnerFragment = new EditDinnerFragment();
+        Bundle arguments = new Bundle();
+        arguments.putSerializable("dinner", dinner);
+        editDinnerFragment.setArguments(arguments);
+
+        FragmentManager manager = activity.getFragmentManager();
+        manager.beginTransaction()
+                .replace(R.id.contentFrame, editDinnerFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
     /** Removes a user from a dinner. */
-    private void unjoinDinner(Dinner dinner, int position) {
+    private void unjoinDinner(Dinner dinner) {
         DatabaseHandler databaseHandler = new DatabaseHandler();
         databaseHandler.removeGuest(dinner, activity, dinners, this, position);
     }
