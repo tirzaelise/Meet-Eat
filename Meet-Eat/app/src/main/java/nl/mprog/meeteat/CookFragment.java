@@ -1,15 +1,24 @@
+/* Meet & Eat
+ * Tirza Soute (10761977)
+ * Programmeerproject
+ *
+ * This class implements the fragment where the user can give information about the dinner they
+ * will be holding.
+ */
+
 package nl.mprog.meeteat;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -42,26 +51,7 @@ public class CookFragment extends Fragment implements View.OnClickListener {
         if (rootView != null) {
             rootView.findViewById(R.id.addButton).setOnClickListener(this);
             calendarPopUp();
-        }
-    }
-
-    /** Adds a dinner to the database */
-    public void searchRecipes() {
-        food = ((EditText) rootView.findViewById(R.id.giveFood)).getText().toString();
-        date = ((EditText) rootView.findViewById(R.id.giveTime)).getText().toString();
-        freeSpacesString = ((EditText) rootView.findViewById(R.id.giveAmount)).getText()
-                .toString();
-        area = capitalizeFully(((EditText) rootView.findViewById(R.id.giveArea)).getText()
-                .toString());
-
-        if (!filledInAllFields()) {
-            Toast.makeText(activity, "Please fill in all fields", Toast.LENGTH_SHORT).show();
-        } else if (!correctTimeFormat()) {
-            Toast.makeText(activity, "Please enter a start time according to the format hh:mm",
-                    Toast.LENGTH_SHORT).show();
-        } else {
-            food = food.replace(" ", "&nbsp;");
-            toRecipeResultFragment();
+            timePopUp();
         }
     }
 
@@ -75,20 +65,20 @@ public class CookFragment extends Fragment implements View.OnClickListener {
                 calendar.set(Calendar.YEAR, year);
                 calendar.set(Calendar.MONTH, month);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateEditText(calendar);
+                updateDate(calendar);
             }
         };
         setDateListener(calendar, date);
     }
 
     /** Updates the word 'Date' in the EditText to the date that was picked. */
-    private void updateEditText(Calendar calendar) {
+    private void updateDate(Calendar calendar) {
         String format = "dd/MM/yy";
         SimpleDateFormat date = new SimpleDateFormat(format, Locale.UK);
         ((EditText) rootView.findViewById(R.id.giveDate)).setText(date.format(calendar.getTime()));
     }
 
-    /** Sets a listener on the EditText so tht a date can be picked when the EditText is clicked. */
+    /** Sets a listener on the EditText so that a date can be picked when the it is clicked. */
     private void setDateListener(final Calendar calendar, 
                                  final DatePickerDialog.OnDateSetListener date) {
         rootView.findViewById(R.id.giveDate).setOnClickListener(new View.OnClickListener() {
@@ -100,36 +90,71 @@ public class CookFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    /** Checks if a start time corresponds to the format hh:mm */
-    private boolean correctTimeFormat() {
-        String[] splitTime = date.split(":");
+    /** Creates a pop up with a clock so that the user can easily pick a time. */
+    private void timePopUp() {
+        final Calendar calendar = Calendar.getInstance();
 
-        // If there is no ":" in the string, split returns an array containing the input at the
-        // first place
-        if (splitTime[0].equals(date)) {
-            return false;
-        } else {
-            String[] splitHour = splitTime[0].split("");
-            String[] splitMins = splitTime[1].split("");
-
-            Log.wtf(splitHour[0], splitHour[1]);
-
-            if ((splitHour[1].equals("0") || splitHour[1].equals("1") || splitHour[1].equals("2"))
-                    && splitHour[2].matches("[0-9]+") && splitMins[1].matches("[0-5]+") &&
-                    splitMins[2].matches("[0-9]+")) {
-                return true;
+        TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                calendar.set(Calendar.MINUTE, minute);
+                updateTime(calendar);
             }
-        }
-        return false;
+        };
+        setTimeListener(calendar, time);
     }
 
-    /** Checks if all fields were filled in */
+    /** Updates the time in the EditText to the selected time. */
+    private void updateTime(Calendar calendar) {
+        String format = "HH:mm";
+        SimpleDateFormat time = new SimpleDateFormat(format, Locale.UK);
+        ((EditText) rootView.findViewById(R.id.giveTime)).setText(time.format(calendar.getTime()));
+    }
+
+    /** Sets a listener on the EditText o that a time can be picked when it is clicked. */
+    private void setTimeListener(final Calendar calendar,
+                                 final TimePickerDialog.OnTimeSetListener time) {
+        rootView.findViewById(R.id.giveTime).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new TimePickerDialog(activity, time, calendar.get(Calendar.HOUR_OF_DAY),
+                        calendar.get(Calendar.MINUTE), true).show();
+            }
+        });
+    }
+
+    /**
+     * Sends the user to the fragment where the search results will be displayed if everything is
+     * filled in correctly.
+     */
+    public void searchRecipes() {
+        food = ((EditText) rootView.findViewById(R.id.giveFood)).getText().toString();
+        freeSpacesString = ((EditText) rootView.findViewById(R.id.giveAmount)).getText()
+                .toString();
+        area = capitalizeFully(((EditText) rootView.findViewById(R.id.giveArea)).getText()
+                .toString());
+
+        if (!filledInAllFields()) {
+            Toast.makeText(activity, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+        } else {
+            food = food.replace(" ", "&nbsp;");
+            date = ((EditText) rootView.findViewById(R.id.giveDate)).getText().toString() + " " +
+                    ((EditText) rootView.findViewById(R.id.giveTime)).getText().toString();
+            toRecipeResultFragment();
+        }
+    }
+
+    /** Checks if all fields were filled in. */
     private boolean filledInAllFields() {
-        return (!food.equals("") && !date.equals("") &&
+        String date = ((EditText) rootView.findViewById(R.id.giveDate)).getText().toString();
+        String time = ((EditText) rootView.findViewById(R.id.giveTime)).getText().toString();
+
+        return (!food.equals("") && !date.equals("") && !time.equals("") &&
                 !freeSpacesString.equals("") && !area.equals(""));
     }
 
-    /** Sends the user to the fragment where they can see the results of their recipe search */
+    /** Sends the user to the fragment where they can see the results of their recipe search. */
     private void toRecipeResultFragment() {
         int freeSpaces = Integer.valueOf(freeSpacesString);
         RecipeResultFragment recipeResultFragment = new RecipeResultFragment();

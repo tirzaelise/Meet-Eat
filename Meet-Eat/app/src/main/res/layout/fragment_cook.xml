@@ -90,7 +90,7 @@
         android:inputType="date"
         android:textSize="14sp"
         android:hint="@string/date"
-        android:ems="10"
+        android:ems="8"
         android:focusable="false"
         android:id="@+id/giveDate" />
 
@@ -101,8 +101,9 @@
         android:layout_toEndOf="@id/giveDate"
         android:inputType="time"
         android:textSize="14sp"
-        android:hint="@string/timeHint"
-        android:ems="10"
+        android:hint="@string/time"
+        android:ems="5"
+        android:focusable="false"
         android:id="@+id/giveTime" />
 
     <Button

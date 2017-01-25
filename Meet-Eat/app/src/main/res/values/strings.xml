@@ -58,4 +58,5 @@
     <string name="newDate">What\'s the new date for your dinner?</string>
     <string name="newTitle">What\'s the new title for your dinner?</string>
     <string name="save">Save</string>
+    <string name="time">Time</string>
 </resources>
