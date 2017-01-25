@@ -79,14 +79,20 @@ public class CookFragment extends Fragment implements View.OnClickListener {
         ((EditText) rootView.findViewById(R.id.giveDate)).setText(date.format(calendar.getTime()));
     }
 
-    /** Sets a listener on the EditText so that a date can be picked when the it is clicked. */
+    /**
+     * Sets a listener on the EditText so that a date can be picked when the it is clicked and
+     * removes the option to choose dates before today.
+     */
     private void setDateListener(final Calendar calendar, 
                                  final DatePickerDialog.OnDateSetListener date) {
         rootView.findViewById(R.id.giveDate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(activity, date, calendar.get(Calendar.YEAR), 
-                        calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+                DatePickerDialog datePicker = new DatePickerDialog(activity, date,
+                        calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH));
+                datePicker.getDatePicker().setMinDate(System.currentTimeMillis());
+                datePicker.show();
             }
         });
     }
