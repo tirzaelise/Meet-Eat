@@ -206,6 +206,7 @@ class SavedAdapter extends BaseAdapter {
     /** Deletes a dinner from the database. */
     private void deleteDinner(Dinner dinner) {
         DatabaseHandler databaseHandler = new DatabaseHandler();
+        databaseHandler.deleteDinner(dinner, activity, this, dinners);
     }
 
 

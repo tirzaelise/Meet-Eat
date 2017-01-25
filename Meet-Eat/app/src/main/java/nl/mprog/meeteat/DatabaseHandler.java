@@ -348,4 +348,28 @@ class DatabaseHandler {
             }
         }
     }
+
+    /** Removes a dinner from the database. */
+    void deleteDinner(final Dinner dinner, final Activity activity, final SavedAdapter adapter,
+                              final ArrayList<Dinner> dinners) {
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        Query findDinner = database.child("dinners").orderByChild("id").equalTo(dinner.getId());
+
+        findDinner.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    String databaseKey = snapshot.getKey();
+                    database.child("dinners").child(databaseKey).removeValue();
+                    dinners.remove(dinner);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(activity, "Could not remove dinner", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
