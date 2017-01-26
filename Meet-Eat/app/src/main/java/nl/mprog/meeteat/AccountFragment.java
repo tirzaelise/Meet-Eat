@@ -180,7 +180,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
         if (firebaseUser != null) {
             String userId = firebaseUser.getUid();
-            User user = new User(userId, username);
+            String email = firebaseUser.getEmail();
+            User user = new User(userId, username, email);
             DatabaseHandler databaseHandler = new DatabaseHandler();
             databaseHandler.saveUser(user, activity);
         }

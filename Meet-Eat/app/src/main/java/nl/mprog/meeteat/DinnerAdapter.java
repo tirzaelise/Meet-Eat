@@ -107,7 +107,7 @@ class DinnerAdapter extends BaseExpandableListAdapter {
         ImageButton joinButton = (ImageButton) view.findViewById(R.id.joinButton);
         setClickListener(joinButton, groupPosition);
 
-        return convertView;
+        return view;
     }
 
     /**

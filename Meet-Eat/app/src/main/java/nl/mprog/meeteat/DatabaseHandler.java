@@ -2,7 +2,10 @@ package nl.mprog.meeteat;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -124,6 +127,7 @@ class DatabaseHandler {
 
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         database.child("dinners").child(databaseKey).setValue(dinner);
+        getHostEmail(userInfo.get(1), dinner, context);
 
         Toast.makeText(context, "Joined dinner", Toast.LENGTH_SHORT).show();
     }
@@ -137,6 +141,55 @@ class DatabaseHandler {
             }
         }
         return guestList;
+    }
+
+    /** Finds the e-mail address of the host of the dinner and sends them an e-mail if someone
+     * has joined their dinner. */
+    private void getHostEmail(final String username, final Dinner dinner, final Context context) {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("users")
+                .child(dinner.getHostId());
+
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User host = dataSnapshot.getValue(User.class);
+                String email = host.getEmail();
+                Log.wtf("host", email);
+                sendJoinedEmail(username, email, dinner, context);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(context, "Could not retrieve host's e-mail address",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /** Sends an e-mail to the host of the dinner that will be joined to ask for details. */
+    private void sendJoinedEmail(String username, String hostEmail, Dinner dinner,
+                                 Context context) {
+        String body = joinEmail(username, dinner);
+
+        Intent mailIntent = new Intent(Intent.ACTION_SENDTO);
+        mailIntent.setType("message/rfc822");
+        mailIntent.setData(Uri.parse("mailto:"));
+        mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{hostEmail});
+        mailIntent.putExtra(Intent.EXTRA_SUBJECT, "Joined Dinner");
+        mailIntent.putExtra(Intent.EXTRA_TEXT, body);
+
+        try {
+            context.startActivity(Intent.createChooser(mailIntent, "Send mail"));
+        } catch (android.content.ActivityNotFoundException e){
+            Toast.makeText(context, "There are no e-mail clients installed",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private String joinEmail(String username, Dinner dinner) {
+        return "Hello!\n\n I have joined your dinner at " + dinner.getDate() + ". Please " +
+                "contact me for details, such as your address.\n Thank you in advance.\n\n" +
+                " Kind regards, \n" + username;
     }
 
     /** Retrieves the dinners that the user is hosting from Firebase. */
