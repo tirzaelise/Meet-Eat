@@ -79,8 +79,8 @@ class DatabaseHandler {
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     String databaseKey = snapshot.getKey();
                     ArrayList<String> userInfo = getUserInfo(context);
-                    updateFirebaseGuests(userInfo.get(0), userInfo.get(1), databaseKey, position,
-                            adapter, dinners, context);
+                    updateFirebaseGuests(userInfo, databaseKey, position, adapter, dinners,
+                            context);
                 }
             }
 
@@ -106,15 +106,15 @@ class DatabaseHandler {
      * Searches for the first "null" occurrence in the guests array and replaces this with the
      * guest's name. After that, the Dinner entry in the database is updated.
      */
-    private void updateFirebaseGuests(String userId, String userName, String databaseKey,
-                                      int position, DinnerAdapter adapter,
-                                      ArrayList<Dinner> dinners, Context context) {
+    private void updateFirebaseGuests(ArrayList<String> userInfo, String databaseKey, int position,
+                                      DinnerAdapter adapter, ArrayList<Dinner> dinners,
+                                      Context context) {
         Dinner dinner = dinners.get(position);
         ArrayList<String> guestNames = dinner.getGuestNames();
         ArrayList<String> guestIds = dinner.getGuestIds();
 
-        guestNames = updateGuestList(userName, guestNames);
-        guestIds = updateGuestList(userId, guestIds);
+        guestIds = updateGuestList(userInfo.get(0), guestIds);
+        guestNames = updateGuestList(userInfo.get(1), guestNames);
 
         dinner.setGuestIds(guestIds);
         dinner.setGuestNames(guestNames);
