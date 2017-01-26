@@ -38,3 +38,6 @@ Fragments seemed to overlap each other when the back button is clicked so I fixe
 
 #### Day 13
 The double entries in the Joined Dinners list was also caused because I used addValueEventListener instead of addListenerForSingleValueEvent. It still took a while to realise this, but there are now no longer duplicate entries when a dinner is edited. I worked on a DatePickerDialog and a TimePickerDialog for CookFragment, which now both work. This allows the user to also hold future dinners (instead of just today) and makes filling in all the necessary fields in this fragment more user friendly. I also worked on cleaning a lot of my code using BetterCodeHub and I am working on setting a 'No results found' TextView for several fragments, but this does not work yet.
+
+#### Day 14
+I refactored a lot of code today, because I realised I was doing unnecessary extra work. This was mainly in DatabaseHandler and DinnerAdapter. I also added a feature where the user can send an e-mail to the host of a dinner once they join it so that they can be informed of the host's address etc. 
