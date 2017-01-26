@@ -3,7 +3,6 @@ package nl.mprog.meeteat;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -15,8 +14,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 
@@ -66,32 +63,21 @@ class DatabaseHandler {
         });
     }
 
-    /** The list of guests is updated if there are more than 0 free spaces. */
-    void updateFreeSpaces(String dinnerId, final Context context, final int position,
+    /**
+     * The push key of the dinner is retrieved and the list of guests is updated.
+     */
+    void updateFreeSpaces(final Context context, final Dinner dinner, final int position,
                           final DinnerAdapter adapter, final ArrayList<Dinner> dinners) {
+        String dinnerId = dinner.getId();
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        Query findId = database.child("dinners").orderByChild("id").equalTo(dinnerId);
+        Query findKey = database.child("dinners").orderByChild("id").equalTo(dinnerId);
 
-        findId.addListenerForSingleValueEvent(new ValueEventListener() {
+        findKey.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     String databaseKey = snapshot.getKey();
-                    Dinner dinner = snapshot.getValue(Dinner.class);
-                    String guestString = dinner.getGuestNames().toString();
-                    int freeSpaces = StringUtils.countMatches(guestString, "null");
-
-                    if (freeSpaces > 0) {
-                        ArrayList<String> guestIds = dinner.getGuestIds();
-                        ArrayList<String> guestNames = dinner.getGuestNames();
-
-                        updateGuests(guestIds, guestNames, dinner, databaseKey, position, adapter,
-                                dinners, context);
-                        Toast.makeText(context, "Joined dinner", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(context, "There are no more free spaces for this dinner",
-                                Toast.LENGTH_SHORT).show();
-                    }
+                    updateGuests(databaseKey, position, adapter, dinners, context);
                 }
             }
 
@@ -106,8 +92,7 @@ class DatabaseHandler {
      * Finds the user's name to update the Dinner entry in the database when the join button is
      * clicked.
      */
-    private void updateGuests(final ArrayList<String> guestIds, final ArrayList<String> guestNames,
-                              final Dinner dinner, final String databaseKey, final int position,
+    private void updateGuests(final String databaseKey, final int position,
                               final DinnerAdapter adapter, final ArrayList<Dinner> dinners,
                               final Context context) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -123,8 +108,8 @@ class DatabaseHandler {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         User user = snapshot.getValue(User.class);
                         String username = user.getUsername();
-                        updateFirebaseGuests(guestIds, guestNames, userId, username, dinner,
-                                databaseKey, position, adapter, dinners);
+                        updateFirebaseGuests(userId, username, databaseKey, position, adapter,
+                                dinners, context);
                     }
                 }
 
@@ -141,24 +126,36 @@ class DatabaseHandler {
      * Searches for the first "null" occurrence in the guests array and replaces this with the
      * guest's name. After that, the Dinner entry in the database is updated.
      */
-    private void updateFirebaseGuests(ArrayList<String> guestIds, ArrayList<String> guestNames,
-                                      String id, String name, Dinner dinner, String databaseKey,
+    private void updateFirebaseGuests(String userId, String userName, String databaseKey,
                                       int position, DinnerAdapter adapter,
-                                      ArrayList<Dinner> dinners) {
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+                                      ArrayList<Dinner> dinners, Context context) {
+        Dinner dinner = dinners.get(position);
+        ArrayList<String> guestNames = dinner.getGuestNames();
+        ArrayList<String> guestIds = dinner.getGuestIds();
 
-        for (int i = 0; i < guestNames.size(); i++) {
-            if (guestIds.get(i).equals("null")) {
-                guestIds.set(i, id);
-                guestNames.set(i, name);
-                break;
-            }
-        }
+        guestNames = updateGuestList(userName, guestNames);
+        guestIds = updateGuestList(userId, guestIds);
+
         dinner.setGuestIds(guestIds);
         dinner.setGuestNames(guestNames);
         dinners.set(position, dinner);
         adapter.notifyDataSetChanged();
+
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         database.child("dinners").child(databaseKey).setValue(dinner);
+
+        Toast.makeText(context, "Joined dinner", Toast.LENGTH_SHORT).show();
+    }
+
+    /** Update the first occurrence of "null" in an array with the new guest name or ID. */
+    private ArrayList<String> updateGuestList(String newGuest, ArrayList<String> guestList) {
+        for (int i = 0; i < guestList.size(); i++) {
+            if (guestList.get(i).equals("null")) {
+                guestList.set(i, newGuest);
+                break;
+            }
+        }
+        return guestList;
     }
 
     /** Retrieves the dinners that the user is hosting from Firebase. */

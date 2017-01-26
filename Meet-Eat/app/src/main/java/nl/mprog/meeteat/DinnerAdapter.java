@@ -170,25 +170,36 @@ class DinnerAdapter extends BaseExpandableListAdapter {
     }
 
     /**
-     * Sets a click listener on the join button so tht the user can join a dinner.
+     * Sets a click listener on the join button so that the user can join a dinner.
      */
     private void setClickListener(ImageButton button, final int position) {
-        final String dinnerId = this.dinners.get(position).getId();
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                 if (user != null) {
-                    DatabaseHandler databaseHandler = new DatabaseHandler();
-                    databaseHandler.updateFreeSpaces(dinnerId, v.getContext(), position,
-                            DinnerAdapter.this, dinners);
+                    updateGuests(position);
                 } else {
                     Toast.makeText(context, "Please sign in to join a dinner", Toast.LENGTH_SHORT)
                             .show();
                 }
             }
         });
+    }
+
+    /** Updates the list of guests in the database if there are free spaces. */
+    private void updateGuests(int position) {
+        Dinner dinner = this.dinners.get(position);
+        String guestString = dinner.getGuestNames().toString();
+        int freeSpaces = StringUtils.countMatches(guestString, "null");
+
+        if (freeSpaces > 0) {
+            DatabaseHandler databaseHandler = new DatabaseHandler();
+            databaseHandler.updateFreeSpaces(context, dinner, position, this, dinners);
+        } else {
+            Toast.makeText(context, "There are no more free spaces for this dinner",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 }
