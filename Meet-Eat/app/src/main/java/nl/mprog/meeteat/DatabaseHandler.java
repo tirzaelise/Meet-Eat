@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -199,7 +198,7 @@ class DatabaseHandler {
 
     /** Retrieves the dinners that the user is hosting from Firebase. */
     void getHostingDinners(final SavedAdapter adapter, final ArrayList<Dinner> dinners,
-                           final Activity activity) {
+                           final Activity activity, final View view) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user != null) {
@@ -210,6 +209,12 @@ class DatabaseHandler {
             findHosting.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getChildrenCount() == 0) {
+                        replaceTextInView(false, view);
+                    } else {
+                        replaceTextInView(true, view);
+                    }
+
                     for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                         Dinner dinner = snapshot.getValue(Dinner.class);
                         dinners.add(dinner);
@@ -231,7 +236,7 @@ class DatabaseHandler {
 
     /** Retrieves the dinners that the user has joined from Firebase. */
     void getJoinedDinners(final SavedAdapter adapter, final ArrayList<Dinner> dinners,
-                          final Activity activity) {
+                          final Activity activity, final View view) {
         FirebaseUser user  = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user != null) {
@@ -242,6 +247,12 @@ class DatabaseHandler {
             findJoined.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getChildrenCount() == 0) {
+                        replaceTextInView(false, view);
+                    } else {
+                        replaceTextInView(true, view);
+                    }
+
                     for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                         Dinner dinner = snapshot.getValue(Dinner.class);
                         ArrayList<String> guestIds = dinner.getGuestIds();

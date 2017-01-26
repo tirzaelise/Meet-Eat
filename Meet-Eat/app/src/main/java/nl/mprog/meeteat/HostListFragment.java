@@ -11,6 +11,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class HostListFragment extends Fragment {
+    private View rootView;
     private Activity activity;
 
     @Override
@@ -23,7 +24,7 @@ public class HostListFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        View rootView = getView();
+        rootView = getView();
         activity = getActivity();
 
         if (rootView != null) {
@@ -38,6 +39,6 @@ public class HostListFragment extends Fragment {
     /** Uses DatabaseHandler class to retrieve hosting dinners. */
     private void getHostingDinners(SavedAdapter adapter, ArrayList<Dinner> dinners) {
         DatabaseHandler databaseHandler = new DatabaseHandler();
-        databaseHandler.getHostingDinners(adapter, dinners, activity);
+        databaseHandler.getHostingDinners(adapter, dinners, activity, rootView);
     }
 }

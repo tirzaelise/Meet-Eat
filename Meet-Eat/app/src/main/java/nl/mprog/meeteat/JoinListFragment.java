@@ -11,7 +11,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class JoinListFragment extends Fragment {
-
+    private View rootView;
     private Activity activity;
 
     @Override
@@ -24,7 +24,7 @@ public class JoinListFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        View rootView = getView();
+        rootView = getView();
         activity = getActivity();
 
         if (rootView != null) {
@@ -38,6 +38,6 @@ public class JoinListFragment extends Fragment {
 
     private void getJoinedDinners(SavedAdapter adapter, ArrayList<Dinner> dinners) {
         DatabaseHandler databaseHandler = new DatabaseHandler();
-        databaseHandler.getJoinedDinners(adapter, dinners, activity);
+        databaseHandler.getJoinedDinners(adapter, dinners, activity, rootView);
     }
 }

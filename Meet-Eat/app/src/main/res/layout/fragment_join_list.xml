@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_join_list_fragment"
     android:layout_width="match_parent"
@@ -16,13 +16,24 @@
         android:textSize="18sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/textView" />
+        android:layout_centerHorizontal="true"
+        android:id="@+id/joinedTitle" />
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/joinedTitle"
         android:layout_marginTop="15dp"
         android:id="@+id/listView"/>
 
-</LinearLayout>
+    <TextView
+        android:text="@string/loading"
+        android:textSize="16sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/joinedTitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:id="@+id/loading" />
+
+</RelativeLayout>
