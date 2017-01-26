@@ -16,6 +16,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 class DatabaseHandler {
 
@@ -77,7 +78,9 @@ class DatabaseHandler {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     String databaseKey = snapshot.getKey();
-                    updateGuests(databaseKey, position, adapter, dinners, context);
+                    ArrayList<String> userInfo = getUserInfo(context);
+                    updateFirebaseGuests(userInfo.get(0), userInfo.get(1), databaseKey, position,
+                            adapter, dinners, context);
                 }
             }
 
@@ -89,37 +92,14 @@ class DatabaseHandler {
     }
 
     /**
-     * Finds the user's name to update the Dinner entry in the database when the join button is
-     * clicked.
+     * Retrieves the user's ID and name.
      */
-    private void updateGuests(final String databaseKey, final int position,
-                              final DinnerAdapter adapter, final ArrayList<Dinner> dinners,
-                              final Context context) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (user != null) {
-            final String userId = user.getUid();
-            final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-            Query findName = database.child("users").orderByChild("userId").equalTo(userId);
-
-            findName.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        User user = snapshot.getValue(User.class);
-                        String username = user.getUsername();
-                        updateFirebaseGuests(userId, username, databaseKey, position, adapter,
-                                dinners, context);
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(context, "Failed to retrieve username",
-                            Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+    private ArrayList<String> getUserInfo(Context context) {
+        SharedPreferences sharedPrefs = context.getSharedPreferences("userInfo",
+                Context.MODE_PRIVATE);
+        String username = sharedPrefs.getString("username", "");
+        String userId = sharedPrefs.getString("userId", "");
+        return new ArrayList<>(Arrays.asList(userId, username));
     }
 
     /**
