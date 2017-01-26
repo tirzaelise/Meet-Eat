@@ -186,6 +186,7 @@ class DatabaseHandler {
         }
     }
 
+    /** Returns the predefined e-mail string to join a dinner.  */
     private String joinEmail(String username, Dinner dinner) {
         return "Hello!\n\n I have joined your dinner at " + dinner.getDate() + ". Please " +
                 "contact me for details, such as your address.\n Thank you in advance.\n\n" +

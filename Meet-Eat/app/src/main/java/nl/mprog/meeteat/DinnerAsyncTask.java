@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -29,14 +30,16 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
     private String date;
     private int freeSpaces;
     private String area;
+    private View view;
 
     DinnerAsyncTask(RecipeResultFragment activity, OnTaskCompleted listener, String date,
-                    int freeSpaces, String area) {
+                    int freeSpaces, String area, View view) {
         this.context = activity.getActivity();
         this.listener = listener;
         this.date = date;
         this.freeSpaces = freeSpaces;
         this.area = area;
+        this.view = view;
     }
 
     interface OnTaskCompleted {
@@ -55,6 +58,7 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
         try {
             JSONObject readObject = new JSONObject(result);
             if (!readObject.getString("totalResults").equals("0")) {
+                replaceTextInView(true);
                 JSONArray dinnersObject = readObject.getJSONArray("results");
                 ArrayList<Dinner> dinners = new ArrayList<>();
                 SharedPreferences sharedPrefs = context.getSharedPreferences("userInfo",
@@ -69,7 +73,7 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
                 }
                 listener.onTaskCompleted(dinners);
             } else {
-                Toast.makeText(context, "No data was found", Toast.LENGTH_SHORT).show();
+                replaceTextInView(false);
             }
         } catch (JSONException e) {
             Toast.makeText(context, "No data was found", Toast.LENGTH_SHORT).show();
@@ -94,5 +98,17 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
         String[] guests = new String[spaces];
         Arrays.fill(guests, "null");
         return new ArrayList<>(Arrays.asList(guests));
+    }
+
+    /** Replaces the loading text with a no results text. */
+    private void replaceTextInView(boolean results) {
+        TextView loadingText = (TextView) view.findViewById(R.id.loadingText);
+
+        if (results) {
+            loadingText.setVisibility(View.INVISIBLE);
+        } else {
+            loadingText.setText(context.getResources().getString(R.string.noResults));
+            loadingText.setVisibility(View.VISIBLE);
+        }
     }
 }

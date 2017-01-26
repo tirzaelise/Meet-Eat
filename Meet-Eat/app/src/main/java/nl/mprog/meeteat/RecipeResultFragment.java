@@ -1,9 +1,19 @@
+/* Meet & Eat
+ * Tirza Soute (10761977)
+ * Programmeerproject
+ *
+ * This fragment shows the user's search results for recipes given a food that they put in. It uses
+ * the DinnerAsyncTask and InfoAsyncTask for this. Firstly, the ID and title of a recipe are
+ * retrieved using DinnerAsyncTask and then InfoAsyncTask is used to obtain the ingredients and
+  * whether the recipe is vegan and/or vegetarian. These results are then displayed in this fragment
+  * in a ListView.
+ */
+
 package nl.mprog.meeteat;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,11 +66,12 @@ public class RecipeResultFragment extends Fragment implements DinnerAsyncTask.On
     }
 
     /**
-     * Gets the basic information about a dinner, namely the title and its Spoonacular ID.
+     * Gets the basic information about a dinner, namely the title and its ID on Spoonacular.
      */
     private void getDinnerInfo() {
         String query = "search?&query=" + food;
-        DinnerAsyncTask dinnerAsyncTask = new DinnerAsyncTask(this, this, date, freeSpaces, area);
+        DinnerAsyncTask dinnerAsyncTask = new DinnerAsyncTask(this, this, date, freeSpaces, area,
+                rootView);
         dinnerAsyncTask.execute(query);
     }
 

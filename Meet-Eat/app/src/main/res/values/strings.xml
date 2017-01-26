@@ -61,4 +61,5 @@
     <string name="time">Time</string>
     <string name="searching">Searching...</string>
     <string name="noResults">No results were found</string>
+    <string name="loading">Loading...</string>
 </resources>
