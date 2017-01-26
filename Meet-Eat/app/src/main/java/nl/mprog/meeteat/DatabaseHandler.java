@@ -20,6 +20,7 @@ import java.util.Arrays;
 
 class DatabaseHandler {
 
+    /** Writes a new dinner to the database. */
     void writeToDatabase(Dinner dinner) {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         database.child("dinners").push().setValue(dinner);
@@ -224,7 +225,7 @@ class DatabaseHandler {
         editor.putString("username", user.getUsername()).apply();
     }
 
-    /** Saves the user's name in SharedPreferences. */
+    /** Saves the user's name and ID in SharedPreferences. */
     void getUsername(final String userId, final Context context) {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         Query findName = database.child("users").orderByChild("userId").equalTo(userId);
@@ -244,7 +245,7 @@ class DatabaseHandler {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Toast.makeText(context, "Could not save name", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -285,9 +286,7 @@ class DatabaseHandler {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     String databaseKey = snapshot.getKey();
-                    Dinner foundDinner = snapshot.getValue(Dinner.class);
-                    removeUser(foundDinner, databaseKey, database, dinners, adapter, position,
-                            activity);
+                    removeUser(databaseKey, dinners, adapter, position, activity);
                 }
             }
 
@@ -299,12 +298,13 @@ class DatabaseHandler {
     }
 
     /** Removes the current user from a dinner in the database. */
-    private void removeUser(Dinner dinner, String key, DatabaseReference database,
-                             ArrayList<Dinner> dinners, SavedAdapter adapter, int dinnerPosition,
-                            Activity activity) {
+    private void removeUser(String key, ArrayList<Dinner> dinners, SavedAdapter adapter,
+                            int position, Activity activity) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user != null) {
+            DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+            Dinner dinner = dinners.get(position);
             ArrayList<String> guestIds = dinner.getGuestIds();
             ArrayList<String> guestNames = dinner.getGuestNames();
             String userId = user.getUid();
@@ -316,7 +316,7 @@ class DatabaseHandler {
                 dinner.setGuestIds(guestIds);
                 dinner.setGuestNames(guestNames);
 
-                dinners.set(dinnerPosition, dinner);
+                dinners.set(position, dinner);
                 adapter.notifyDataSetChanged();
                 adapter.setData(dinners);
 
