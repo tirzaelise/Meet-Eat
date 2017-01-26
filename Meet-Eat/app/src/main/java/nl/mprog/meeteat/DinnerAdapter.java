@@ -12,6 +12,7 @@ package nl.mprog.meeteat;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,11 +95,11 @@ class DinnerAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
                              View convertView, ViewGroup parentView) {
-        View view = convertView;
+//        View view = convertView;
 
-        if (convertView == null) {
-            view = inflater.inflate(R.layout.layout_child, parentView, false);
-        }
+//        if (convertView == null) {
+        View view = inflater.inflate(R.layout.layout_child, parentView, false); // otherwise the vegetarian , , vegan comes up
+//        }
 
         setInfo(groupPosition, view);
         setVisibility(groupPosition, view);
@@ -191,6 +192,7 @@ class DinnerAdapter extends BaseExpandableListAdapter {
     /** Updates the list of guests in the database if there are free spaces. */
     private void updateGuests(int position) {
         Dinner dinner = this.dinners.get(position);
+        Log.wtf("dinner", dinner.getTitle());
         String guestString = dinner.getGuestNames().toString();
         int freeSpaces = StringUtils.countMatches(guestString, "null");
 

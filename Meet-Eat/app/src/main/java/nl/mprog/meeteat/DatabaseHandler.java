@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +35,7 @@ class DatabaseHandler {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         Query areaQuery = database.child("dinners").orderByChild("area").equalTo(area);
 
-        areaQuery.addValueEventListener(new ValueEventListener() {
+        areaQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getChildrenCount() == 0) {
@@ -157,7 +156,6 @@ class DatabaseHandler {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User host = dataSnapshot.getValue(User.class);
                 String email = host.getEmail();
-                Log.wtf("host", email);
                 sendJoinedEmail(username, email, dinner, context);
             }
 
@@ -374,6 +372,7 @@ class DatabaseHandler {
         if (user != null) {
             DatabaseReference database = FirebaseDatabase.getInstance().getReference();
             Dinner dinner = dinners.get(position);
+
             ArrayList<String> guestIds = dinner.getGuestIds();
             ArrayList<String> guestNames = dinner.getGuestNames();
             String userId = user.getUid();
