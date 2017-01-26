@@ -48,7 +48,9 @@ class DatabaseHandler {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                Dinner dinner = dataSnapshot.getValue(Dinner.class);
+                dinners.remove(dinner);
+                adapter.notifyDataSetChanged();
             }
 
             @Override

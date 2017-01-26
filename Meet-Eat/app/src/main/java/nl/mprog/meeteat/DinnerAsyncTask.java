@@ -3,7 +3,8 @@
  * Programmeerproject
  *
  * This class implements the AsyncTask for the Spoonacular API. It gets everything from the web page
- * and uses this to create an ArrayList<Dinner> of all the recipes that were found.
+ * and uses this to create ArrayList<Dinner> of all the recipes that were found given the type of
+ * food the user put in. This AsyncTask retrieves the title and ID of a dinner.
  */
 
 package nl.mprog.meeteat;
@@ -11,6 +12,7 @@ package nl.mprog.meeteat;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.view.View;
 import android.widget.Toast;
 
 

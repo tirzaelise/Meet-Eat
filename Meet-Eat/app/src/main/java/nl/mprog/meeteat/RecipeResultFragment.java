@@ -3,6 +3,7 @@ package nl.mprog.meeteat;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 
 public class RecipeResultFragment extends Fragment implements DinnerAsyncTask.OnTaskCompleted,
         InfoAsyncTask.OnInfoRetrieved {
+    private View rootView;
     private Activity activity;
     private String food;
     private String date;
@@ -30,7 +32,7 @@ public class RecipeResultFragment extends Fragment implements DinnerAsyncTask.On
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        View rootView = getView();
+        rootView = getView();
         activity = getActivity();
         Bundle arguments = this.getArguments();
 
@@ -38,10 +40,14 @@ public class RecipeResultFragment extends Fragment implements DinnerAsyncTask.On
             dinners = new ArrayList<>();
             getArguments(arguments);
             getDinnerInfo();
-            showResult(rootView);
+            initialiseAdapter(rootView);
         }
     }
 
+    /**
+     * Gets the arguments that were passed to this fragment to search for recipes and create a
+     * Dinner object.
+     */
     private void getArguments(Bundle arguments) {
         food = arguments.getString("food");
         date = arguments.getString("date");
@@ -49,18 +55,26 @@ public class RecipeResultFragment extends Fragment implements DinnerAsyncTask.On
         area = arguments.getString("area");
     }
 
+    /**
+     * Gets the basic information about a dinner, namely the title and its Spoonacular ID.
+     */
     private void getDinnerInfo() {
         String query = "search?&query=" + food;
         DinnerAsyncTask dinnerAsyncTask = new DinnerAsyncTask(this, this, date, freeSpaces, area);
         dinnerAsyncTask.execute(query);
     }
 
-    private void showResult(View rootView) {
+    /** Initialises the RecipeAdapter for the ListView. */
+    private void initialiseAdapter(View rootView) {
         ListView listView = (ListView) rootView.findViewById(R.id.listView);
         adapter = new RecipeAdapter(activity, dinners);
         listView.setAdapter(adapter);
     }
 
+    /**
+     * Starts InfoAsyncTask once DinnerAsyncTask has completed to get extra information about a
+     * recipe. Namely, its ingredients and whether it's vegetarian and vegan.
+     */
     @Override
     public void onTaskCompleted(ArrayList<Dinner> retrievedDinners) {
         for (int i = 0; i < retrievedDinners.size(); i++) {
@@ -71,6 +85,7 @@ public class RecipeResultFragment extends Fragment implements DinnerAsyncTask.On
         }
     }
 
+    /** Adds a complete dinner to the ArrayList<Dinner> once all information is retrieved. */
     @Override
     public void onInfoRetrieved(Dinner dinner) {
         dinners.add(dinner);

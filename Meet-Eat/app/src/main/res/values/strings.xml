@@ -59,4 +59,6 @@
     <string name="newTitle">What\'s the new title for your dinner?</string>
     <string name="save">Save</string>
     <string name="time">Time</string>
+    <string name="searching">Searching...</string>
+    <string name="noResults">No results were found</string>
 </resources>
