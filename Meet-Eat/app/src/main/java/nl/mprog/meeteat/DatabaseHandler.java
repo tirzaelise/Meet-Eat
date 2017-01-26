@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,33 +33,24 @@ class DatabaseHandler {
 
     /** Reads the database based on the user's input area. */
     void readDatabase(String area, final ArrayList<Dinner> dinners, final DinnerAdapter adapter,
-                      final ResultFragment fragment) {
+                      final ResultFragment fragment, final View view) {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         Query areaQuery = database.child("dinners").orderByChild("area").equalTo(area);
 
-        areaQuery.addChildEventListener(new ChildEventListener() {
+        areaQuery.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Dinner dinner = dataSnapshot.getValue(Dinner.class);
-                dinners.add(dinner);
-                adapter.notifyDataSetChanged();
-            }
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getChildrenCount() == 0) {
+                    replaceTextInView(false, view);
+                } else {
+                    replaceTextInView(true, view);
+                }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Dinner dinner = dataSnapshot.getValue(Dinner.class);
-                dinners.remove(dinner);
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    Dinner dinner = snapshot.getValue(Dinner.class);
+                    dinners.add(dinner);
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -66,6 +59,17 @@ class DatabaseHandler {
                         Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /** Replaces the loading text with no results if necessary. */
+    private void replaceTextInView(boolean results, View view) {
+        TextView loadingText = (TextView) view.findViewById(R.id.loading);
+
+        if (results) {
+            loadingText.setVisibility(View.INVISIBLE);
+        } else {
+            loadingText.setText(R.string.noResults);
+        }
     }
 
     /**

@@ -107,8 +107,7 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
         if (results) {
             loadingText.setVisibility(View.INVISIBLE);
         } else {
-            loadingText.setText(context.getResources().getString(R.string.noResults));
-            loadingText.setVisibility(View.VISIBLE);
+            loadingText.setText(R.string.noResults);
         }
     }
 }

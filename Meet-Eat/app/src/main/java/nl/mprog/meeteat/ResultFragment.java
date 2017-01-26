@@ -43,6 +43,6 @@ public class ResultFragment extends Fragment {
         listView.setAdapter(adapter);
 
         DatabaseHandler databaseHandler = new DatabaseHandler();
-        databaseHandler.readDatabase(area, dinners, adapter, this);
+        databaseHandler.readDatabase(area, dinners, adapter, this, rootView);
     }
 }
