@@ -10,15 +10,21 @@
 
 package nl.mprog.meeteat;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -192,16 +198,62 @@ class DinnerAdapter extends BaseExpandableListAdapter {
     /** Updates the list of guests in the database if there are free spaces. */
     private void updateGuests(int position) {
         Dinner dinner = this.dinners.get(position);
-        Log.wtf("dinner", dinner.getTitle());
         String guestString = dinner.getGuestNames().toString();
         int freeSpaces = StringUtils.countMatches(guestString, "null");
 
         if (freeSpaces > 0) {
-            DatabaseHandler databaseHandler = new DatabaseHandler();
-            databaseHandler.updateFreeSpaces(context, dinner, position, this, dinners);
+            chooseAmountOfPeople(freeSpaces, dinner, position);
         } else {
             Toast.makeText(context, "There are no more free spaces for this dinner",
                     Toast.LENGTH_SHORT).show();
         }
     }
+
+    /**
+     * Creates a pop up dialog where the user can specify the amount of people they want to join a
+     * dinner with.
+     */
+    private void chooseAmountOfPeople(int freeSpaces, Dinner dinner, int position) {
+        final NumberPicker numberPicker = new NumberPicker(context);
+        numberPicker.setMinValue(1);
+        numberPicker.setMaxValue(freeSpaces);
+
+        FrameLayout frameLayout = buildPickerLayout(numberPicker);
+        buildNumberPicker(frameLayout, numberPicker, dinner, position);
+    }
+
+    /** Builds the layout for the number picker. */
+    private FrameLayout buildPickerLayout(NumberPicker numberPicker) {
+        final FrameLayout frameLayout = new FrameLayout(context);
+
+        frameLayout.addView(numberPicker, new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                Gravity.CENTER
+        ));
+        return frameLayout;
+    }
+
+    /**
+     * Builds the number picker so that the user can define with how many people they'd like to
+     * join a dinner and uses DatabaseHandler to update the list of guests in firebase.
+     */
+    private void buildNumberPicker(FrameLayout frameLayout, final NumberPicker numberPicker,
+                                   final Dinner dinner, final int position) {
+        new AlertDialog.Builder(context)
+                .setView(frameLayout)
+                .setTitle("With how many people would you like to join this dinner?")
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int amountOfPeople = numberPicker.getValue();
+                        DatabaseHandler databaseHandler = new DatabaseHandler();
+                        databaseHandler.updateFreeSpaces(context, dinner, position,
+                                DinnerAdapter.this, dinners, amountOfPeople);
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
 }

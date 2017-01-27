@@ -74,7 +74,8 @@ class DatabaseHandler {
      * The push key of the dinner is retrieved and the list of guests is updated.
      */
     void updateFreeSpaces(final Context context, final Dinner dinner, final int position,
-                          final DinnerAdapter adapter, final ArrayList<Dinner> dinners) {
+                          final DinnerAdapter adapter, final ArrayList<Dinner> dinners,
+                          final int amountJoining) {
         String dinnerId = dinner.getId();
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         Query findKey = database.child("dinners").orderByChild("id").equalTo(dinnerId);
@@ -86,7 +87,7 @@ class DatabaseHandler {
                     String databaseKey = snapshot.getKey();
                     ArrayList<String> userInfo = getUserInfo(context);
                     updateFirebaseGuests(userInfo, databaseKey, position, adapter, dinners,
-                            context);
+                            context, amountJoining);
                 }
             }
 
@@ -114,13 +115,13 @@ class DatabaseHandler {
      */
     private void updateFirebaseGuests(ArrayList<String> userInfo, String databaseKey, int position,
                                       DinnerAdapter adapter, ArrayList<Dinner> dinners,
-                                      Context context) {
+                                      Context context, int amountJoining) {
         Dinner dinner = dinners.get(position);
         ArrayList<String> guestNames = dinner.getGuestNames();
         ArrayList<String> guestIds = dinner.getGuestIds();
 
-        guestIds = updateGuestList(userInfo.get(0), guestIds);
-        guestNames = updateGuestList(userInfo.get(1), guestNames);
+        guestIds = updateGuestList(userInfo.get(0), guestIds, amountJoining);
+        guestNames = updateGuestList(userInfo.get(1), guestNames, amountJoining);
 
         dinner.setGuestIds(guestIds);
         dinner.setGuestNames(guestNames);
@@ -134,13 +135,16 @@ class DatabaseHandler {
         Toast.makeText(context, "Joined dinner", Toast.LENGTH_SHORT).show();
     }
 
-    /** Update the first occurrence of "null" in an array with the new guest name or ID. */
-    private ArrayList<String> updateGuestList(String newGuest, ArrayList<String> guestList) {
-        for (int i = 0; i < guestList.size(); i++) {
-            if (guestList.get(i).equals("null")) {
-                guestList.set(i, newGuest);
-                break;
-            }
+    /**
+     * Update the first occurrence of "null" in an array with the new guest name or ID for the
+     * amount of people that the user specified they want to join the dinner with.
+     */
+    private ArrayList<String> updateGuestList(String newGuest, ArrayList<String> guestList,
+                                              int amountJoining) {
+
+        for (int i = 0; i < amountJoining; i++) {
+            int firstFreeSpace = guestList.indexOf("null");
+            guestList.set(firstFreeSpace, newGuest);
         }
         return guestList;
     }
@@ -180,7 +184,7 @@ class DatabaseHandler {
         mailIntent.putExtra(Intent.EXTRA_TEXT, body);
 
         try {
-            context.startActivity(Intent.createChooser(mailIntent, "Send mail"));
+            context.startActivity(Intent.createChooser(mailIntent, "Notify host"));
         } catch (android.content.ActivityNotFoundException e){
             Toast.makeText(context, "There are no e-mail clients installed",
                     Toast.LENGTH_SHORT).show();
@@ -189,9 +193,9 @@ class DatabaseHandler {
 
     /** Returns the predefined e-mail string to join a dinner.  */
     private String joinEmail(String username, Dinner dinner) {
-        return "Hello!\n\n I have joined your dinner at " + dinner.getDate() + ". Please " +
-                "contact me for details, such as your address.\n Thank you in advance.\n\n" +
-                " Kind regards, \n" + username;
+        return "Hello!\n\nI have joined your dinner (" + dinner.getTitle() + ") at " +
+                dinner.getDate() + ". Please " + "contact me for details, such as your address.\n" +
+                "Thank you in advance.\n\nKind regards, \n" + username;
     }
 
     /** Retrieves the dinners that the user is hosting from Firebase. */
