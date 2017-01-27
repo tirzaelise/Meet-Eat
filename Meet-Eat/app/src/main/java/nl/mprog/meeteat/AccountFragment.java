@@ -81,7 +81,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                     SharedPreferences.Editor editor = activity.getSharedPreferences("userInfo",
                             Context.MODE_PRIVATE).edit();
                     editor.remove("userId");
-                    editor.remove("username").apply();
+                    editor.remove("username");
+                    editor.remove("userEmail").apply();
                 }
             }
         };

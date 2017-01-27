@@ -18,6 +18,7 @@ class Dinner implements Serializable {
     private String id;
     private String hostId;
     private String hostName;
+    private String hostEmail;
     private String date;
     private ArrayList<String> guestIds;
     private ArrayList<String> guestNames;
@@ -26,13 +27,14 @@ class Dinner implements Serializable {
     private boolean vegetarian;
     private boolean vegan;
 
-    Dinner(String title, String id, String hostId, String hostName, String date,
+    Dinner(String title, String id, String hostId, String hostName, String hostEmail, String date,
            ArrayList<String> guestIds, ArrayList<String> guestNames, String area,
            String ingredients, boolean vegetarian, boolean vegan) {
         this.title = title;
         this.id = id;
         this.hostId = hostId;
         this.hostName = hostName;
+        this.hostEmail = hostEmail;
         this.date = date;
         this.guestIds = guestIds;
         this.guestNames = guestNames;
@@ -87,6 +89,10 @@ class Dinner implements Serializable {
 
     String getHostName() {
         return hostName;
+    }
+
+    String getHostEmail() {
+        return hostEmail;
     }
 
     String getDate() {

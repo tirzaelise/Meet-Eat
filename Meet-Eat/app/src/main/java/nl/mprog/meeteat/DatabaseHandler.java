@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 class DatabaseHandler {
 
@@ -165,8 +167,9 @@ class DatabaseHandler {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User host = dataSnapshot.getValue(User.class);
-                String email = host.getEmail();
-                sendJoinedEmail(username, email, dinner, context);
+                String hostMail = host.getEmail();
+                String email = joinEmail(username, dinner);
+                sendEmail(email, hostMail, context);
             }
 
             @Override
@@ -178,14 +181,11 @@ class DatabaseHandler {
     }
 
     /** Sends an e-mail to the host of the dinner that will be joined to ask for details. */
-    private void sendJoinedEmail(String username, String hostEmail, Dinner dinner,
-                                 Context context) {
-        String body = joinEmail(username, dinner);
-
+    private void sendEmail(String body, String recipientEmail, Context context) {
         Intent mailIntent = new Intent(Intent.ACTION_SENDTO);
         mailIntent.setType("message/rfc822");
         mailIntent.setData(Uri.parse("mailto:"));
-        mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{hostEmail});
+        mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{recipientEmail});
         mailIntent.putExtra(Intent.EXTRA_SUBJECT, "Joined Dinner");
         mailIntent.putExtra(Intent.EXTRA_TEXT, body);
 
@@ -299,7 +299,8 @@ class DatabaseHandler {
         SharedPreferences.Editor editor = context.getSharedPreferences("userInfo",
                 Context.MODE_PRIVATE).edit();
         editor.putString("userId", user.getUserId());
-        editor.putString("username", user.getUsername()).apply();
+        editor.putString("username", user.getUsername());
+        editor.putString("userEmail", user.getEmail()).apply();
     }
 
     /** Saves the user's name and ID in SharedPreferences. */
@@ -399,11 +400,23 @@ class DatabaseHandler {
                 adapter.setData(dinners);
 
                 database.child("dinners").child(key).setValue(dinner);
+                String email = unjoinEmail(dinner, activity);
+                sendEmail(email, dinner.getHostEmail(), activity);
             } else {
                 Toast.makeText(activity, "You have already been removed from this dinner",
                         Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    /** Body of an email when a user is no longer joining a dinner. */
+    private String unjoinEmail(Dinner dinner, Activity activity) {
+        String name = activity.getSharedPreferences("userInfo", Context.MODE_PRIVATE)
+                .getString("username", "");
+
+        return "Hello!\n\nI would like to inform you that I am no longer joining your " +
+                "dinner (" + dinner.getTitle() + " at " + dinner.getDate() + "). I hope you " +
+                "understand.\n\nKind regards, \n" + name;
     }
 
     /** Removes a dinner from the database. */
@@ -417,6 +430,7 @@ class DatabaseHandler {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     String databaseKey = snapshot.getKey();
+                    emailGuests(dinner, activity);
                     database.child("dinners").child(databaseKey).removeValue();
                     dinners.remove(dinner);
                     adapter.notifyDataSetChanged();
@@ -428,5 +442,51 @@ class DatabaseHandler {
                 Toast.makeText(activity, "Could not remove dinner", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /** Notifies the guests of that the host has cancelled their dinner. */
+    private void emailGuests(Dinner dinner, Activity activity) {
+        HashSet<String> uniqueGuests = new HashSet<>(dinner.getGuestIds());
+        ArrayList<String> uniqueArray = new ArrayList<>(uniqueGuests);
+
+        for (int i = 0; i < uniqueArray.size(); i++) {
+            String guestId = uniqueArray.get(i);
+            Log.wtf("guest", guestId);
+            cancelDinner(guestId, dinner, activity);
+        }
+    }
+
+    /** Finds the email of a user given their ID. */
+    private void cancelDinner(String userId, final Dinner dinner, final Activity activity) {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        Query findEmail = database.child("users").child(userId).equalTo(userId);
+
+        findEmail.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    User user = snapshot.getValue(User.class);
+                    String email = user.getEmail();
+                    String body = cancelMail(dinner, activity);
+                    sendEmail(body, email, activity);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(activity, "Could not retrieve guests' e-mail addresses",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /** Body of an email when the host cancels the dinner. */
+    private String cancelMail(Dinner dinner, Activity activity) {
+        String name = activity.getSharedPreferences("userInfo", Context.MODE_PRIVATE)
+                .getString("username", "");
+
+        return "Hello!\n\nUnfortunately, I have cancelled the dinner you joined (" +
+                dinner.getTitle() + " at " + dinner.getDate() + "). I hope you understand.\n" +
+                "Thank you in advance.\n\nKind regards, \n" + name;
     }
 }

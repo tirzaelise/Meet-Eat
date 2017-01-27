@@ -65,10 +65,11 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
                         Context.MODE_PRIVATE);
                 String hostId = sharedPrefs.getString("userId", "");
                 String hostName = sharedPrefs.getString("username", "");
+                String hostEmail = sharedPrefs.getString("userEmail", "");
 
                 for (int i = 0; i < dinnersObject.length(); i++) {
                     JSONObject dinnerObject = dinnersObject.getJSONObject(i);
-                    Dinner dinner = createDinnerObject(dinnerObject, hostId, hostName);
+                    Dinner dinner = createDinnerObject(dinnerObject, hostId, hostName, hostEmail);
                     dinners.add(dinner);
                 }
                 listener.onTaskCompleted(dinners);
@@ -82,15 +83,16 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
     }
 
     /** Creates a new dinner object from the JSONObject. */
-    private Dinner createDinnerObject(JSONObject dinner, String hostId, String hostName)
+    private Dinner createDinnerObject(JSONObject dinner, String hostId, String hostName,
+                                      String hostEmail)
             throws JSONException {
         String title = dinner.getString("title");
         String id = dinner.getString("id");
         ArrayList<String> guestNames = createEmptyGuests(freeSpaces);
         ArrayList<String> guestIds = createEmptyGuests(freeSpaces);
 
-        return new Dinner(title, id, hostId, hostName, date, guestIds, guestNames, area, "", false,
-                false);
+        return new Dinner(title, id, hostId, hostName, hostEmail, date, guestIds, guestNames, area,
+                "", false, false);
     }
 
     /** Creates an ArrayList<String> of the size of the amount of spaces that was given. */
