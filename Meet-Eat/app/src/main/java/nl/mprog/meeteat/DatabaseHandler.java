@@ -169,7 +169,7 @@ class DatabaseHandler {
                 User host = dataSnapshot.getValue(User.class);
                 String hostMail = host.getEmail();
                 String email = joinEmail(username, dinner);
-                sendEmail(email, hostMail, context);
+                sendEmail(email, hostMail, "Notify host", context);
             }
 
             @Override
@@ -181,7 +181,7 @@ class DatabaseHandler {
     }
 
     /** Sends an e-mail to the host of the dinner that will be joined to ask for details. */
-    private void sendEmail(String body, String recipientEmail, Context context) {
+    private void sendEmail(String body, String recipientEmail, String title, Context context) {
         Intent mailIntent = new Intent(Intent.ACTION_SENDTO);
         mailIntent.setType("message/rfc822");
         mailIntent.setData(Uri.parse("mailto:"));
@@ -190,7 +190,7 @@ class DatabaseHandler {
         mailIntent.putExtra(Intent.EXTRA_TEXT, body);
 
         try {
-            context.startActivity(Intent.createChooser(mailIntent, "Notify host"));
+            context.startActivity(Intent.createChooser(mailIntent, title));
         } catch (android.content.ActivityNotFoundException e){
             Toast.makeText(context, "There are no e-mail clients installed",
                     Toast.LENGTH_SHORT).show();
@@ -401,7 +401,7 @@ class DatabaseHandler {
 
                 database.child("dinners").child(key).setValue(dinner);
                 String email = unjoinEmail(dinner, activity);
-                sendEmail(email, dinner.getHostEmail(), activity);
+                sendEmail(email, dinner.getHostEmail(), "Notify host", activity);
             } else {
                 Toast.makeText(activity, "You have already been removed from this dinner",
                         Toast.LENGTH_SHORT).show();
@@ -447,29 +447,28 @@ class DatabaseHandler {
     /** Notifies the guests of that the host has cancelled their dinner. */
     private void emailGuests(Dinner dinner, Activity activity) {
         HashSet<String> uniqueGuests = new HashSet<>(dinner.getGuestIds());
+        uniqueGuests.remove("null");
         ArrayList<String> uniqueArray = new ArrayList<>(uniqueGuests);
 
+        Log.wtf("unique", Integer.toString(uniqueArray.size()));
         for (int i = 0; i < uniqueArray.size(); i++) {
             String guestId = uniqueArray.get(i);
-            Log.wtf("guest", guestId);
-            cancelDinner(guestId, dinner, activity);
+            findGuestEmail(guestId, dinner, activity);
         }
     }
 
-    /** Finds the email of a user given their ID. */
-    private void cancelDinner(String userId, final Dinner dinner, final Activity activity) {
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        Query findEmail = database.child("users").child(userId).equalTo(userId);
+    /** Finds the email of a user given their ID and sends them an e-mail. */
+    private void findGuestEmail(String userId, final Dinner dinner, final Activity activity) {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("users")
+                .child(userId);
 
-        findEmail.addListenerForSingleValueEvent(new ValueEventListener() {
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
-                    User user = snapshot.getValue(User.class);
-                    String email = user.getEmail();
-                    String body = cancelMail(dinner, activity);
-                    sendEmail(body, email, activity);
-                }
+                User user = dataSnapshot.getValue(User.class);
+                String email = user.getEmail();
+                String body = cancelMail(dinner, activity);
+                sendEmail(body, email, "Notify guests", activity);
             }
 
             @Override
