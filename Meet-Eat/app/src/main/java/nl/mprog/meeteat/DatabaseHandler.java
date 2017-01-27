@@ -86,8 +86,14 @@ class DatabaseHandler {
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     String databaseKey = snapshot.getKey();
                     ArrayList<String> userInfo = getUserInfo(context);
-                    updateFirebaseGuests(userInfo, databaseKey, position, adapter, dinners,
-                            context, amountJoining);
+
+                    if (!userInfo.get(0).equals(dinner.getHostId())) {
+                        updateFirebaseGuests(userInfo, databaseKey, position, adapter, dinners,
+                                context, amountJoining);
+                    } else {
+                        Toast.makeText(context, "You cannot join your own dinner",
+                                Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
