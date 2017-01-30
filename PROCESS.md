@@ -44,3 +44,6 @@ I refactored a lot of code today, because I realised I was doing unnecessary ext
 
 #### Day 15
 I worked on some things that were given to me as feedback during my presentation/demo today. There is now a pop up dialog when the user wants to join a dinner where the user has to specify with how many people they'd like to join a dinner. I also made a check when the user wants to join a dinner to see whether the user trying to join the dinner is not the host of the dinner. I made the ingredients EditText in EditDinnerFragment multiline so that the ingredients would be easier to read and I made some other layout changes. I also worked on sending e-mails when the host deletes a dinner or when a guest unjoins a dinner, but this does not work yet. Furthermore, I created a launcher icon. I managed to fix sending the e-mails by the end of the day as well.
+
+#### Day 16
+I spent today cleaning a lot of code using BetterCodeHub. I mostly made methods shorter and minimised the amount of duplicated code. I cleaned MainActivity, AccountFragment, RecipeAdapter and created DateSelector and TimeSelector to avoid dupliated code.
