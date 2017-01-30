@@ -1,3 +1,11 @@
+/* Meet & Eat
+ * Tirza Soute (10761977)
+ * Programmeerproject
+ *
+ * This class implements the time selector. The user can select the time of their dinner here using
+ * a TimePickerDialog. The selected time is automatically set in the EditText.
+ */
+
 package nl.mprog.meeteat;
 
 import android.app.Activity;
@@ -10,11 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-/**
- * Created by tirza on 30-1-17.
- */
-
-public class TimeSelector {
+class TimeSelector {
     View view;
     Activity activity;
 

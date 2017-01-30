@@ -1,22 +1,24 @@
+/* Meet & Eat
+ * Tirza Soute (10761977)
+ * Programmeerproject
+ *
+ * This class implements the date selector. The user can select the date of their dinner here using
+ * a DatePickerDialog. The selected date is automatically set in the EditText.
+ */
+
 package nl.mprog.meeteat;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-/**
- * Created by tirza on 30-1-17.
- */
-
-public class DateSelector {
+class DateSelector {
     View view;
     Activity activity;
 
