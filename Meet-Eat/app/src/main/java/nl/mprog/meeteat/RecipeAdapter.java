@@ -74,8 +74,8 @@ class RecipeAdapter extends BaseAdapter {
         String title = this.recipes.get(position).getTitle();
         String ingredients = "Ingredients: " + this.recipes.get(position).getIngredients();
 
-        ((TextView) view.findViewById(R.id.dinnerTitle)).setText(title);
-        ((TextView) view.findViewById(R.id.dinnerIngredients)).setText(ingredients);
+        ((TextView) view.findViewById(R.id.recipeTitle)).setText(title);
+        ((TextView) view.findViewById(R.id.recipeIngredients)).setText(ingredients);
     }
 
     /** Sets the visibility of a TextView according to a boolean value. */
