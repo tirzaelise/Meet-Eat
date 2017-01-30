@@ -1,7 +1,15 @@
+/* Meet & Eat
+ * Tirza Soute (10761977)
+ * Programmeerproject
+ *
+ * This class implements the adapter for recipes that the user has searched for. It displays the
+ * title, the ingredients, whether the recipe is vegetarian and/or vegan and an image of the
+ * prepared recipe. The user can add a recipe to the database if it's what they're going to cook.
+ */
+
 package nl.mprog.meeteat;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,20 +25,10 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-/*
- * Created by tirza on 17-1-17.
- */
-
 class RecipeAdapter extends BaseAdapter {
     private ArrayList<Dinner> recipes;
     private Context context;
     private LayoutInflater inflater;
-    private Dinner recipe;
-    private TextView recipeTitle;
-    private TextView recipeIngredients;
-    private TextView recipeVegetarian;
-    private TextView recipeVegan;
-    private ImageView recipeImage;
 
     RecipeAdapter(Context context, ArrayList<Dinner> recipes) {
         this.context = context;
@@ -55,53 +53,43 @@ class RecipeAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View rowView = convertView;
+        View view = convertView;
 
         if (convertView == null) {
-            rowView = inflater.inflate(R.layout.layout_recipe_row, parent, false);
-            initialiseViewsAndRecipe(rowView, position);
-            String ingredients = "Ingredients: " + recipe.getIngredients();
-
-            recipeTitle.setText(recipe.getTitle());
-            recipeIngredients.setText(ingredients);
-            booleanToVisibility(recipe.isVegetarian(), recipeVegetarian);
-            booleanToVisibility(recipe.isVegan(), recipeVegan);
-            String url = "https://spoonacular.com/recipeImages/" + recipe.getId() + "-312x231.jpg";
-
-            Picasso.with(context).load(url).into(recipeImage);
-
-        } else {
-            initialiseViewsAndRecipe(rowView, position);
-            String ingredients = "Ingredients: " + this.recipes.get(position).getIngredients();
-            boolean isVegetarian = this.recipes.get(position).isVegetarian();
-            boolean isVegan = this.recipes.get(position).isVegan();
-
-            recipeTitle.setText(recipes.get(position).getTitle());
-            recipeIngredients.setText(ingredients);
-            booleanToVisibility(isVegetarian, recipeVegetarian);
-            booleanToVisibility(isVegan, recipeVegan);
-            String url = "https://spoonacular.com/recipeImages/" +
-                    this.recipes.get(position).getId() + "-312x231.jpg";
-            Picasso.with(context).load(url).into(recipeImage);
+            view = inflater.inflate(R.layout.layout_recipe_row, parent, false);
         }
 
-        Button makeDinner = ((Button) rowView.findViewById(R.id.makeButton));
+        setInfo(view, position);
+        setVisibility(view, position);
+        setImage(view, position);
+
+        Button makeDinner = ((Button) view.findViewById(R.id.makeButton));
         setClickListener(makeDinner, position);
 
-        return rowView;
+        return view;
     }
 
-    /** Initialises the views in the row layout and a value for the recipe */
-    private void initialiseViewsAndRecipe(View view, int position) {
-        recipe = recipes.get(position);
-        recipeTitle = (TextView) view.findViewById(R.id.recipeTitle);
-        recipeIngredients = (TextView) view.findViewById(R.id.recipeIngredients);
-        recipeVegetarian = (TextView) view.findViewById(R.id.recipeVegetarian);
-        recipeVegan = (TextView) view.findViewById(R.id.recipeVegan);
-        recipeImage = (ImageView) view.findViewById(R.id.recipeImage);
+    /** Sets the info about a recipe in the corresponding TextViews. */
+    private void setInfo(View view, int position) {
+        String title = this.recipes.get(position).getTitle();
+        String ingredients = "Ingredients: " + this.recipes.get(position).getIngredients();
+
+        ((TextView) view.findViewById(R.id.dinnerTitle)).setText(title);
+        ((TextView) view.findViewById(R.id.dinnerIngredients)).setText(ingredients);
     }
 
-    /** Determines the visibility of a TextView according to a boolean */
+    /** Sets the visibility of a TextView according to a boolean value. */
+    private void setVisibility(View view, int position) {
+        TextView vegetarianView = (TextView) view.findViewById(R.id.recipeVegetarian);
+        TextView veganView = (TextView) view.findViewById(R.id.recipeVegan);
+        boolean isVegetarian = this.recipes.get(position).isVegetarian();
+        boolean isVegan = this.recipes.get(position).isVegan();
+
+        booleanToVisibility(isVegetarian, vegetarianView);
+        booleanToVisibility(isVegan, veganView);
+    }
+
+    /** Determines the visibility of a TextView according to a boolean. */
     private void booleanToVisibility(boolean isTrue, TextView textView){
         if (isTrue) {
             textView.setVisibility(View.VISIBLE);
@@ -110,7 +98,15 @@ class RecipeAdapter extends BaseAdapter {
         }
     }
 
-    /** Adds a dinner to the Firebase database if the user is logged in */
+    /** Sets the image of a recipe in the corresponding ImageView. */
+    private void setImage(View view, int position) {
+        ImageView imageView = (ImageView) view.findViewById(R.id.recipeImage);
+        String url = "https://spoonacular.com/recipeImages/" + this.recipes.get(position).getId() +
+                "-312x231.jpg";
+        Picasso.with(context).load(url).into(imageView);
+    }
+
+    /** Adds a dinner to the Firebase database if the user is logged in. */
     private void setClickListener(Button button, final int position) {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,7 +119,8 @@ class RecipeAdapter extends BaseAdapter {
                     databaseHandler.writeToDatabase(clickedRecipe);
                     Toast.makeText(context, "Added dinner", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(context, "Please log in to add a dinner", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Please log in to add a dinner",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
