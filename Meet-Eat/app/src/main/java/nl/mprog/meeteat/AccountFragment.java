@@ -1,3 +1,12 @@
+/* Meet & Eat
+ * Tirza Soute (10761977)
+ * Programmeerproject
+ *
+ * This class implements the fragment where the user can create an account, log in and log out. This
+ * is done using Firebase. The user is also saved in the Firebase database after creating an account
+ * to save their name, e-mail address and and user ID.
+ */
+
 package nl.mprog.meeteat;
 
 import android.app.Activity;
@@ -15,6 +24,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
@@ -145,20 +155,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (!task.isSuccessful()) {
-                                try {
-                                    throw task.getException();
-                                } catch (FirebaseAuthWeakPasswordException e) {
-                                    Toast.makeText(activity, "Password must be at least 6 " +
-                                            "characters", Toast.LENGTH_SHORT).show();
-                                } catch (FirebaseAuthInvalidCredentialsException e) {
-                                    Toast.makeText(activity, "Invalid e-mail address",
-                                            Toast.LENGTH_SHORT).show();
-                                } catch (FirebaseAuthUserCollisionException e) {
-                                    Toast.makeText(activity, "User already exists",
-                                            Toast.LENGTH_SHORT).show();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+                                catchSignUpException(task);
                             } else {
                                 saveUser(name);
                                 Toast.makeText(activity, "Registered successfully",
@@ -169,6 +166,24 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                     });
         } else {
             Toast.makeText(activity, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /** Identifies why an account could not be created. */
+    private void catchSignUpException(Task <AuthResult> task) {
+        try {
+            throw task.getException();
+        } catch (FirebaseAuthWeakPasswordException e) {
+            Toast.makeText(activity, "Password must be at least 6 characters",
+                    Toast.LENGTH_SHORT).show();
+        } catch (FirebaseAuthInvalidCredentialsException e) {
+            Toast.makeText(activity, "Invalid e-mail address", Toast.LENGTH_SHORT).show();
+        } catch (FirebaseAuthUserCollisionException e) {
+            Toast.makeText(activity, "User already exists", Toast.LENGTH_SHORT).show();
+        } catch (FirebaseNetworkException e) {
+            Toast.makeText(activity, "No network", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -67,7 +67,7 @@ class SavedAdapter extends BaseAdapter {
 
         setDinnerInfo(view, position);
         setDinnerImage(view, position);
-        setHostOptionally(view, joining, position);
+        setHostOptionally(view, position);
 
         ImageButton editButton = (ImageButton) view.findViewById(R.id.editButton);
         ImageButton deleteButton = (ImageButton) view.findViewById(R.id.deleteButton);
@@ -94,7 +94,7 @@ class SavedAdapter extends BaseAdapter {
      * If the adapter is being used to show the joined dinners, set the host name in the ListView.
      * Otherwise, set the visibility of the TextView to gone.
      */
-    private void setHostOptionally(View view, boolean joining, int position) {
+    private void setHostOptionally(View view, int position) {
         if (joining) {
             String host = "Host: " + dinners.get(position).getHostName();
             ((TextView) view.findViewById(R.id.dinnerHost)).setText(host);
@@ -143,16 +143,16 @@ class SavedAdapter extends BaseAdapter {
                 switch (v.getId()) {
                     case R.id.editButton:
                         alertDialog("Are you sure you want to edit this dinner?", v.getId(),
-                                dinner, joining, position);
+                                dinner, position);
                         break;
                     case R.id.deleteButton:
                         if (joining) {
                             alertDialog("Are you sure you no longer want to join this dinner?",
-                                    v.getId(), dinner, joining, position);
+                                    v.getId(), dinner, position);
                             break;
                         } else {
                             alertDialog("Are you sure you want to delete this dinner?", v.getId(),
-                                    dinner, joining, position);
+                                    dinner, position);
                             break;
                         }
                 }
@@ -162,7 +162,7 @@ class SavedAdapter extends BaseAdapter {
 
     /** Creates an alert dialog when a button is clicked. */
     private void alertDialog(String alert, final int buttonId, final Dinner dinner,
-                             final boolean joining, final int position) {
+                             final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setMessage(alert);
         builder.setCancelable(true);
@@ -172,21 +172,7 @@ class SavedAdapter extends BaseAdapter {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
-
-                switch (buttonId) {
-                    case R.id.editButton:
-                        goToEditFragment(dinner);
-                        break;
-
-                    case R.id.deleteButton:
-                        if (joining) {
-                            unjoinDinner(dinner, position);
-                            break;
-                        } else {
-                            deleteDinner(dinner);
-                            break;
-                        }
-                }
+                clickedYes(buttonId, dinner, position);
             }
         });
 
@@ -197,6 +183,23 @@ class SavedAdapter extends BaseAdapter {
             }
         });
         builder.show();
+    }
+
+    /** Defines what to do when the user has clicked 'Yes' in the alert dialog. */
+    private void clickedYes(int buttonId, Dinner dinner, int position) {
+        switch (buttonId) {
+            case R.id.editButton:
+                goToEditFragment(dinner);
+                break;
+            case R.id.deleteButton:
+                if (joining) {
+                    unjoinDinner(dinner, position);
+                    break;
+                } else {
+                    deleteDinner(dinner);
+                    break;
+                }
+        }
     }
 
     /** Sends the user to the fragment where they can edit their dinner. */
