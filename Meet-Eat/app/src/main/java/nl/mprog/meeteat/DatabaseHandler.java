@@ -40,11 +40,7 @@ class DatabaseHandler {
         areaQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getChildrenCount() == 0) {
-                    replaceTextInView(false, view);
-                } else {
-                    replaceTextInView(true, view);
-                }
+                replaceTextInView(dataSnapshot.getChildrenCount(), view);
 
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     Dinner dinner = snapshot.getValue(Dinner.class);
@@ -62,10 +58,10 @@ class DatabaseHandler {
     }
 
     /** Replaces the loading text with no results if necessary. */
-    private void replaceTextInView(boolean results, View view) {
+    private void replaceTextInView(long amountResults, View view) {
         TextView loadingText = (TextView) view.findViewById(R.id.loading);
 
-        if (results) {
+        if (amountResults != 0) {
             loadingText.setVisibility(View.INVISIBLE);
         } else {
             loadingText.setText(R.string.noResults);
@@ -217,11 +213,7 @@ class DatabaseHandler {
             findHosting.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getChildrenCount() == 0) {
-                        replaceTextInView(false, view);
-                    } else {
-                        replaceTextInView(true, view);
-                    }
+                    replaceTextInView(dataSnapshot.getChildrenCount(), view);
 
                     for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                         Dinner dinner = snapshot.getValue(Dinner.class);
@@ -255,11 +247,7 @@ class DatabaseHandler {
             findJoined.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getChildrenCount() == 0) {
-                        replaceTextInView(false, view);
-                    } else {
-                        replaceTextInView(true, view);
-                    }
+                    replaceTextInView(dataSnapshot.getChildrenCount(), view);
 
                     for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                         Dinner dinner = snapshot.getValue(Dinner.class);
