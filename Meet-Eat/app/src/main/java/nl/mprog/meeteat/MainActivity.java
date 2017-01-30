@@ -1,3 +1,12 @@
+/* Meet & Eat
+ * Tirza Soute (10761977)
+ * Programmeerproject
+ *
+ * This class implements the main activity of the application. The navigation drawer is defined, as
+ * well as what should happen when it is closed, opened or an item is clicked. The user is sent to a
+ * new fragment when they click an item.
+ */
+
 package nl.mprog.meeteat;
 
 import android.app.Fragment;
@@ -39,11 +48,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /** Creates menu items for the navigation drawer. */
+    /** Creates menu items for the navigation drawer and sets the adapter. */
     private void createDrawerItems() {
         ArrayList<DrawerItem> data = createDrawerData();
         DrawerAdapter adapter = new DrawerAdapter(this, data);
-
         drawerList.setAdapter(adapter);
     }
 
@@ -64,44 +72,23 @@ public class MainActivity extends AppCompatActivity {
         drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 
                 switch (position) {
                     case 0:
                         drawerLayout.closeDrawers();
-
-                        MainFragment mainFragment = new MainFragment();
-                        changeFragment(mainFragment);
+                        changeFragment(new MainFragment());
                         break;
                     case 1:
                         drawerLayout.closeDrawers();
-
-                        AccountFragment accountFragment = new AccountFragment();
-                        changeFragment(accountFragment);
+                        changeFragment(new AccountFragment());
                         break;
                     case 2:
-                        if (user != null) {
-                            drawerLayout.closeDrawers();
-
-                            HostListFragment hostListFragment = new HostListFragment();
-                            changeFragment(hostListFragment);
-                            break;
-                        } else {
-                            Toast.makeText(MainActivity.this, "Please log in to view this page",
-                                    Toast.LENGTH_SHORT).show();
-                        }
+                        checkLoggedIn(drawerLayout, new HostListFragment());
+                        break;
                     case 3:
-                        if (user != null) {
-                            drawerLayout.closeDrawers();
-
-                            JoinListFragment joinListFragment = new JoinListFragment();
-                            changeFragment(joinListFragment);
-                            break;
-                        } else {
-                            Toast.makeText(MainActivity.this, "Please log in to view this page",
-                                    Toast.LENGTH_SHORT).show();
-                        }
+                        checkLoggedIn(drawerLayout, new JoinListFragment());
+                        break;
                 }
             }
         });
@@ -117,12 +104,37 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
+    /** Sends the user to the new fragment if they're logged in. */
+    private void checkLoggedIn(DrawerLayout drawerLayout, Fragment newFragment) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            drawerLayout.closeDrawers();
+
+            changeFragment(newFragment);
+        } else {
+            Toast.makeText(MainActivity.this, "Please log in to view this page",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
     /** Sets up the navigation drawer. */
     private void setUpDrawer() {
-        final ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setElevation(0);
 
+        defineDrawerToggle(actionBar);
+
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+        }
+    }
+
+    /** Defines what happens when the Navigation Drawer is opened and closed. */
+    private void defineDrawerToggle(final ActionBar actionBar) {
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.openDrawer,
                 R.string.closeDrawer) {
 
@@ -140,11 +152,6 @@ public class MainActivity extends AppCompatActivity {
         };
         drawerToggle.setDrawerIndicatorEnabled(true);
         drawerLayout.addDrawerListener(drawerToggle);
-
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
-        }
     }
 
     /** Returns true if the touch event was handled. */
