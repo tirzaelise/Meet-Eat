@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,7 +68,8 @@ class DatabaseHandler {
     }
 
     /**
-     * The push key of the dinner is retrieved and the list of guests is updated.
+     * The push key of the dinner is retrieved and the list of guests is updated if the user who
+     * wants to join the dinner is not the host of the dinner.
      */
     void updateFreeSpaces(final Context context, final Dinner dinner, final int position,
                           final DinnerAdapter adapter, final ArrayList<Dinner> dinners,
@@ -215,7 +215,7 @@ class DatabaseHandler {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     replaceTextInView(dataSnapshot.getChildrenCount(), view);
 
-                    for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Dinner dinner = snapshot.getValue(Dinner.class);
                         dinners.add(dinner);
                         adapter.notifyDataSetChanged();
@@ -228,16 +228,13 @@ class DatabaseHandler {
                             Toast.LENGTH_SHORT).show();
                 }
             });
-        } else {
-            Toast.makeText(activity, "Please log in to view this page",
-                    Toast.LENGTH_SHORT).show();
         }
     }
 
     /** Retrieves the dinners that the user has joined from Firebase. */
     void getJoinedDinners(final SavedAdapter adapter, final ArrayList<Dinner> dinners,
                           final Activity activity, final View view) {
-        FirebaseUser user  = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser user  = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user != null) {
             final String userId = user.getUid();
@@ -253,7 +250,7 @@ class DatabaseHandler {
                         Dinner dinner = snapshot.getValue(Dinner.class);
                         ArrayList<String> guestIds = dinner.getGuestIds();
 
-                        if (isInArray(userId, guestIds)) {
+                        if (guestIds.contains(userId)) {
                             dinners.add(dinner);
                             adapter.notifyDataSetChanged();
                         }
@@ -262,21 +259,11 @@ class DatabaseHandler {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(activity, "Could not retrieve joined dinners",
+                    Toast.makeText(activity, "Could not retrieve dinners",
                             Toast.LENGTH_SHORT).show();
                 }
             });
         }
-    }
-
-    /** Checks if a certain value is in an array. */
-    private boolean isInArray(String value, ArrayList<String> array) {
-        for (int i = 0; i < array.size(); i++) {
-            if (array.get(i).equals(value)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /** Saves a user in Firebase under his user ID. */
@@ -373,17 +360,11 @@ class DatabaseHandler {
             Dinner dinner = dinners.get(position);
 
             ArrayList<String> guestIds = dinner.getGuestIds();
-            ArrayList<String> guestNames = dinner.getGuestNames();
             String userId = user.getUid();
             int lastOccurrence = guestIds.lastIndexOf(userId);
 
             if (lastOccurrence != -1) {
-                guestIds.set(lastOccurrence, "null");
-                guestNames.set(lastOccurrence, "null");
-                dinner.setGuestIds(guestIds);
-                dinner.setGuestNames(guestNames);
-
-                dinners.set(position, dinner);
+                dinner = removeFromDinner(dinner, lastOccurrence);
                 adapter.notifyDataSetChanged();
                 adapter.setData(dinners);
 
@@ -395,6 +376,16 @@ class DatabaseHandler {
                         Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    /** Removes the user's name and ID from the guest list. */
+    private Dinner removeFromDinner(Dinner dinner, int lastOccurrence) {
+        ArrayList<String> guestIds = dinner.getGuestIds();
+        ArrayList<String> guestNames = dinner.getGuestNames();
+
+        guestIds.set(lastOccurrence, "null");
+        guestNames.set(lastOccurrence, "null");
+        return dinner;
     }
 
     /** Body of an email when a user is no longer joining a dinner. */
@@ -438,7 +429,6 @@ class DatabaseHandler {
         uniqueGuests.remove("null");
         ArrayList<String> uniqueArray = new ArrayList<>(uniqueGuests);
 
-        Log.wtf("unique", Integer.toString(uniqueArray.size()));
         for (int i = 0; i < uniqueArray.size(); i++) {
             String guestId = uniqueArray.get(i);
             findGuestEmail(guestId, dinner, activity);
