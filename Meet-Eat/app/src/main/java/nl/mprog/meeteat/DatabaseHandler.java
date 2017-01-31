@@ -1,3 +1,14 @@
+/* Meet & Eat
+ * Tirza Soute (10761977)
+ * Programmeerproject
+ *
+ * This class handles the database actions. This includes reading the database, writing new dinners
+ * to the database, retrieving specific data from the database (such as dinners hosted by the
+ * current user or dinners joined by the current user), deleting dinners from the database, updating
+ * dates, titles and ingredients of dinners, updating the amount of free spaces for dinners and
+ * saving users to the database when they create an account. The database is a Firebase database.
+ */
+
 package nl.mprog.meeteat;
 
 import android.app.Activity;
@@ -140,7 +151,7 @@ class DatabaseHandler {
     }
 
     /**
-     * Update the first occurrence of "null" in an array with the new guest name or ID for the
+     * Updates the first occurrence of "null" in an array with the new guest name or ID for the
      * amount of people that the user specified they want to join the dinner with.
      */
     private ArrayList<String> updateGuestList(String newGuest, ArrayList<String> guestList,
