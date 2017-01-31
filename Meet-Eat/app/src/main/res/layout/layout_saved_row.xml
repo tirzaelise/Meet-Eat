@@ -72,7 +72,8 @@
         android:maxWidth="24dp"
         android:maxHeight="24dp"
         android:scaleType="fitCenter"
-        android:id="@+id/deleteButton" />
+        android:id="@+id/deleteButton"
+        android:contentDescription="@string/deleteButtonDesc" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -85,7 +86,8 @@
         android:maxWidth="24dp"
         android:maxHeight="24dp"
         android:scaleType="fitCenter"
-        android:id="@+id/editButton" />
+        android:id="@+id/editButton"
+        android:contentDescription="@string/editButtonDesc" />
 
     <TextView
         android:layout_width="wrap_content"

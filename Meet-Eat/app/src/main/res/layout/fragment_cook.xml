@@ -29,16 +29,6 @@
         android:hint="@string/food"
         android:id="@+id/giveFood"/>
 
- <!-->   <TextView
-        android:text="@string/whatTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/giveFood"
-        android:layout_marginTop="20dp"
-        android:id="@+id/whatTime"/>
-
-</-->
-
     <TextView
         android:text="@string/howManyPeople"
         android:layout_width="wrap_content"
@@ -76,7 +66,7 @@
         android:id="@+id/giveArea" />
 
     <TextView
-        android:text="When will dinner start?"
+        android:text="@string/startDinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/giveArea"

@@ -16,7 +16,8 @@
         android:padding="1dp"
         android:background="@android:color/darker_gray"
         android:layout_alignParentStart="true"
-        android:id="@+id/dinnerImage" />
+        android:id="@+id/dinnerImage"
+        android:contentDescription="@string/joinButonDesc" />
 
     <ImageButton
         android:layout_width="wrap_content"

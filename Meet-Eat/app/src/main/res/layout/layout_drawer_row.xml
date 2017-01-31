@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:paddingStart="@dimen/activity_horizontal_margin"
@@ -18,7 +17,8 @@
         android:maxWidth="24dp"
         android:maxHeight="24dp"
         android:scaleType="fitCenter"
-        android:id="@+id/menuIcon" />
+        android:id="@+id/menuIcon"
+        android:contentDescription="@string/drawerIconDesc" />
 
     <TextView
         android:layout_width="wrap_content"
