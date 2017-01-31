@@ -169,7 +169,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    /** Identifies why an account could not be created. */
+    /** Tries to catch the exception to find out why an account could not be created. */
     private void catchSignUpException(Task <AuthResult> task) {
         try {
             throw task.getException();
@@ -206,8 +206,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     /** Hides keyboard. */
     private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) activity
-                .getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (activity.getCurrentFocus() != null) {
+            imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
     /** Logs in the user. */

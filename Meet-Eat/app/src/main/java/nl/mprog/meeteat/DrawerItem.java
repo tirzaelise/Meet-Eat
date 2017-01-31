@@ -1,23 +1,27 @@
-package nl.mprog.meeteat;
-
-/**
- * Created by tirza on 21-1-17.
+/* Meet & Eat
+ * Tirza Soute (10761977)
+ * Programmeerproject
+ *
+ * This class implements the DrawerItem object. This object consists of a title and an icon and is
+ * used to add an image/icon next to the title of an item in the Navigation Drawer.
  */
+
+package nl.mprog.meeteat;
 
 class DrawerItem {
     private int icon;
-    private String item;
+    private String title;
 
-    DrawerItem(int icon, String item) {
+    DrawerItem(int icon, String title) {
         this.icon = icon;
-        this.item = item;
+        this.title = title;
     }
 
     int getIcon() {
         return icon;
     }
 
-    String getItem() {
-        return item;
+    String getTitle() {
+        return title;
     }
 }

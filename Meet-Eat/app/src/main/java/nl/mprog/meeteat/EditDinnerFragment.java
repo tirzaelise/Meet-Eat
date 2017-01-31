@@ -10,20 +10,12 @@
 package nl.mprog.meeteat;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.app.Fragment;
-import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TimePicker;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
 
 public class EditDinnerFragment extends Fragment implements View.OnClickListener{
     private View rootView;
@@ -61,16 +53,16 @@ public class EditDinnerFragment extends Fragment implements View.OnClickListener
         String time = splitDate[1];
 
         ((EditText) rootView.findViewById(R.id.newTitle)).setText(dinner.getTitle());
-        ((EditText) rootView.findViewById(R.id.newDate)).setText(date);
-        ((EditText) rootView.findViewById(R.id.newTime)).setText(time);
+        ((EditText) rootView.findViewById(R.id.giveDate)).setText(date);
+        ((EditText) rootView.findViewById(R.id.giveTime)).setText(time);
         ((EditText) rootView.findViewById(R.id.newIngredients)).setText(dinner.getIngredients());
     }
 
-    /** Updates the info about the dinner with the user's input. */
+    /** Updates the info about the dinner in the database with the user's input. */
     private void updateInfo() {
         String title = ((EditText) rootView.findViewById(R.id.newTitle)).getText().toString();
-        String date = ((EditText) rootView.findViewById(R.id.newDate)).getText().toString();
-        String time = ((EditText) rootView.findViewById(R.id.newTime)).getText().toString();
+        String date = ((EditText) rootView.findViewById(R.id.giveDate)).getText().toString();
+        String time = ((EditText) rootView.findViewById(R.id.giveTime)).getText().toString();
         String ingredients = ((EditText) rootView.findViewById(R.id.newIngredients)).getText()
                 .toString();
 

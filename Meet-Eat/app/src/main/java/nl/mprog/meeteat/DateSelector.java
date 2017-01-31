@@ -2,8 +2,8 @@
  * Tirza Soute (10761977)
  * Programmeerproject
  *
- * This class implements the date selector. The user can select the date of their dinner here using
- * a DatePickerDialog. The selected date is automatically set in the EditText.
+ * This class implements the date selector. This allows the user to select the date of their dinner
+ * using a DatePickerDialog. The selected date is automatically set in the EditText.
  */
 
 package nl.mprog.meeteat;
@@ -51,8 +51,8 @@ class DateSelector {
     }
 
     /**
-     * Sets a listener on the EditText so that a date can be picked when the it is clicked and
-     * removes the option to choose dates before today.
+     * Sets a listener on the EditText so that a date can be picked when the it is clicked. Also
+     * prevents the user from being able to pick a date before the current one.
      */
     private void setDateListener(final Calendar calendar,
                                  final DatePickerDialog.OnDateSetListener date) {

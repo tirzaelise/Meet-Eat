@@ -1,8 +1,16 @@
+/* Meet & Eat
+ * Tirza Soute (10761977)
+ * Programmeerproject
+ *
+ * This class implements the adapter for the Navigation Drawer. It consists of a TextView, which is
+ * the title of a fragment in the app, and an image, which corresponds to the title of the TextView.
+ */
+
+
 package nl.mprog.meeteat;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,19 +20,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by tirza on 21-1-17.
- */
-
 class DrawerAdapter extends BaseAdapter {
-    private Context context;
     private LayoutInflater inflater;
     private ArrayList<DrawerItem> data;
 
     DrawerAdapter(Context context, ArrayList<DrawerItem> data) {
-//        super(context, resource);
-
-        this.context = context;
         this.data = data;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -52,18 +52,12 @@ class DrawerAdapter extends BaseAdapter {
 
         if (view == null) {
             view = inflater.inflate(R.layout.layout_drawer_row, parent, false);
-            ImageView  menuIcon = (ImageView) view.findViewById(R.id.menuIcon);
-            TextView  menuItem = (TextView) view.findViewById(R.id.menuItem);
-            DrawerItem currentItem = data.get(position);
-
-            menuIcon.setImageResource(currentItem.getIcon());
-            menuItem.setText(currentItem.getItem());
-        } else {
-            DrawerItem currentItem = this.data.get(position);
-
-            ((ImageView) view.findViewById(R.id.menuIcon)).setImageResource(currentItem.getIcon());
-            ((TextView) view.findViewById(R.id.menuItem)).setText(currentItem.getItem());
         }
+
+        DrawerItem currentItem = this.data.get(position);
+
+        ((ImageView) view.findViewById(R.id.menuIcon)).setImageResource(currentItem.getIcon());
+        ((TextView) view.findViewById(R.id.menuItem)).setText(currentItem.getTitle());
 
         return view;
     }

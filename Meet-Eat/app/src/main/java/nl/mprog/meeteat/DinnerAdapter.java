@@ -99,11 +99,7 @@ class DinnerAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
                              View convertView, ViewGroup parentView) {
-//        View view = convertView;
-
-//        if (convertView == null) {
-        View view = inflater.inflate(R.layout.layout_child, parentView, false); // otherwise the vegetarian , , vegan comes up
-//        }
+        View view = inflater.inflate(R.layout.layout_child, parentView, false);
 
         setInfo(groupPosition, view);
         setVisibility(groupPosition, view);
@@ -145,17 +141,6 @@ class DinnerAdapter extends BaseExpandableListAdapter {
     }
 
     /**
-     * Sets the image of a dinner in the ListView.
-     */
-    private void setImage(int position, View view) {
-        ImageView dinnerImage = (ImageView) view.findViewById(R.id.dinnerImage);
-
-        String url = "https://spoonacular.com/recipeImages/" + this.dinners.get(position).getId() +
-                "-312x231.jpg";
-        Picasso.with(context).load(url).into(dinnerImage);
-    }
-
-    /**
      * Uses the boolean values to set visibility and text.
      */
     private void booleanToVisibility(boolean isVegetarian, boolean isVegan, TextView vegetarian,
@@ -172,6 +157,17 @@ class DinnerAdapter extends BaseExpandableListAdapter {
             vegetarian.setVisibility(View.INVISIBLE);
             vegan.setVisibility(View.INVISIBLE);
         }
+    }
+
+    /**
+     * Sets the image of a dinner in the ListView.
+     */
+    private void setImage(int position, View view) {
+        ImageView dinnerImage = (ImageView) view.findViewById(R.id.dinnerImage);
+
+        String url = "https://spoonacular.com/recipeImages/" + this.dinners.get(position).getId() +
+                "-312x231.jpg";
+        Picasso.with(context).load(url).into(dinnerImage);
     }
 
     /**

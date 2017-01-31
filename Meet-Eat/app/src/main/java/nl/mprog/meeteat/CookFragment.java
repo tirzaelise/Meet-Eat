@@ -10,21 +10,13 @@
 package nl.mprog.meeteat;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.app.Fragment;
-import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TimePicker;
 import android.widget.Toast;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
 
 import static org.apache.commons.lang3.text.WordUtils.capitalizeFully;
 
@@ -73,11 +65,12 @@ public class CookFragment extends Fragment implements View.OnClickListener {
             food = food.replace(" ", "&nbsp;");
             date = ((EditText) rootView.findViewById(R.id.giveDate)).getText().toString() + " " +
                     ((EditText) rootView.findViewById(R.id.giveTime)).getText().toString();
+
             toRecipeResultFragment();
         }
     }
 
-    /** Checks if all fields were filled in. */
+    /** Checks if all EditText fields were filled in. */
     private boolean filledInAllFields() {
         String date = ((EditText) rootView.findViewById(R.id.giveDate)).getText().toString();
         String time = ((EditText) rootView.findViewById(R.id.giveTime)).getText().toString();
