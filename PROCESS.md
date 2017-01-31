@@ -49,4 +49,4 @@ I worked on some things that were given to me as feedback during my presentation
 I spent today cleaning a lot of code using BetterCodeHub. I mostly made methods shorter and minimised the amount of duplicated code. I cleaned MainActivity, AccountFragment, RecipeAdapter and created DateSelector and TimeSelector to avoid dupliated code.
 
 #### Day 17 
-Finished creating headers and commenting methods for all Java files.
+Finished creating headers and commenting methods for all Java files. I also cleaned all the XML files.
