@@ -23,29 +23,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/whatMaking"
         android:layout_alignStart="@+id/whatMaking"
+        android:layout_alignEnd="@id/whatMaking"
         android:inputType="textPersonName"
         android:textSize="14sp"
         android:ems="10"
         android:hint="@string/food"
         android:id="@+id/giveFood"/>
-
-    <TextView
-        android:text="@string/howManyPeople"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/giveFood"
-        android:layout_marginTop="20dp"
-        android:id="@+id/howManyPeople"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/howManyPeople"
-        android:inputType="number"
-        android:textSize="14sp"
-        android:hint="@string/number"
-        android:ems="10"
-        android:id="@+id/giveAmount" />
 
     <TextView
         android:text="@string/whatArea"
@@ -59,6 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/whatArea"
+        android:layout_alignEnd="@id/whatArea"
         android:inputType="textPersonName"
         android:textSize="14sp"
         android:hint="@string/city"
@@ -66,23 +50,43 @@
         android:id="@+id/giveArea" />
 
     <TextView
+        android:text="@string/howManyPeople"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/howManyPeople"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:textSize="14sp"
+        android:hint="@string/number"
+        android:ems="10"
+        android:layout_below="@+id/howManyPeople"
+        android:layout_alignStart="@+id/howManyPeople"
+        android:id="@+id/giveAmount"/>
+
+    <TextView
         android:text="@string/startDinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/giveArea"
-        android:layout_marginTop="20dp"
+        android:layout_above="@+id/giveArea"
+        android:layout_alignStart="@+id/howManyPeople"
         android:id="@+id/whatTime"/>
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/whatTime"
         android:inputType="date"
         android:textSize="14sp"
         android:hint="@string/date"
-        android:ems="8"
+        android:ems="5"
         android:focusable="false"
-        android:id="@+id/giveDate" />
+        android:layout_below="@+id/whatTime"
+        android:layout_alignStart="@+id/whatTime"
+        android:id="@+id/giveDate"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -95,16 +99,17 @@
         android:hint="@string/time"
         android:ems="5"
         android:focusable="false"
+        android:layout_alignEnd="@id/giveAmount"
         android:id="@+id/giveTime" />
 
     <Button
         android:text="@string/getRecipe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
         android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
-        android:id="@+id/addButton" />
+        android:id="@+id/addButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

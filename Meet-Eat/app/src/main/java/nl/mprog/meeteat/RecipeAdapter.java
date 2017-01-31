@@ -94,7 +94,7 @@ class RecipeAdapter extends BaseAdapter {
         if (isTrue) {
             textView.setVisibility(View.VISIBLE);
         } else {
-            textView.setVisibility(View.INVISIBLE);
+            textView.setVisibility(View.GONE);
         }
     }
 

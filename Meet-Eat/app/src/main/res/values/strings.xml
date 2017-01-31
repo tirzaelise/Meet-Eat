@@ -67,4 +67,5 @@
     <string name="drawerIconDesc">This icon depicts the drawer item</string>
     <string name="deleteButtonDesc">This button lets the user delete a dinner or remove themselves from it</string>
     <string name="editButtonDesc">This button lets the user edit his dinner</string>
+    <string name="logoDesc">This image contains the app logo</string>
 </resources>

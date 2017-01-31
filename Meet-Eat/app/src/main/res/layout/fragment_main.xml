@@ -10,17 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="nl.mprog.meeteat.MainFragment">
 
-    <!-->
-    <TextView
-        android:text="@string/introText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:id="@+id/introText" />
-    </-->
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -57,4 +46,5 @@
         android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
         android:id="@+id/joiningButton" />
+
 </RelativeLayout>
