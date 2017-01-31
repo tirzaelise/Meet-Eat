@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 1:
                         drawerLayout.closeDrawers();
-                        changeFragment(new AccountFragment());
+                        changeFragment(new SignUpFragment());
                         break;
                     case 2:
                         checkLoggedIn(drawerLayout, new HostListFragment());

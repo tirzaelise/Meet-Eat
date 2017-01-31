@@ -40,7 +40,6 @@
         android:textColor="@android:color/white"
         android:id="@+id/saveButton" />
 
-
     <TextView
         android:text="@string/newIngredients"
         android:layout_width="wrap_content"

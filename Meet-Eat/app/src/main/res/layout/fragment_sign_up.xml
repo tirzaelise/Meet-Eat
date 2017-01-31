@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="nl.mprog.meeteat.AccountFragment">
+    tools:context="nl.mprog.meeteat.SignUpFragment">
 
     <EditText
         android:layout_width="wrap_content"
@@ -16,7 +16,7 @@
         android:inputType="textPersonName"
         android:ems="10"
         android:hint="@string/name"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
         android:id="@+id/giveName"/>
 
@@ -46,24 +46,12 @@
         android:text="@string/signUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="30dp"
         android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/givePassword"
         android:id="@+id/signUpButton" />
-
-    <Button
-        android:text="@string/signIn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/signUpButton"
-        android:background="@color/colorPrimary"
-        android:textColor="@android:color/white"
-        android:layout_centerHorizontal="true"
-        android:visibility="invisible"
-        android:id="@+id/signInButton" />
-
 
     <Button
         android:text="@string/signOut"

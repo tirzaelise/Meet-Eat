@@ -2,7 +2,7 @@
  * Tirza Soute (10761977)
  * Programmeerproject
  *
- * This class implements the fragment where the user can create an account, log in and log out. This
+ * This class implements the fragment where the user can create an account and log out. This
  * is done using Firebase. The user is also saved in the Firebase database after creating an account
  * to save their name, e-mail address and and user ID.
  */
@@ -32,7 +32,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 
-public class AccountFragment extends Fragment implements View.OnClickListener {
+public class SignUpFragment extends Fragment implements View.OnClickListener {
     private View rootView;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -41,7 +41,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_account, container, false);
+        return inflater.inflate(R.layout.fragment_sign_up, container, false);
     }
 
     @Override
@@ -50,11 +50,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
         rootView = getView();
         activity = getActivity();
+
         mAuth = FirebaseAuth.getInstance();
         stateChanged();
 
         if (rootView != null) {
-            rootView.findViewById(R.id.signInButton).setOnClickListener(this);
             rootView.findViewById(R.id.signUpButton).setOnClickListener(this);
             rootView.findViewById(R.id.signOutButton).setOnClickListener(this);
             rootView.findViewById(R.id.accountAlready).setOnClickListener(this);
@@ -100,27 +100,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
     /**
      * Changes the visibility of views so that the right views are shown when the user has to sign
-     * in.
-     */
-    private void signInVisibility() {
-        rootView.findViewById(R.id.giveName).setVisibility(View.INVISIBLE);
-        rootView.findViewById(R.id.giveEmail).setVisibility(View.VISIBLE);
-        rootView.findViewById(R.id.givePassword).setVisibility(View.VISIBLE);
-        rootView.findViewById(R.id.signInButton).setVisibility(View.VISIBLE);
-        rootView.findViewById(R.id.signUpButton).setVisibility(View.INVISIBLE);
-        rootView.findViewById(R.id.signOutButton).setVisibility(View.INVISIBLE);
-        rootView.findViewById(R.id.accountAlready).setVisibility(View.INVISIBLE);
-    }
-
-    /**
-     * Changes the visibility of views so that the right views are shown when the user has to sign
      * up.
      */
     private void signUpVisibility() {
         rootView.findViewById(R.id.giveName).setVisibility(View.VISIBLE);
         rootView.findViewById(R.id.giveEmail).setVisibility(View.VISIBLE);
         rootView.findViewById(R.id.givePassword).setVisibility(View.VISIBLE);
-        rootView.findViewById(R.id.signInButton).setVisibility(View.INVISIBLE);
         rootView.findViewById(R.id.signUpButton).setVisibility(View.VISIBLE);
         rootView.findViewById(R.id.signOutButton).setVisibility(View.INVISIBLE);
         rootView.findViewById(R.id.accountAlready).setVisibility(View.VISIBLE);
@@ -135,7 +120,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         rootView.findViewById(R.id.giveName).setVisibility(View.INVISIBLE);
         rootView.findViewById(R.id.giveEmail).setVisibility(View.INVISIBLE);
         rootView.findViewById(R.id.givePassword).setVisibility(View.INVISIBLE);
-        rootView.findViewById(R.id.signInButton).setVisibility(View.INVISIBLE);
         rootView.findViewById(R.id.signUpButton).setVisibility(View.INVISIBLE);
         rootView.findViewById(R.id.signOutButton).setVisibility(View.VISIBLE);
         rootView.findViewById(R.id.accountAlready).setVisibility(View.INVISIBLE);
@@ -213,36 +197,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    /** Logs in the user. */
-    private void logIn() {
-        String email = ((EditText) rootView.findViewById(R.id.giveEmail)).getText().toString();
-        String password = ((EditText) rootView.findViewById(R.id.givePassword)).getText().
-                toString();
-
-        if (!email.equals("") && !password.equals("")) {
-            mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (!task.isSuccessful()) {
-                                Toast.makeText(activity, "Authentication failed",
-                                        Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(activity, "Logged in successfully",
-                                        Toast.LENGTH_SHORT).show();
-                                hideKeyboard();
-                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                                if (user != null) {
-                                    DatabaseHandler databaseHandler = new DatabaseHandler();
-                                    databaseHandler.getUsername(user.getUid(), activity);
-                                }
-                            }
-                        }
-                    });
-        } else {
-            Toast.makeText(activity, "Please fill in all fields", Toast.LENGTH_SHORT).show();
-        }
+    /** Sends the user to the fragment to log in instead of creating an account. */
+    private void toSignInFragment() {
+        this.getFragmentManager().beginTransaction()
+                .replace(R.id.contentFrame, new SignInFragment())
+                .addToBackStack(null)
+                .commit();
     }
 
     /** Signs out the user. */
@@ -253,10 +213,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.signInButton:
-                logIn();
-                signInVisibility();
-                break;
             case R.id.signUpButton:
                 createAccount();
                 break;
@@ -265,7 +221,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 signUpVisibility();
                 break;
             case R.id.accountAlready:
-                signInVisibility();
+                toSignInFragment();
                 break;
         }
     }
