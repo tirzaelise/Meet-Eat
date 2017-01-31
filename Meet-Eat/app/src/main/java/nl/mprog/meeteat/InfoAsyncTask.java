@@ -23,15 +23,21 @@ class InfoAsyncTask extends AsyncTask<String, Void, String> {
         this.dinner = dinner;
     }
 
+    /** Holds a dinner with all info from the API once the listener is alerted in OnPostExecute. */
     interface OnInfoRetrieved {
         void onInfoRetrieved(Dinner dinner);
     }
 
+    /** Retrieves the info from a web page in the background. */
     @Override
     protected String doInBackground(String... params) {
         return HttpRequestHandler.downloadFromApi(params);
     }
 
+    /**
+     * Updates standard values of the ingredients, vegetarian boolean and vegan boolean of a dinner
+     * with the retrieved information.
+     */
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
@@ -40,18 +46,8 @@ class InfoAsyncTask extends AsyncTask<String, Void, String> {
             JSONObject readObject = new JSONObject(result);
             boolean vegetarian = readObject.getBoolean("vegetarian");
             boolean vegan = readObject.getBoolean("vegan");
-            JSONArray ingredientsObject = readObject.getJSONArray("extendedIngredients");
-            String ingredients = "";
+            String ingredients = formIngredients(readObject);
 
-            for (int i = 0; i < ingredientsObject.length(); i++) {
-                JSONObject dinnerObject = ingredientsObject.getJSONObject(i);
-                String ingredient = dinnerObject.getString("name");
-                if (ingredients.equals("")) {
-                    ingredients = ingredient;
-                } else {
-                    ingredients = ingredients + ", " + ingredient;
-                }
-            }
             dinner.setIngredients(ingredients);
             dinner.setVegetarian(vegetarian);
             dinner.setVegan(vegan);
@@ -59,5 +55,23 @@ class InfoAsyncTask extends AsyncTask<String, Void, String> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    /** Forms a string of the ingredients that were retrieved using HttpRequestHandler. */
+    private String formIngredients(JSONObject readObject) throws JSONException {
+        JSONArray ingredientsObject = readObject.getJSONArray("extendedIngredients");
+        String ingredients = "";
+
+        for (int i = 0; i < ingredientsObject.length(); i++) {
+            JSONObject ingredientObject = ingredientsObject.getJSONObject(i);
+            String ingredient = ingredientObject.getString("name");
+
+            if (ingredients.equals("")) {
+                ingredients = ingredient;
+            } else {
+                ingredients = ingredients + ", " + ingredient;
+            }
+        }
+        return ingredients;
     }
 }

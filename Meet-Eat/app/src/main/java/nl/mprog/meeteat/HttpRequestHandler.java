@@ -17,6 +17,7 @@ import java.net.URL;
 
 class HttpRequestHandler {
 
+    /** Downloads the text from a web page and saves it in a string. */
     static synchronized String downloadFromApi(String... params) {
         String urlToApi = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/";
         String query = params[0];

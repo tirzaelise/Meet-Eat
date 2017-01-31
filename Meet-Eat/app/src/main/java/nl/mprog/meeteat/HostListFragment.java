@@ -1,3 +1,12 @@
+/* Meet & Eat
+ * Tirza Soute (10761977)
+ * Programmeerproject
+ *
+ * This fragment shows the user the dinners that he's hosting. This is done using DatabaseHandler,
+ * which retrieves all dinners where the ID of the host is equal to the current user's ID. This data
+ * is shown in a ListView.
+ */
+
 package nl.mprog.meeteat;
 
 import android.app.Activity;

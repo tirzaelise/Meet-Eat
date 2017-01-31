@@ -1,3 +1,13 @@
+/* Meet & Eat
+ * Tirza Soute (10761977)
+ * Programmeerproject
+ *
+ * This fragment lets the user search for dinners in a specific area. When they hit the search
+ * button, the city they searched for is saved in SharedPreferences. This city is also put in the
+ * EditText to optimise user friendliness, since users will usually want to have dinner in the
+ * same area (where they live).
+ */
+
 package nl.mprog.meeteat;
 
 import android.app.Activity;
@@ -36,7 +46,6 @@ public class JoinFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-
     /** Changes the text in the area EditText to the most recent search. */
     private void resetLastSearch() {
         SharedPreferences sharedPrefs = activity.getSharedPreferences("lastSearch",
@@ -61,7 +70,7 @@ public class JoinFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    /** Saves the most recent search in Shared Preferences. */
+    /** Saves the most recent search in SharedPreferences. */
     private void saveLastSearch(String area) {
         SharedPreferences.Editor editor = activity.getSharedPreferences("lastSearch",
                 Context.MODE_PRIVATE).edit();

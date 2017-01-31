@@ -1,3 +1,12 @@
+/* Meet & Eat
+ * Tirza Soute (10761977)
+ * Programmeerproject
+ *
+ * This fragment shows the user the dinners that he has joined. This is done using DatabaseHandler,
+ * which retrieves all dinners where the ID of the current user is in the list of guest IDS of a
+ * dinner. This data is shown in a ListView.
+ */
+
 package nl.mprog.meeteat;
 
 import android.app.Activity;
@@ -36,6 +45,7 @@ public class JoinListFragment extends Fragment {
         }
     }
 
+    /** Retrieves the dinners that the user has joined using DatabaseHandler. */
     private void getJoinedDinners(SavedAdapter adapter, ArrayList<Dinner> dinners) {
         DatabaseHandler databaseHandler = new DatabaseHandler();
         databaseHandler.getJoinedDinners(adapter, dinners, activity, rootView);
