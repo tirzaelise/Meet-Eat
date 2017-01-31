@@ -1,3 +1,12 @@
+/* Meet & Eat
+ * Tirza Soute (10761977)
+ * Programmeerproject
+ *
+ * This fragment shows the user's search results for dinners in a specified area. This is done using
+ * DatabaseHandler, which retrieves the dinners that have the specified area as their area. The data
+ * is displayed in a ListView.
+ */
+
 package nl.mprog.meeteat;
 
 import android.app.Fragment;
@@ -26,17 +35,22 @@ public class ResultFragment extends Fragment {
         Bundle arguments = this.getArguments();
 
         if (arguments != null && rootView != null) {
+            setCity(arguments, rootView);
             showResult(arguments, rootView);
         }
     }
 
-    /** Shows the user's search result by reading from the Firebase database using DatabaseHelper */
-    private void showResult(Bundle arguments, View rootView) {
+    /** Sets the city that the user searched for in the TextView. */
+    private void setCity(Bundle arguments, View rootView) {
         String area = arguments.getString("area", "");
         TextView dinnersInTV = (TextView) rootView.findViewById(R.id.dinnersInText);
         String dinnersIn = dinnersInTV.getText() + " " + area;
         dinnersInTV.setText(dinnersIn);
+    }
 
+    /** Shows the user's search result by reading from the database using DatabaseHandler. */
+    private void showResult(Bundle arguments, View rootView) {
+        String area = arguments.getString("area", "");
         ExpandableListView listView = (ExpandableListView) rootView.findViewById(R.id.listView);
         ArrayList<Dinner> dinners = new ArrayList<>();
         DinnerAdapter adapter = new DinnerAdapter(this, dinners);

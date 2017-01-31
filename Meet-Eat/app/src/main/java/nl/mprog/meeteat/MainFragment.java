@@ -1,17 +1,21 @@
+/* Meet & Eat
+ * Tirza Soute (10761977)
+ * Programmeerproject
+ *
+ * This fragment is the home screen of the app. This is where the user decides whether they want to
+ * join or cook a dinner. The user's name is also put on the screen if they're logged in.
+ */
+
 package nl.mprog.meeteat;
 
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
     View rootView;
@@ -35,7 +39,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    /** Shows the user's name in the fragment */
+    /** Shows the user's name in the fragment. */
     private void putUsername() {
         TextView helloTextView = (TextView) rootView.findViewById(R.id.helloText);
         SharedPreferences sharedPrefs = getActivity().getSharedPreferences("userInfo",

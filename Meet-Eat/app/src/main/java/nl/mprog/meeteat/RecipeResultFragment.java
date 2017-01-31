@@ -5,8 +5,8 @@
  * This fragment shows the user's search results for recipes given a food that they put in. It uses
  * the DinnerAsyncTask and InfoAsyncTask for this. Firstly, the ID and title of a recipe are
  * retrieved using DinnerAsyncTask and then InfoAsyncTask is used to obtain the ingredients and
-  * whether the recipe is vegan and/or vegetarian. These results are then displayed in this fragment
-  * in a ListView.
+ * whether the recipe is vegan and/or vegetarian. These results are then displayed in this fragment
+ * in a ListView.
  */
 
 package nl.mprog.meeteat;
