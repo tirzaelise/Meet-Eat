@@ -1,5 +1,5 @@
 ## Description
-
+<img scr="/doc/searchScreenshot.png" height="400">
 ## Technical design
 ### High-level overview: to navigate and help understand total of code
 ### Detailed: describe modules/classes and how they relate
