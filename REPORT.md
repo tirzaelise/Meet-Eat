@@ -1,8 +1,36 @@
-## Description<br>
+## Description
 
-<img src="/doc/searchScreenshot.png" width="350" align="left">  Meet & Eat is an application that allows users to join other users' dinners. The idea behind this is that there will be less food that goes to waste. Users can also add new dinners that can be joined by searching for recipes given a food. These recipes are retrieved using the Spoonacular API.
+<img src="/doc/searchScreenshot.png" width="350"><p align="left">Meet & Eat is an application that allows users to join other users' dinners. The idea behind this is that there will be less food that goes to waste. Users can also add new dinners that can be joined by searching for recipes given a food. These recipes are retrieved using the Spoonacular API.</p>
 
 ## Technical design
+
+### High-level overview
+
+- CookFragment 
+- DatabaseHandler
+- DateSelector
+- Dinner
+- DinnerAdapter
+- DinnerAsyncTask
+- DrawerAdapter
+- DrawerItem
+- EditDinnerFragment
+- HostListFragment 
+- HttpRequestHandler
+- InfoAsyncTask
+- JoinFragment
+- JoinListFragment
+- MainActivity
+- MainFragment
+- RecipeAdapter
+- RecipeResultFragment
+- DinnerResultFragment
+- SavedAdapter
+- SignInFragment
+- SignUpFragment
+- TimeSelector
+- User
+
 ### High-level overview: to navigate and help understand total of code
 ### Detailed: describe modules/classes and how they relate
 
