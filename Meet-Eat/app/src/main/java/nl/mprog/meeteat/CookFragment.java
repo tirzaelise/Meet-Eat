@@ -61,6 +61,8 @@ public class CookFragment extends Fragment implements View.OnClickListener {
 
         if (!filledInAllFields()) {
             Toast.makeText(activity, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+        } else if (!area.matches(".*[a-zA-Z].*[a-zA-Z].*")) {
+            Toast.makeText(activity, "Please fill in a valid area", Toast.LENGTH_SHORT).show();
         } else {
             food = food.replace(" ", "&nbsp;");
             date = ((EditText) rootView.findViewById(R.id.giveDate)).getText().toString() + " " +
