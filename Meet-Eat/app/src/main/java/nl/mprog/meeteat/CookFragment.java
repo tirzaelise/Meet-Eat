@@ -66,7 +66,7 @@ public class CookFragment extends Fragment implements View.OnClickListener {
             date = ((EditText) rootView.findViewById(R.id.giveDate)).getText().toString() + " " +
                     ((EditText) rootView.findViewById(R.id.giveTime)).getText().toString();
 
-            toRecipeResultFragment();
+            getFreeSpaces();
         }
     }
 
@@ -79,9 +79,24 @@ public class CookFragment extends Fragment implements View.OnClickListener {
                 !freeSpacesString.equals("") && !area.equals(""));
     }
 
+    /** Creates an integer from the number that the user gave in as a string. */
+    private void getFreeSpaces() {
+        try {
+            int freeSpaces = Integer.valueOf(freeSpacesString);
+
+            if (freeSpaces > 0) {
+                toRecipeResultFragment(freeSpaces);
+            } else {
+                Toast.makeText(activity, "Please allow more than 0 people to join",
+                        Toast.LENGTH_SHORT).show();
+            }
+        } catch (NumberFormatException e) {
+            Toast.makeText(activity, "Please fill in a valid number", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     /** Sends the user to the fragment where they can see the results of their recipe search. */
-    private void toRecipeResultFragment() {
-        int freeSpaces = Integer.valueOf(freeSpacesString);
+    private void toRecipeResultFragment(int freeSpaces) {
         RecipeResultFragment recipeResultFragment = new RecipeResultFragment();
         Bundle arguments = new Bundle();
         arguments.putString("food", food);
