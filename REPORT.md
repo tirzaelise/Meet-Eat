@@ -38,9 +38,15 @@ The user can also navigate to <i>HostListFragment</i>, where they can view the d
 Finally, the user can navigate to <i>JoinListFragment</i>, where the dinners that they've joined are displayed. These dinners are retrieved using <i>DatabaseHandler</i>. This fragment also allows the users to remove themselves from a dinner, which is done using <i>DatabaseHandler</i> as well.
 
 ## Challenges during development: important changes from DESIGN document
-Originally, I was going to use Google authentication to sign in and sign up to Firebase. However, after I started using fragments, this was no longer possible, since Google authentication requires an activity for certain methods that have to be used. Therefore, I decided to use e-mail verification instead. 
+Originally, I was going to use Google authentication to sign in and sign up to Firebase. However, I since I wanted a Navigation Drawer, I started to use fragments instead of activities to make my application nicer. Google authentication requires an activity instead of a fragment for certain methods that have to be used. Therefore, I decided to use e-mail verification instead. 
 
-I was also going to use the type of cuisine as a parameter to search for dinners, but since I am using Firebase to retrieve dinners in an area, using <i>orderByChild(area)</i>, this was not possible. This is because you cannot use two search parameters in Firebase. Originally, I was not going to use an API either, but since I did and the type of cuisine was not available in the API data, I decided to leave this out completely.  
+I was also going to use the type of cuisine as a parameter to search for dinners, but since I am using Firebase to retrieve dinners in an area (<i>orderByChild(area)</i>) this was not possible. This is because you cannot use two different types of <i>orderByChild()</i> on one query in Firebase. Originally, I was not going to use an API either, but since the type of cuisine was not available in the API data either, I decided to leave this attribute out completely.  
+
+After I started using an API, one of the challenges that came up was that I had to use two separate AsyncTasks. The first call to the Spoonacular API could only give really basic information about a recipe, but I wanted to display the ingredients as well so that users would know if they couldn't join a dinner due to an allergy. Therefore, I had to use the first AsyncTask to get the title and ID of a dinner and then another AsyncTask to get the ingredients of a dinner. I also thought it would be nice to display whether a dinner is vegetarian or vegan so I retrieved this data using the second AsyncTask as well. I had to use interfaces to display all the retrieved data from both AsyncTasks correctly, which I had not done before so that was challenging. 
+
+Another challenge was that I wanted to save the user's name somewhere to show this in the guest list or as the host. 
+
+- 
 
 ## Defend decisions
 ### Why was it good to do it differently
