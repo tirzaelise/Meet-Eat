@@ -77,15 +77,15 @@ public class JoinFragment extends Fragment implements View.OnClickListener {
         editor.putString("lastArea", area).apply();
     }
 
-    /** Sends the user to ResultFragment to show his search results. */
+    /** Sends the user to DinnerResultFragment to show his search results. */
     private void toResultFragment(String area) {
-        ResultFragment resultFragment = new ResultFragment();
+        DinnerResultFragment dinnerResultFragment = new DinnerResultFragment();
         Bundle arguments = new Bundle();
         arguments.putString("area", area);
-        resultFragment.setArguments(arguments);
+        dinnerResultFragment.setArguments(arguments);
 
         this.getFragmentManager().beginTransaction()
-                .replace(R.id.contentFrame, resultFragment)
+                .replace(R.id.contentFrame, dinnerResultFragment)
                 .addToBackStack(null)
                 .commit();
     }

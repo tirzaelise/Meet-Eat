@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class ResultFragment extends Fragment {
+public class DinnerResultFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle

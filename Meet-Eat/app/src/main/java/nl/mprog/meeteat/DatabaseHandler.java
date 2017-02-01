@@ -43,7 +43,7 @@ class DatabaseHandler {
 
     /** Reads the database based on the user's input area. */
     void readDatabase(String area, final ArrayList<Dinner> dinners, final DinnerAdapter adapter,
-                      final ResultFragment fragment, final View view) {
+                      final DinnerResultFragment fragment, final View view) {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         Query areaQuery = database.child("dinners").orderByChild("area").equalTo(area);
 
@@ -255,8 +255,6 @@ class DatabaseHandler {
             findJoined.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    replaceTextInView(dataSnapshot.getChildrenCount(), view);
-
                     for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                         Dinner dinner = snapshot.getValue(Dinner.class);
                         ArrayList<String> guestIds = dinner.getGuestIds();
@@ -265,6 +263,7 @@ class DatabaseHandler {
                             dinners.add(dinner);
                             adapter.notifyDataSetChanged();
                         }
+                        replaceTextInView(dinners.size(), view);
                     }
                 }
 

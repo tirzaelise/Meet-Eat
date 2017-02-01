@@ -18,7 +18,7 @@
         </activity>
         <activity android:name=".CookFragment" />
         <activity android:name=".JoinFragment" />
-        <activity android:name=".ResultFragment" />
+        <activity android:name=".DinnerResultFragment" />
         <activity android:name=".SignUpFragment" />
         <activity android:name=".MainFragment" />
         <activity android:name=".RecipeResultFragment" />

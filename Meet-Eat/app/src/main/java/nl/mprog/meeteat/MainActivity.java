@@ -43,8 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setUpDrawer();
 
         if (savedInstanceState == null) {
-            MainFragment mainFragment = new MainFragment();
-            changeFragment(mainFragment);
+            changeFragment(new MainFragment());
         }
     }
 
