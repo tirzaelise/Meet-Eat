@@ -7,7 +7,23 @@ Meet & Eat is an Android application that allows users to join other users' dinn
 
 ### High-level overview
 
-The following graph shows how all the parts of my application are connected. Since I used fragments, <i>MainActivity</i> is the only activity. All the other 'activities' are fragments. <i>MainActivity</i> creates the Navigation Drawer and replaces the current fragment when an item in the Navigation Drawer is clicked. This activity uses <i>DrawerAdapter</i> to show the navigation drawer items with an icon, which is why <i>DrawerItem</i> is necessary.
+The following graph shows how all the parts of my application are connected. 
+
+<img src="/doc/graph.png">
+
+<!--
+- MainActivity -> DrawerAdapter (DrawerItem)
+
+- MainFragment
+  - CookFragment (DateSelector, TimeSelector) -> HttpRequestHandler -> DinnerAsyncTask (Dinner) -> InfoAsyncTask (Dinner) -> RecipeResultFragment (RecipeAdapter) -> DatabaseHandler
+  - JoinFragment -> DatabaseHandler -> DinnerResultFragment (DinnerAdapter) -> DatabaseHandler
+- SignUpFragment -> DatabaseHandler (User) or SignInFragment -> DatabaseHandler (User)
+- HostListFragment (SavedAdapter) -> DatabaseHandler -> EditDinnerFragment (DateSelector, TimeSelector) -> DatabaseHandler
+- JoinListFragment (SavedAdapter) -> DatabaseHandler
+-->
+
+### Detailed overview
+Since I used fragments, <i>MainActivity</i> is the only activity. All the other 'activities' are fragments. <i>MainActivity</i> creates the Navigation Drawer and replaces the current fragment when an item in the Navigation Drawer is clicked. This activity uses <i>DrawerAdapter</i> to show the navigation drawer items with an icon, which is why <i>DrawerItem</i> is necessary.
 
 <i>MainFragment</i> is the home screen of the application, which is where the user indicates whether they want to cook or join a dinner tonight.
 
@@ -20,20 +36,6 @@ Using the Navigation Drawer, the user can also navigate to <i>SignUpFragment</i>
 The user can also navigate to <i>HostListFragment</i>, where they can view the dinners that they are hosting. These dinners are retrieved using <i>DatabaseHandler</i>. In this fragment, the user can also remove the dinner they're hosting, which is done using <i>DatabaseHandler</i>. Furthermore, the user can edit a dinner they're hosting. If this is the case, they are sent to <i>EditDinnerFragment</i>. In this fragment, they can edit the title, ingredients and date and time of their dinner using <i>DatabaseHandler</i>.
 
 Finally, the user can navigate to <i>JoinListFragment</i>, where the dinners that they've joined are displayed. These dinners are retrieved using <i>DatabaseHandler</i>. This fragment also allows the users to remove themselves from a dinner, which is done using <i>DatabaseHandler</i> as well.
-
-<img src="/doc/graph.png">
-
-- MainActivity -> DrawerAdapter (DrawerItem)
-
-- MainFragment
-  - CookFragment (DateSelector, TimeSelector) -> HttpRequestHandler -> DinnerAsyncTask (Dinner) -> InfoAsyncTask (Dinner) -> RecipeResultFragment (RecipeAdapter) -> DatabaseHandler
-  - JoinFragment -> DatabaseHandler -> DinnerResultFragment (DinnerAdapter) -> DatabaseHandler
-- SignUpFragment -> DatabaseHandler (User) or SignInFragment -> DatabaseHandler (User)
-- HostListFragment (SavedAdapter) -> DatabaseHandler -> EditDinnerFragment (DateSelector, TimeSelector) -> DatabaseHandler
-- JoinListFragment (SavedAdapter) -> DatabaseHandler
-
-### High-level overview: to navigate and help understand total of code
-### Detailed: describe modules/classes and how they relate
 
 ## Challenges during development: important changes from DESIGN document
 Originally, I was going to use Google authentication to sign in and sign up to Firebase. However, after I started using fragments, this was no longer possible, since Google authentication requires an activity for certain methods that have to be used. Therefore, I decided to use e-mail verification instead. 
