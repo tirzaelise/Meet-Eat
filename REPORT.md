@@ -1,7 +1,7 @@
 ## Description
 <img src="/doc/searchScreenshot.png" width="350">
 
-Meet & Eat is an Android application that allows users to join other users' dinners. The idea behind this is that there will be less food that goes to waste. Users can also add new dinners that can be joined by searching for recipes given a food. These recipes are retrieved using the Spoonacular API.
+Meet & Eat is an Android application that allows users to join other users' dinners. The idea behind this is that there will be less food will go to waste. Users can also register what they're going to cook so that other users can join their dinner. If users add their own dinner, they automatically search for recipes given a food using the Spoonacular API.
 
 ## Technical design
 
