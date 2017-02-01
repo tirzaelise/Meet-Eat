@@ -1,6 +1,9 @@
-## Description
-<img scr="/doc/searchScreenshot.png" height="400">
-## Technical design
+## Description<br>
+
+<p><img src="/doc/searchScreenshot.png" width="350" align="left">  Meet & Eat is an application that allows users to join other users' dinners. The idea behind this is that there will be less food that goes to waste. Users can also add new dinners that can be joined by searching for recipes given a food. These recipes are retrieved using the Spoonacular API.</p>
+
+
+<p style="clear: both;">## Technical design
 ### High-level overview: to navigate and help understand total of code
 ### Detailed: describe modules/classes and how they relate
 
@@ -9,4 +12,4 @@
 ## Defend decisions
 ### Why was it good to do it differently
 ### Are there tradeoffs for the current solution
-### Would you have chosen a differnt decision if you'd had more time
+### Would you have chosen a differnt decision if you'd had more time</p>
