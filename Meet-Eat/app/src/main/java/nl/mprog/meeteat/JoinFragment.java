@@ -92,10 +92,8 @@ public class JoinFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.searchButton:
-                search();
-                break;
+        if (v.getId() == R.id.searchButton) {
+            search();
         }
     }
 }

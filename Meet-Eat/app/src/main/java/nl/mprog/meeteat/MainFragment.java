@@ -54,22 +54,22 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /** Changes the fragment to the fragment that the user has selected. */
+    private void changeFragment(Fragment newFragment) {
+        this.getFragmentManager().beginTransaction()
+                .replace(R.id.contentFrame, newFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.joiningButton:
-                JoinFragment joinFragment = new JoinFragment();
-                this.getFragmentManager().beginTransaction()
-                        .replace(R.id.contentFrame, joinFragment)
-                        .addToBackStack(null)
-                        .commit();
+                changeFragment(new JoinFragment());
                 break;
             case R.id.cookingButton:
-                CookFragment cookFragment = new CookFragment();
-                this.getFragmentManager().beginTransaction()
-                        .replace(R.id.contentFrame, cookFragment)
-                        .addToBackStack(null)
-                        .commit();
+                changeFragment(new CookFragment());
                 break;
         }
     }

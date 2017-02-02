@@ -114,10 +114,8 @@ public class CookFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.addButton:
-                searchRecipes();
-                break;
+        if (v.getId() == R.id.addButton) {
+            searchRecipes();
         }
     }
 }

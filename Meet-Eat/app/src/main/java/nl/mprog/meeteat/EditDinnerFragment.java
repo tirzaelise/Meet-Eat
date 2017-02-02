@@ -84,11 +84,9 @@ public class EditDinnerFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.saveButton:
-                updateInfo();
-                toHostListFragment();
-                break;
+        if (v.getId() == R.id.saveButton) {
+            updateInfo();
+            toHostListFragment();
         }
     }
 }
