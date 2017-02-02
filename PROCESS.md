@@ -53,3 +53,6 @@ Finished creating headers and commenting methods for all Java files. I also clea
 
 #### Day 18
 I spent the entire day working on my report. I let someone else test my app and they found a couple bugs, which I fixed. You can now no longer put in that 0 people can join your dinner and the area that is put in must be at least two characters.
+
+#### Day 19
+I finished writing my report and updated my ReadMe. I also created a LICENSE. I also tweaked some small things in my app, such as a maximum amount of people that can join a dinner (currently set at 15, which seems like a reasonable amount) so that the database doesn't break due to it being too big. I also implemented that the user is sent back to the dinners he's hosting after he's edited a dinner. The user is also sent there after he's added a dinner. Finally, the user is sent to the main fragment where he can indicate whether he's going to cook or join after logging in/signing up.  
