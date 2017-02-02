@@ -44,9 +44,9 @@ I was also going to use the type of cuisine as a parameter to search for dinners
 
 After I started using an API, one of the challenges that came up was that I had to use two separate AsyncTasks. The first call to the Spoonacular API could only give really basic information about a recipe, but I wanted to display the ingredients as well so that users would know if they couldn't join a dinner due to an allergy. Therefore, I had to use the first AsyncTask to get the title and ID of a dinner and then another AsyncTask to get the ingredients of a dinner. I also thought it would be nice to display whether a dinner is vegetarian or vegan so I retrieved this data using the second AsyncTask as well. I had to use interfaces to display all the retrieved data from both AsyncTasks correctly, which I had not done before so that was challenging. 
 
-Another challenge was that I wanted to save the user's name somewhere to show this in the guest list or as the host. 
+Another challenge was that I wanted to save the user's name somewhere to show this in the guest list or if they're hosting a dinner. At first I was gonig to use <i>setDisplayName()</i> for this, but I found out that this does not work if you're using e-mail verification. If the user already has an account, you don't want them to have to fill in their name again. Therefore, there is a 'users' part in the database, which keeps track of the application's users (their name, e-mail address and user ID). This is also used to send e-mails to the host or guests when someone joins a dinner, removes themselves from a dinner or cancels a dinner. If the user logs in, their information is retrieved from the database and saved in SharedPreferences.
 
-- 
+Getting data from Firebase into a ListView is also quite challenging, since Firebase is asynchronous. I really struggled with this at first, because I wanted to add all the retrieved data to an ArrayList and then return this ArrayList at the end of the method. However, this is not possible, because this results in an empty ArrayList: retrieving the data in the <i>onDataChange()</i> loop is too slow. Therefore, I ended up filling my ListView in the <i>DatabaseHandler</i> class itself, instead of returning an ArrayList to populate the ListView with.
 
 ## Defend decisions
 ### Why was it good to do it differently
