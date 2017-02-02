@@ -1,13 +1,19 @@
 # Meet & Eat
 UvA Programmeerproject: Android Application<br>
 January 2016<br>
-Tirza Soute
+Tirza Soute<br><br>
 
-This application will help reduce the amount of food that is thrown away each year and allow users to meet new people over dinner.
+<img src="/doc/homeScreenshot.png" height="400">
+<img src="/doc/cookingScreenshot.png" height="400">
+<img src="/doc/recipeResultScreenshot.png" height="400">
+<img src="/doc/searchScreenshot.png" height="400">
+<img src="/doc/signUpScreenshot.png" height="400">
+<img src="/doc/hostingScreenshot.png" height="400">
+<!--<img src="/doc/navDrawerScreenshot.png" height="400"></-->
 
-### Problem 
-On average, each person in The Netherlands throws away 135 kilograms of food each year, which is a waste. Therefore, I will create an application that prevents there from being so much wasted food.
+On average, each person in The Netherlands throws away 135 kilograms of food each year. Meet & Eat will help reduce the amount of food that is thrown away and allow users to meet new people over dinner. This is done by letting users indicate what they are going to cook or letting users join other users' dinners.
 
+<!-->
 ### Available features to solve the problem 
 Users will be able to indicate whether they will be cooking or whether they would like to join someone else's dinner. This will results in less food being thrown away or, ideally, no  food being thrown away at all.
 
@@ -31,3 +37,4 @@ I want to integrate Firebase's Google login, which might be difficult since I ha
 
 ### Review of similar applications or visualisations in terms of features and technical aspects
 EatWith also integrates ratings, prices, a starting time and a save button. The rest is very similar to my idea.
+</-->
