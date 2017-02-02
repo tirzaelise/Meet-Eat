@@ -16,7 +16,6 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -218,9 +217,6 @@ class SavedAdapter extends BaseAdapter {
 
     /** Removes a user from a dinner. */
     private void unjoinDinner(Dinner dinner, int position) {
-        Log.wtf("position", Integer.toString(position));
-        Log.wtf("dinner title", this.dinners.get(position).getTitle());
-
         DatabaseHandler databaseHandler = new DatabaseHandler();
         databaseHandler.removeGuest(dinner, activity, dinners, this, position);
     }
