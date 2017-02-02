@@ -92,7 +92,7 @@
     <string name="signInJoin">Please sign in to join a dinner</string>
     <string name="noFreeSpaces">There are no more free spaces for this dinner</string>
     <string name="howManyJoin">With how many people would you like to join this dinner?</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="noDataFound">No data was found</string>
     <string name="account">Account</string>
