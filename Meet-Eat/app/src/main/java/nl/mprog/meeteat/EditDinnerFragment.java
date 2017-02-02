@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class EditDinnerFragment extends Fragment implements View.OnClickListener{
     private View rootView;
@@ -66,12 +67,22 @@ public class EditDinnerFragment extends Fragment implements View.OnClickListener
         String ingredients = ((EditText) rootView.findViewById(R.id.newIngredients)).getText()
                 .toString();
 
-        dinner.setTitle(title);
-        dinner.setDate(date + " " + time);
-        dinner.setIngredients(ingredients);
+        if (filledInAllFields(title, date, time, ingredients)) {
+            dinner.setTitle(title);
+            dinner.setDate(date + " " + time);
+            dinner.setIngredients(ingredients);
 
-        DatabaseHandler databaseHandler = new DatabaseHandler();
-        databaseHandler.updateDinner(dinner, activity);
+            DatabaseHandler databaseHandler = new DatabaseHandler();
+            databaseHandler.updateDinner(dinner, activity);
+        } else {
+            Toast.makeText(activity, R.string.allFields, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /** Checks if the user filled something in in all fields. */
+    private boolean filledInAllFields(String title, String date, String time, String ingredients) {
+        return (!title.equals("") && !date.equals("") && !time.equals("") &&
+                !ingredients.equals(""));
     }
 
     /** Sends the user back to fragment with the dinners he's hosting. */

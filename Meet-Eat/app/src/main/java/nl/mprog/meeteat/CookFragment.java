@@ -86,10 +86,10 @@ public class CookFragment extends Fragment implements View.OnClickListener {
         try {
             int freeSpaces = Integer.valueOf(freeSpacesString);
 
-            if (freeSpaces > 0) {
+            if (freeSpaces > 0 && freeSpaces <= 15) {
                 toRecipeResultFragment(freeSpaces);
             } else {
-                Toast.makeText(activity, R.string.moreThan0, Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, R.string.validNumber, Toast.LENGTH_SHORT).show();
             }
         } catch (NumberFormatException e) {
             Toast.makeText(activity, R.string.validNumber, Toast.LENGTH_SHORT).show();
