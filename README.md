@@ -1,7 +1,8 @@
 # Meet & Eat
+
 UvA Programmeerproject: Android Application<br>
 January 2016<br>
-Tirza Soute<br><br>
+Tirza Soute<br>
 
 <img src="/doc/homeScreenshot.png" height="400">
 <img src="/doc/cookingScreenshot.png" height="400">
