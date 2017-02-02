@@ -17,13 +17,8 @@ On average, each person in The Netherlands throws away 135 kilograms of food eac
 ### Available features to solve the problem 
 Users will be able to indicate whether they will be cooking or whether they would like to join someone else's dinner. This will results in less food being thrown away or, ideally, no  food being thrown away at all.
 
-### Sketch of application
-<img src="/doc/loginSketch.png" height="400">
-<img src="/doc/indicationSketch.png" height="400">
-<img src="/doc/cookingSketch.png" height="400"><br>
-<img src="/doc/joiningSketch.png" height="400">
-<img src="/doc/resultsSketch.png" height="400">
-
+### Sketch of application</-->
+<!-->
 ### Separate parts of the application and how these should work together
 The home screen will be a login screen. After that, there will be a screen where the user can indicate whether they will be cooking or joining. 
 If the user is cooking, they have to specify what they will be cooking, for how many people they will provide dinner and in what area they live. 
