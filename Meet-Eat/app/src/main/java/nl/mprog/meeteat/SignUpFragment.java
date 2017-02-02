@@ -145,6 +145,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                         Toast.LENGTH_SHORT).show();
                                 saveUser(name);
                                 hideKeyboard();
+                                toMainFragment();
                             }
                         }
                     });
@@ -194,6 +195,14 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
         }
+    }
+
+    /** Sends the user back to the main fragment after signing up. */
+    private void toMainFragment() {
+        this.getFragmentManager().beginTransaction()
+                .replace(R.id.contentFrame, new MainFragment())
+                .addToBackStack(null)
+                .commit();
     }
 
     /** Sends the user to the fragment to log in instead of creating an account. */

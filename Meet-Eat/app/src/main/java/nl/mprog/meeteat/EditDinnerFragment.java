@@ -74,11 +74,20 @@ public class EditDinnerFragment extends Fragment implements View.OnClickListener
         databaseHandler.updateDinner(dinner, activity);
     }
 
+    /** Sends the user back to fragment with the dinners he's hosting. */
+    private void toHostListFragment() {
+        this.getFragmentManager().beginTransaction()
+                .replace(R.id.contentFrame, new HostListFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.saveButton:
                 updateInfo();
+                toHostListFragment();
                 break;
         }
     }

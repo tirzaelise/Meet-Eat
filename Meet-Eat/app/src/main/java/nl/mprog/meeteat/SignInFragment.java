@@ -134,6 +134,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                                         .show();
                                 hideKeyboard();
                                 getUsername();
+                                toMainFragment();
                             }
                         }
                     });
@@ -160,6 +161,14 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
             DatabaseHandler databaseHandler = new DatabaseHandler();
             databaseHandler.getUsername(user.getUid(), activity);
         }
+    }
+
+    /** Sends the user back to the main fragment after signing in. */
+    private void toMainFragment() {
+        this.getFragmentManager().beginTransaction()
+                .replace(R.id.contentFrame, new MainFragment())
+                .addToBackStack(null)
+                .commit();
     }
 
     /** Signs out the user. */

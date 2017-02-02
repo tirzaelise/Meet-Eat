@@ -9,6 +9,7 @@
 
 package nl.mprog.meeteat;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,13 +28,13 @@ import java.util.ArrayList;
 
 class RecipeAdapter extends BaseAdapter {
     private ArrayList<Dinner> recipes;
-    private Context context;
+    private Activity activity;
     private LayoutInflater inflater;
 
-    RecipeAdapter(Context context, ArrayList<Dinner> recipes) {
-        this.context = context;
+    RecipeAdapter(Activity activity, ArrayList<Dinner> recipes) {
+        this.activity = activity;
         this.recipes = recipes;
-        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -72,7 +73,7 @@ class RecipeAdapter extends BaseAdapter {
     /** Sets the info about a recipe in the corresponding TextViews. */
     private void setInfo(View view, int position) {
         String title = this.recipes.get(position).getTitle();
-        String ingredients = context.getString(R.string.ingredients) + ": " +
+        String ingredients = activity.getString(R.string.ingredients) + ": " +
                 this.recipes.get(position).getIngredients();
 
         ((TextView) view.findViewById(R.id.recipeTitle)).setText(title);
@@ -104,7 +105,7 @@ class RecipeAdapter extends BaseAdapter {
         ImageView imageView = (ImageView) view.findViewById(R.id.recipeImage);
         String url = "https://spoonacular.com/recipeImages/" + this.recipes.get(position).getId() +
                 "-312x231.jpg";
-        Picasso.with(context).load(url).into(imageView);
+        Picasso.with(activity).load(url).into(imageView);
     }
 
     /** Adds a dinner to the Firebase database if the user is logged in. */
@@ -118,11 +119,20 @@ class RecipeAdapter extends BaseAdapter {
                     Dinner clickedRecipe = recipes.get(position);
                     DatabaseHandler databaseHandler = new DatabaseHandler();
                     databaseHandler.writeToDatabase(clickedRecipe);
-                    Toast.makeText(context, R.string.successAddDinner, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, R.string.successAddDinner, Toast.LENGTH_SHORT).show();
+                    toHostListFragment();
                 } else {
-                    Toast.makeText(context, R.string.logInAddDinner, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, R.string.logInAddDinner, Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    /** Sends the user to fragment with the dinners he's hosting. */
+    private void toHostListFragment() {
+        activity.getFragmentManager().beginTransaction()
+                .replace(R.id.contentFrame, new HostListFragment())
+                .addToBackStack(null)
+                .commit();
     }
 }
