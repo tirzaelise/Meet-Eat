@@ -141,15 +141,15 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                             if (!task.isSuccessful()) {
                                 catchSignUpException(task);
                             } else {
-                                saveUser(name);
-                                Toast.makeText(activity, "Registered successfully",
+                                Toast.makeText(activity, R.string.successRegister,
                                         Toast.LENGTH_SHORT).show();
+                                saveUser(name);
                                 hideKeyboard();
                             }
                         }
                     });
         } else {
-            Toast.makeText(activity, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, R.string.allFields, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -158,14 +158,13 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         try {
             throw task.getException();
         } catch (FirebaseAuthWeakPasswordException e) {
-            Toast.makeText(activity, "Password must be at least 6 characters",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, R.string.failPassword, Toast.LENGTH_SHORT).show();
         } catch (FirebaseAuthInvalidCredentialsException e) {
-            Toast.makeText(activity, "Invalid e-mail address", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, R.string.failEmail, Toast.LENGTH_SHORT).show();
         } catch (FirebaseAuthUserCollisionException e) {
-            Toast.makeText(activity, "User already exists", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, R.string.failUserExists, Toast.LENGTH_SHORT).show();
         } catch (FirebaseNetworkException e) {
-            Toast.makeText(activity, "No network", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, R.string.failNetwork, Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
         }

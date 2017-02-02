@@ -79,9 +79,12 @@ class SavedAdapter extends BaseAdapter {
     /** Sets all the information about a dinner in the ListView. */
     private void setDinnerInfo(View view, int position) {
         String title = this.dinners.get(position).getTitle();
-        String date = "Date: " + this.dinners.get(position).getDate();
-        String guests = "Guests: " + arrayToString(this.dinners.get(position).getGuestNames());
-        String ingredients = "Ingredients: " + this.dinners.get(position).getIngredients();
+        String date = activity.getString(R.string.date) + ": " +
+                this.dinners.get(position).getDate();
+        String guests = activity.getString(R.string.guests) + ": " +
+                arrayToString(this.dinners.get(position).getGuestNames());
+        String ingredients = activity.getString(R.string.ingredients) + ": " +
+                this.dinners.get(position).getIngredients();
 
         ((TextView) view.findViewById(R.id.dinnerTitle)).setText(title);
         ((TextView) view.findViewById(R.id.dinnerDate)).setText(date);
@@ -95,7 +98,8 @@ class SavedAdapter extends BaseAdapter {
      */
     private void setHostOptionally(View view, int position) {
         if (joining) {
-            String host = "Host: " + dinners.get(position).getHostName();
+            String host = activity.getString(R.string.host) + ": "
+                    + dinners.get(position).getHostName();
             ((TextView) view.findViewById(R.id.dinnerHost)).setText(host);
             view.findViewById(R.id.editButton).setVisibility(View.GONE);
         } else {
@@ -108,7 +112,7 @@ class SavedAdapter extends BaseAdapter {
         String string;
 
         if (array.get(0).equals("null")) {
-            string = "none";
+            string = activity.getString(R.string.none);
         } else {
             string = array.get(0);
         }
@@ -141,16 +145,16 @@ class SavedAdapter extends BaseAdapter {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.editButton:
-                        alertDialog("Are you sure you want to edit this dinner?", v.getId(),
+                        alertDialog(activity.getString(R.string.dialogEdit), v.getId(),
                                 dinner, position);
                         break;
                     case R.id.deleteButton:
                         if (joining) {
-                            alertDialog("Are you sure you no longer want to join this dinner?",
+                            alertDialog(activity.getString(R.string.dialogUnjoin),
                                     v.getId(), dinner, position);
                             break;
                         } else {
-                            alertDialog("Are you sure you want to delete this dinner?", v.getId(),
+                            alertDialog(activity.getString(R.string.dialogDelete), v.getId(),
                                     dinner, position);
                             break;
                         }
@@ -166,7 +170,7 @@ class SavedAdapter extends BaseAdapter {
         builder.setMessage(alert);
         builder.setCancelable(true);
 
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -175,7 +179,7 @@ class SavedAdapter extends BaseAdapter {
             }
         });
 
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();

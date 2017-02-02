@@ -60,9 +60,9 @@ public class CookFragment extends Fragment implements View.OnClickListener {
                 .toString());
 
         if (!filledInAllFields()) {
-            Toast.makeText(activity, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, R.string.allFields, Toast.LENGTH_SHORT).show();
         } else if (!area.matches(".*[a-zA-Z].*[a-zA-Z].*")) {
-            Toast.makeText(activity, "Please fill in a valid area", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, R.string.validArea, Toast.LENGTH_SHORT).show();
         } else {
             food = food.replace(" ", "&nbsp;");
             date = ((EditText) rootView.findViewById(R.id.giveDate)).getText().toString() + " " +
@@ -89,11 +89,10 @@ public class CookFragment extends Fragment implements View.OnClickListener {
             if (freeSpaces > 0) {
                 toRecipeResultFragment(freeSpaces);
             } else {
-                Toast.makeText(activity, "Please allow more than 0 people to join",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, R.string.moreThan0, Toast.LENGTH_SHORT).show();
             }
         } catch (NumberFormatException e) {
-            Toast.makeText(activity, "Please fill in a valid number", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, R.string.validNumber, Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -115,12 +115,15 @@ class DinnerAdapter extends BaseExpandableListAdapter {
      * Sets the info about a dinner in the ListView.
      */
     private void setInfo(int position, View view) {
-        String host = "Host: " + this.dinners.get(position).getHostName();
+        String host = context.getString(R.string.host) + ": " +
+                this.dinners.get(position).getHostName();
         String guestsString = Arrays.toString(this.dinners.get(position).getGuestNames().toArray());
-        String freeSpaces = "Free spaces: " +
+        String freeSpaces = context.getString(R.string.free) + ": " +
                 Integer.toString(StringUtils.countMatches(guestsString, "null"));
-        String date = "Date: " + this.dinners.get(position).getDate();
-        String ingredients = "Ingredients: " + this.dinners.get(position).getIngredients();
+        String date = context.getString(R.string.date) + ": " +
+                this.dinners.get(position).getDate();
+        String ingredients = context.getString(R.string.ingredients) + ": " +
+                this.dinners.get(position).getIngredients();
 
         ((TextView) view.findViewById(R.id.host)).setText(host);
         ((TextView) view.findViewById(R.id.space)).setText(freeSpaces);
@@ -182,8 +185,7 @@ class DinnerAdapter extends BaseExpandableListAdapter {
                 if (user != null) {
                     updateGuests(position);
                 } else {
-                    Toast.makeText(context, "Please sign in to join a dinner", Toast.LENGTH_SHORT)
-                            .show();
+                    Toast.makeText(context, R.string.signInJoin, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -198,8 +200,7 @@ class DinnerAdapter extends BaseExpandableListAdapter {
         if (freeSpaces > 0) {
             chooseAmountOfPeople(freeSpaces, dinner, position);
         } else {
-            Toast.makeText(context, "There are no more free spaces for this dinner",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.noFreeSpaces, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -230,14 +231,14 @@ class DinnerAdapter extends BaseExpandableListAdapter {
 
     /**
      * Builds the number picker so that the user can define with how many people they'd like to
-     * join a dinner and uses DatabaseHandler to update the list of guests in firebase.
+     * join a dinner and uses DatabaseHandler to update the list of guests in Firebase.
      */
     private void buildNumberPicker(FrameLayout frameLayout, final NumberPicker numberPicker,
                                    final Dinner dinner, final int position) {
         new AlertDialog.Builder(context)
                 .setView(frameLayout)
-                .setTitle("With how many people would you like to join this dinner?")
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                .setTitle(context.getString(R.string.howManyJoin))
+                .setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         int amountOfPeople = numberPicker.getValue();
@@ -246,7 +247,7 @@ class DinnerAdapter extends BaseExpandableListAdapter {
                                 DinnerAdapter.this, dinners, amountOfPeople);
                     }
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(context.getString(R.string.cancel), null)
                 .show();
     }
 

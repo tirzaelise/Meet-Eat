@@ -47,9 +47,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         if (sharedPrefs.contains("username")) {
             String name = sharedPrefs.getString("username", "");
-            helloTextView.setText("Hello, " + name + "!");
+            helloTextView.setText(getString(R.string.hello) + " " + name +
+                    getString(R.string.exclamation));
         } else {
-            helloTextView.setText(R.string.hello);
+            helloTextView.setText(getString(R.string.helloExcl));
         }
     }
 

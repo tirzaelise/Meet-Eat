@@ -12,6 +12,7 @@ package nl.mprog.meeteat;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -57,11 +58,12 @@ public class MainActivity extends AppCompatActivity {
     /** Creates the data for the drawer adapter. */
     private ArrayList<DrawerItem> createDrawerData() {
         ArrayList<DrawerItem> data = new ArrayList<>();
+        Resources resources = this.getResources();
 
-        data.add(new DrawerItem(R.drawable.home_icon, "Home"));
-        data.add(new DrawerItem(R.drawable.account_icon, "Account"));
-        data.add(new DrawerItem(R.drawable.hosting_icon, "Hosting dinners"));
-        data.add(new DrawerItem(R.drawable.joining_icon, "Joined dinners"));
+        data.add(new DrawerItem(R.drawable.home_icon, resources.getString(R.string.home)));
+        data.add(new DrawerItem(R.drawable.account_icon, resources.getString(R.string.account)));
+        data.add(new DrawerItem(R.drawable.hosting_icon, resources.getString(R.string.hosting)));
+        data.add(new DrawerItem(R.drawable.joining_icon, resources.getString(R.string.joined)));
 
         return data;
     }
@@ -112,8 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
             changeFragment(newFragment);
         } else {
-            Toast.makeText(MainActivity.this, "Please log in to view this page",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, R.string.logInRequired, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -139,13 +140,13 @@ public class MainActivity extends AppCompatActivity {
 
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                if (actionBar != null) setTitle("Navigation");
+                if (actionBar != null) setTitle(R.string.navigation);
                 invalidateOptionsMenu();
             }
 
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                if (actionBar != null) actionBar.setTitle(getString(R.string.app_name));
+                if (actionBar != null) actionBar.setTitle(R.string.app_name);
                 invalidateOptionsMenu();
             }
         };

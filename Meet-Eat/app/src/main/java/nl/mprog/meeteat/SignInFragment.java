@@ -127,23 +127,18 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (!task.isSuccessful()) {
-                                Toast.makeText(activity, "Authentication failed",
-                                        Toast.LENGTH_SHORT).show();
+                                Toast.makeText(activity, R.string.failAuth, Toast.LENGTH_SHORT)
+                                        .show();
                             } else {
-                                Toast.makeText(activity, "Logged in successfully",
-                                        Toast.LENGTH_SHORT).show();
+                                Toast.makeText(activity, R.string.successLogIn, Toast.LENGTH_SHORT)
+                                        .show();
                                 hideKeyboard();
-                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                                if (user != null) {
-                                    DatabaseHandler databaseHandler = new DatabaseHandler();
-                                    databaseHandler.getUsername(user.getUid(), activity);
-                                }
+                                getUsername();
                             }
                         }
                     });
         } else {
-            Toast.makeText(activity, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, R.string.allFields, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -154,6 +149,16 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         if (activity.getCurrentFocus() != null) {
             imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
+    /** Gets the user's username from the database. */
+    private void getUsername() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            DatabaseHandler databaseHandler = new DatabaseHandler();
+            databaseHandler.getUsername(user.getUid(), activity);
         }
     }
 

@@ -83,7 +83,7 @@ class DinnerAsyncTask extends AsyncTask<String, Void, String> {
                 replaceTextInView(false);
             }
         } catch (JSONException e) {
-            Toast.makeText(context, "No data was found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.noDataFound, Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }

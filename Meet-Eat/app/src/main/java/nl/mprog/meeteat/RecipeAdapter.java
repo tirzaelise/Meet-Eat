@@ -72,7 +72,8 @@ class RecipeAdapter extends BaseAdapter {
     /** Sets the info about a recipe in the corresponding TextViews. */
     private void setInfo(View view, int position) {
         String title = this.recipes.get(position).getTitle();
-        String ingredients = "Ingredients: " + this.recipes.get(position).getIngredients();
+        String ingredients = context.getString(R.string.ingredients) + ": " +
+                this.recipes.get(position).getIngredients();
 
         ((TextView) view.findViewById(R.id.recipeTitle)).setText(title);
         ((TextView) view.findViewById(R.id.recipeIngredients)).setText(ingredients);
@@ -117,10 +118,9 @@ class RecipeAdapter extends BaseAdapter {
                     Dinner clickedRecipe = recipes.get(position);
                     DatabaseHandler databaseHandler = new DatabaseHandler();
                     databaseHandler.writeToDatabase(clickedRecipe);
-                    Toast.makeText(context, "Added dinner", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.successAddDinner, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(context, "Please log in to add a dinner",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.logInAddDinner, Toast.LENGTH_SHORT).show();
                 }
             }
         });

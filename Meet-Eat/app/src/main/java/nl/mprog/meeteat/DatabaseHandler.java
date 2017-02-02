@@ -15,6 +15,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.view.View;
 import android.widget.TextView;
@@ -61,8 +62,8 @@ class DatabaseHandler {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(fragment.getActivity(), "Failed to read database",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(fragment.getActivity(), R.string.dbReadFail, Toast.LENGTH_SHORT)
+                        .show();
             }
         });
     }
@@ -100,15 +101,15 @@ class DatabaseHandler {
                         updateFirebaseGuests(userInfo, databaseKey, position, adapter, dinners,
                                 context, amountJoining);
                     } else {
-                        Toast.makeText(context, "You cannot join your own dinner",
-                                Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, R.string.notJoinOwnDinner, Toast.LENGTH_SHORT)
+                                .show();
                     }
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(context, "Failed to join dinner", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.failedJoin, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -147,7 +148,7 @@ class DatabaseHandler {
         database.child("dinners").child(databaseKey).setValue(dinner);
         getHostEmail(userInfo.get(1), dinner, context);
 
-        Toast.makeText(context, "Joined dinner", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, R.string.successJoin, Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -175,40 +176,41 @@ class DatabaseHandler {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User host = dataSnapshot.getValue(User.class);
                 String hostMail = host.getEmail();
-                String email = joinEmail(username, dinner);
-                sendEmail(email, hostMail, "Notify host", context);
+                String email = joinEmail(username, dinner, context);
+                sendEmail(email, hostMail, context.getResources().getString(R.string.notifyHost),
+                        context.getResources().getString(R.string.successJoin), context);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(context, "Could not retrieve host's e-mail address",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.failHostEmail, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     /** Sends an e-mail to the host of the dinner that will be joined to ask for details. */
-    private void sendEmail(String body, String recipientEmail, String title, Context context) {
+    private void sendEmail(String body, String recipientEmail, String title, String subject,
+                           Context context) {
         Intent mailIntent = new Intent(Intent.ACTION_SENDTO);
         mailIntent.setType("message/rfc822");
         mailIntent.setData(Uri.parse("mailto:"));
         mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{recipientEmail});
-        mailIntent.putExtra(Intent.EXTRA_SUBJECT, "Joined Dinner");
+        mailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
         mailIntent.putExtra(Intent.EXTRA_TEXT, body);
 
         try {
             context.startActivity(Intent.createChooser(mailIntent, title));
         } catch (android.content.ActivityNotFoundException e){
-            Toast.makeText(context, "There are no e-mail clients installed",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.noEmailClients, Toast.LENGTH_SHORT).show();
         }
     }
 
     /** Returns the predefined e-mail string to join a dinner.  */
-    private String joinEmail(String username, Dinner dinner) {
-        return "Hello!\n\nI have joined your dinner (" + dinner.getTitle() + ") at " +
-                dinner.getDate() + ". Please " + "contact me for details, such as your address.\n" +
-                "Thank you in advance.\n\nKind regards, \n" + username;
+    private String joinEmail(String username, Dinner dinner, Context context) {
+        Resources resources = context.getResources();
+
+        return String.format(resources.getString(R.string.joinEmail), dinner.getTitle(),
+                dinner.getDate(), username);
     }
 
     /** Retrieves the dinners that the user is hosting from Firebase. */
@@ -235,8 +237,8 @@ class DatabaseHandler {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(activity, "Could not retrieve dinners",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, R.string.failedRetrieveDinners, Toast.LENGTH_SHORT)
+                            .show();
                 }
             });
         }
@@ -269,8 +271,8 @@ class DatabaseHandler {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(activity, "Could not retrieve dinners",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, R.string.failedRetrieveDinners, Toast.LENGTH_SHORT)
+                            .show();
                 }
             });
         }
@@ -299,6 +301,7 @@ class DatabaseHandler {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
                     String username = user.getUsername();
+
                     SharedPreferences.Editor editor = context.getSharedPreferences("userInfo",
                             Context.MODE_PRIVATE).edit();
                     editor.putString("username", username);
@@ -308,7 +311,7 @@ class DatabaseHandler {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(context, "Could not save name", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.failedSaveName, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -324,13 +327,13 @@ class DatabaseHandler {
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     String databaseKey = snapshot.getKey();
                     database.child("dinners").child(databaseKey).setValue(dinner);
-                    Toast.makeText(activity, "Updated dinner", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, R.string.successUpdate, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(activity, "Failed to update dinner", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, R.string.failUpdate, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -355,7 +358,7 @@ class DatabaseHandler {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(activity, "Could not find dinner", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, R.string.failFind, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -380,10 +383,12 @@ class DatabaseHandler {
 
                 database.child("dinners").child(key).setValue(dinner);
                 String email = unjoinEmail(dinner, activity);
-                sendEmail(email, dinner.getHostEmail(), "Notify host", activity);
+                Resources resources = activity.getResources();
+
+                sendEmail(email, dinner.getHostEmail(), resources.getString(R.string.notifyHost),
+                        resources.getString(R.string.removeGuest), activity);
             } else {
-                Toast.makeText(activity, "You have already been removed from this dinner",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, R.string.removedAlready, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -400,12 +405,12 @@ class DatabaseHandler {
 
     /** Body of an email when a user is no longer joining a dinner. */
     private String unjoinEmail(Dinner dinner, Activity activity) {
+        Resources resources = activity.getResources();
         String name = activity.getSharedPreferences("userInfo", Context.MODE_PRIVATE)
                 .getString("username", "");
 
-        return "Hello!\n\nI would like to inform you that I am no longer joining your " +
-                "dinner (" + dinner.getTitle() + " at " + dinner.getDate() + "). I hope you " +
-                "understand.\n\nKind regards, \n" + name;
+        return String.format(resources.getString(R.string.unjoinEmail), dinner.getTitle(),
+                dinner.getDate(), name);
     }
 
     /** Removes a dinner from the database. */
@@ -428,7 +433,7 @@ class DatabaseHandler {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(activity, "Could not remove dinner", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, R.string.failDelete, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -456,24 +461,26 @@ class DatabaseHandler {
                 User user = dataSnapshot.getValue(User.class);
                 String email = user.getEmail();
                 String body = cancelMail(dinner, activity);
-                sendEmail(body, email, "Notify guests", activity);
+
+                Resources resources = activity.getResources();
+                sendEmail(body, email, resources.getString(R.string.notifyGuest),
+                        resources.getString(R.string.cancelDinner), activity);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(activity, "Could not retrieve guests' e-mail addresses",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, R.string.failFindEmailGuest, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     /** Body of an email when the host cancels the dinner. */
     private String cancelMail(Dinner dinner, Activity activity) {
+        Resources resources = activity.getResources();
         String name = activity.getSharedPreferences("userInfo", Context.MODE_PRIVATE)
                 .getString("username", "");
 
-        return "Hello!\n\nUnfortunately, I have cancelled the dinner you joined (" +
-                dinner.getTitle() + " at " + dinner.getDate() + "). I hope you understand.\n" +
-                "Thank you in advance.\n\nKind regards, \n" + name;
+        return String.format(resources.getString(R.string.cancelEmail), dinner.getTitle(),
+                dinner.getDate(), name);
     }
 }
